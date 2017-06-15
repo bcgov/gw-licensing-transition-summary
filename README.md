@@ -1,37 +1,48 @@
 <div id="devex-badge">
-*Add a project state badge. See https://raw.githubusercontent.com/BCDevExchange/docs/master/discussion/projectstates.md*
+<a rel="Inspiration" href="https://github.com/BCDevExchange/docs/blob/master/discussion/projectstates.md"><img alt="An idea being explored and shaped. Open for discussion, but may never go anywhere." style="border-width:0" src="https://assets.bcdevexchange.org/images/badges/insipiration.svg" title="An idea being explored and shaped. Open for discussion, but may never go anywhere." /></a>
 </div>
 
 ---
 
-# Description of analysis/indicator code
+# Summarizing and visualizing B.C. ground water license transition data 
 
-With links to envreportbc packages being used and indicator page if available
+This repository contains R code for summarizing and visualizing B.C. ground water license transition data and generates some static data visualizations in PDF document.
 
 ### Usage
 
-Describe data being used (links), and how to run. Eg:
-
 There are four core scripts that are required for the analysis, they need to be run in order:
 
-- 01_clean.R
-- 02_analysis.R
-- 03_visualize.R
+- 01_load.R
+- 02_clean.R
+- 03_analysis.R
 - 04_output.R
 
-### Project Status
+The `run_all.R` script can be `source`ed to run it all at once.
+
+Most packages used in the analysis can be installed from CRAN using `install.packages()`, but you will need to install [envreportutils](https://github.com/bcgov/envreportutils) and [bcmaps](https://github.com/bcgov/bcmaps) using devtools:
+
+```r
+install.packages("devtools") # If you don't already have it installed
+
+library(devtools)
+install_github("bcgov/envreportutils")
+install_github("bcgov/bcmaps")
+```
 
 ### Getting Help or Reporting an Issue
 
-To report bugs/issues/feature requests, please file an [issue](https://github.com/bcgov/<repo-name>/issues/).
+To report bugs/issues/feature requests, please file an [Issue](https://github.com/bcgov-c/gw-license-transition-summary/issues).
 
 ### How to Contribute
 
 If you would like to contribute, please see our [CONTRIBUTING](CONTRIBUTING.md) guidelines.
 
+Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+
+
 ### License
 
-    Copyright 2016 Province of British Columbia
+    Copyright 2017 Province of British Columbia
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

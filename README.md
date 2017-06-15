@@ -6,7 +6,7 @@
 
 # Summarizing and visualizing B.C. ground water license transition data 
 
-This repository contains R code for summarizing and visualizing B.C. ground water license transition data and generates some static data visualizations in PDF document.
+This repository contains R code for summarizing and visualizing B.C. ground water license transition data and generates a summary of the static data visualizations in a PDF document.
 
 ### Usage
 
@@ -19,14 +19,13 @@ There are four core scripts that are required for the analysis, they need to be 
 
 The `run_all.R` script can be `source`ed to run it all at once.
 
-Most packages used in the analysis can be installed from CRAN using `install.packages()`, but you will need to install [envreportutils](https://github.com/bcgov/envreportutils) and [bcmaps](https://github.com/bcgov/bcmaps) using devtools:
+Most packages used in the analysis can be installed from CRAN using `install.packages()`, but you will need to install [envreportutils](https://github.com/bcgov/envreportutils) using devtools:
 
 ```r
 install.packages("devtools") # If you don't already have it installed
 
 library(devtools)
 install_github("bcgov/envreportutils")
-install_github("bcgov/bcmaps")
 ```
 
 ### Getting Help or Reporting an Issue

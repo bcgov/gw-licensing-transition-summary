@@ -10,4 +10,67 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 
+library(ggplot2) 
+library(envreportutils) # theme_soe()
+library(RColorBrewer) #for colour palette
+
+
+## Load clean data if not already in local repository
+if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
+
+## @knitr pre
+
+## order dataframe, get number of categories and set colour palette
+ta_type <- order_df(ta_type, target_col = "StatusDescription", value_col = "number", fun = max, desc = TRUE)
+type.order <- levels(ta_type$StatusDescription)
+type.no <- length(type.order)+1
+colr.pal <- brewer.pal(type.no, "Set1")
+
+
+## PLOTS
+
+## @knitr types
+
+## bar chart of applications by type
+ta_type_plot <- ggplot(ta_type, aes(1, y = number, fill = StatusDescription)) +
+  geom_col(alpha = 0.7) +
+  labs(title = "FrontCounter BC Process Status") +
+  scale_fill_manual(values = colr.pal, name = NULL) +
+  xlab(NULL) +
+  ylab(NULL) +
+  theme_soe() +
+  coord_flip() +
+  scale_y_continuous(limits = c(0, 1200), breaks = seq(0, 1200, 200), expand=c(0, 0)) +
+  theme(panel.grid.major.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.text = element_text(size=6),
+        plot.title = element_text(size = 8),
+        plot.margin = unit(c(5,5,5,5),"mm"),
+        legend.text = element_text(size=8))
+
+plot(ta_type_plot)
+
+
+## @knitr estimate
+
+## bar chart of tot applications with estimated
+tot_est_plot <- ggplot(est.df, aes(1, y = val, fill = cat)) +
+  geom_col(alpha = .7) +
+  labs(title = "Applications Received by FrontCounter BC") +
+  scale_fill_manual(values = c("grey70", "#3182bd"), name = NULL) +
+  xlab(NULL) +
+  ylab(NULL) +
+  theme_soe() +
+  coord_flip() +
+  scale_y_continuous(limits = c(0, 20000), breaks = seq(0, 20000, 2000), expand=c(0, 0)) +
+  theme(panel.grid.major.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.text = element_text(size=6),
+        plot.title = element_text(size = 8),
+        plot.margin = unit(c(5,5,5,5),"mm"),
+        legend.text = element_text(size=8))
+
+plot(tot_est_plot)
+
+## @knitr end
 

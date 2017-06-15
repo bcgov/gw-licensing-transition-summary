@@ -1,0 +1,39 @@
+---
+output: pdf_document
+classoption: landscape
+geometry: margin=.5cm
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, cache = FALSE)
+
+library(knitr) #for rendering the PDF
+library(dplyr) # data munging
+library(ggplot2) # fortify()
+library(envreportutils) # theme_soe()
+library(RColorBrewer) #for colour palette
+
+read_chunk("04_output.R")
+
+## Load clean data if not already in local repository
+if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
+```
+
+
+```{r pre}
+```
+\pagenumbering{gobble}
+
+## Existing Use Groundwater License Applications Summary (`r tot_ta` applications as of `r Sys.Date()`)
+
+
+```{r estimate, fig.height = 2, fig.width = 5}
+
+```
+
+
+```{r types, fig.height = 2, fig.width = 5}
+
+```
+

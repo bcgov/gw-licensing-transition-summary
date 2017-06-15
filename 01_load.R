@@ -11,3 +11,13 @@
 # See the License for the specific language governing permissions and limitations under the License.
 
 
+library(readr) # data import 
+
+## Import the data for Existing Use Groundwater License Applications (CSV) from internal data directory. 
+## Data license: Access Only http://www2.gov.bc.ca/gov/content/home/copyright 
+transition_lic_raw <- read_csv("Z:/water/groundwater/licensing/ApplicationSearch_eASP.csv")
+
+
+## Create tmp folder if not already there and store raw data in local repository
+if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
+save(transition_lic_raw, file = "tmp/trans_gwlic_raw.RData")

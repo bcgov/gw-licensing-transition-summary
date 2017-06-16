@@ -21,35 +21,13 @@ if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
 ## @knitr pre
 
 ## order dataframe, get number of categories and set colour palette
-ta_type <- order_df(ta_type, target_col = "StatusDescription", value_col = "number", fun = max, desc = TRUE)
-type.order <- levels(ta_type$StatusDescription)
-type.no <- length(type.order)+1
+#ta_type <- order_df(ta_type, target_col = "StatusDescription", value_col = "number", fun = max, desc = TRUE)
+#type.order <- levels(ta_type$StatusDescription)
+type.no <- length(cat.order)+1
 colr.pal <- brewer.pal(type.no, "Set1")
 
 
 ## PLOTS
-
-## @knitr types
-
-## bar chart of applications by type
-ta_type_plot <- ggplot(ta_type, aes(1, y = number, fill = StatusDescription)) +
-  geom_col(alpha = 0.7) +
-  labs(title = "FrontCounter BC Process Status") +
-  scale_fill_manual(values = colr.pal, name = NULL) +
-  xlab(NULL) +
-  ylab(NULL) +
-  theme_soe() +
-  coord_flip() +
-  scale_y_continuous(limits = c(0, 1200), breaks = seq(0, 1200, 200), expand=c(0, 0)) +
-  theme(panel.grid.major.y = element_blank(),
-        axis.text.y = element_blank(),
-        axis.text = element_text(size=6),
-        plot.title = element_text(size = 8),
-        plot.margin = unit(c(5,5,5,5),"mm"),
-        legend.text = element_text(size=8))
-
-plot(ta_type_plot)
-
 
 ## @knitr estimate
 
@@ -57,7 +35,7 @@ plot(ta_type_plot)
 tot_est_plot <- ggplot(est.df, aes(1, y = val, fill = cat)) +
   geom_col(alpha = .7) +
   labs(title = "Applications Received by FrontCounter BC") +
-  scale_fill_manual(values = c("grey70", "#3182bd"), name = NULL) +
+  scale_fill_manual(values = c("grey70", "#3182bd"), name = NULL, breaks = rev(levels(est.df$cat))) +
   xlab(NULL) +
   ylab(NULL) +
   theme_soe() +
@@ -68,9 +46,38 @@ tot_est_plot <- ggplot(est.df, aes(1, y = val, fill = cat)) +
         axis.text = element_text(size=6),
         plot.title = element_text(size = 8),
         plot.margin = unit(c(5,5,5,5),"mm"),
-        legend.text = element_text(size=8))
+        legend.text = element_text(size=6),
+        legend.position = "bottom",
+        legend.direction = "horizontal")
 
 plot(tot_est_plot)
+
+
+## @knitr types
+
+## bar chart of applications by type
+ta_type_plot <- ggplot(ta_type, aes(1, y = number, fill = StatusDescription)) +
+  geom_col(alpha = 0.7) +
+  labs(title = "FrontCounter BC Process Status") +
+  scale_fill_manual(values = colr.pal, name = NULL, breaks = rev(levels(ta_type$StatusDescription))) +
+  xlab(NULL) +
+  ylab(NULL) +
+  theme_soe() +
+  coord_flip() +
+  scale_y_continuous(limits = c(0, 1200), breaks = seq(0, 1200, 200), expand=c(0, 0)) +
+  theme(panel.grid.major.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.text = element_text(size=6),
+        plot.title = element_text(size = 8),
+        plot.margin = unit(c(5,5,5,5),"mm"),
+        legend.text = element_text(size=6),
+        legend.position = "bottom",
+        legend.direction = "horizontal") +
+  guides(fill = guide_legend(nrow = 1))
+
+plot(ta_type_plot)
+
+
 
 ## @knitr end
 

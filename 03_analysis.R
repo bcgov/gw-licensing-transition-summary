@@ -20,18 +20,25 @@ if (!exists("transition_lic")) load("tmp/trans_gwlic_clean.RData")
 tot_ta <- length(transition_lic$AuthorizationType)
 est_ta <- 20000
 remaining <- est_ta-tot_ta
-cat <- c("Estimated\nOutstanding", "Current\nNumber")
+cat <- c("Estimated Outstanding", "Current Number")
 val <- c(remaining, tot_ta)
 est.df <- data.frame(cat, val)
 
 est.df<- order_df(est.df, target_col = "cat", value_col = "val", fun = max, desc = TRUE)
+
 
 ## number of licenses by application category
 ta_type <- transition_lic %>% 
   group_by(StatusDescription) %>% 
   summarise(number = length(StatusDescription))
 
+## arranging the order of the categories to be plotted
+cat.order <- c("Accepted", "Under Review", "Pending", "Submitted", "Pre-Submittal", 
+                "Not Accepted", "Cancelled", "Editing")
+
+## reordering the categories for plotting
+ta_type$StatusDescription <- factor(ta_type$StatusDescription, levels = cat.order)
 
 ## Create tmp folder if not already there and store clean data in local repository
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
-save(tot_ta, ta_type, est.df,  file = "tmp/trans_gwlic_summaries.RData")
+save(tot_ta, ta_type, est.df, cat.order,  file = "tmp/trans_gwlic_summaries.RData")

@@ -51,7 +51,12 @@ plot(tot_est_plot)
 
 ## @knitr types
 
-## bar chart of applications by type
+## bar chart of all applications by status description
+
+## get number of categories and set colour palette
+type.no <- length(cat.order)+1
+colr.pal <- brewer.pal(type.no, "Set1")
+
 ta_type_plot <- ggplot(ta_type, aes(1, y = number, fill = StatusDescription)) +
   geom_col(alpha = 0.7) +
   labs(title = "FrontCounter BC Process Status") +

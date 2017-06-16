@@ -13,18 +13,18 @@
 library(dplyr) # data munging
 
 ## Load raw data if not already in local repository
-if (!exists("transition_lic_raw")) load("tmp/trans_gwlic_raw.RData")
+if (!exists("transition_app_raw")) load("tmp/trans_gwlic_raw.RData")
 
 ## clean transition_lic_raw 
 
 ## Only keep columns in transition_lic necessary for data summaries
 keep_col <- c("AuthorizationType", "ApplicationDate", "StatusDescription", "VFCBCOffice")
 
-transition_lic <- transition_lic_raw %>% 
+transition_app <- transition_app_raw %>% 
   select(one_of(keep_col))
 
 
 ## Create tmp folder if not already there and store clean data in local repository
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
-save(transition_lic, file = "tmp/trans_gwlic_clean.RData")
+save(transition_app, file = "tmp/trans_gwlic_clean.RData")
 

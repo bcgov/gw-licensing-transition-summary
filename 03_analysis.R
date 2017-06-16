@@ -14,10 +14,10 @@ library(dplyr) # data munging
 library(envreportutils) # order_df
 
 ## Load clean data if not already in local repository
-if (!exists("transition_lic")) load("tmp/trans_gwlic_clean.RData")
+if (!exists("transition_app")) load("tmp/trans_gwlic_clean.RData")
 
 ## make a total applications with estimated total dataframe
-tot_ta <- length(transition_lic$AuthorizationType)
+tot_ta <- length(transition_app$AuthorizationType)
 est_ta <- 20000
 remaining <- est_ta-tot_ta
 cat <- c("Estimated Outstanding", "Current Number")
@@ -28,7 +28,7 @@ est.df<- order_df(est.df, target_col = "cat", value_col = "val", fun = max, desc
 
 
 ## number of licenses by application category
-ta_type <- transition_lic %>% 
+ta_type <- transition_app %>% 
   group_by(StatusDescription) %>% 
   summarise(number = length(StatusDescription))
 

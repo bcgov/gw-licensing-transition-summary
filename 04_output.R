@@ -18,20 +18,16 @@ library(RColorBrewer) #for colour palette
 ## Load clean data if not already in local repository
 if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
 
-## @knitr pre
 
-## order dataframe, get number of categories and set colour palette
-#ta_type <- order_df(ta_type, target_col = "StatusDescription", value_col = "number", fun = max, desc = TRUE)
-#type.order <- levels(ta_type$StatusDescription)
-type.no <- length(cat.order)+1
-colr.pal <- brewer.pal(type.no, "Set1")
+## @knitr pre
 
 
 ## PLOTS
 
+
 ## @knitr estimate
 
-## bar chart of tot applications with estimated
+## bar chart of total and estimated applications
 tot_est_plot <- ggplot(est.df, aes(1, y = val, fill = cat)) +
   geom_col(alpha = .7) +
   labs(title = "Applications Received by FrontCounter BC") +
@@ -77,6 +73,34 @@ ta_type_plot <- ggplot(ta_type, aes(1, y = number, fill = StatusDescription)) +
 
 plot(ta_type_plot)
 
+
+## @knitr in_progress
+
+## bar chart of incoming licenses by status
+tl_status_plot <- ggplot(tl_in_progress, aes(1, y = number, fill = JobStatus)) +
+  geom_col(alpha = 0.7) +
+  geom_text(aes(label = number), position = position_stack(vjust = 0.5), size = 2) +
+  labs(title = "Applications Granted & Under Adjudication by FLNRO",
+       subtitle = paste("Parked:", tl_parked, " ", "Abandoned:", tl_abandon)) +
+  scale_fill_manual(values = c("#6baed6", "#3182bd"), name = NULL,
+                    breaks = rev(levels(tl_in_progress$JobStatus))) +
+  xlab(NULL) +
+  ylab(NULL) +
+  theme_soe() +
+  coord_flip() +
+  scale_y_continuous(limits = c(0, 500), breaks = seq(0, 500, 50), expand=c(0, 0)) +
+  theme(panel.grid.major.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.text = element_text(size=6),
+        plot.title = element_text(size = 8),
+        plot.subtitle = element_text(size = 8),
+        plot.margin = unit(c(5,5,5,5),"mm"),
+        legend.text = element_text(size=6),
+        legend.position = "bottom",
+        legend.direction = "horizontal") +
+  guides(fill = guide_legend(nrow = 1))
+
+plot(tl_status_plot)
 
 
 ## @knitr end

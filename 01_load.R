@@ -13,9 +13,13 @@
 
 library(readr) # data import 
 
-## Import the data for Existing Use Groundwater License Applications (CSV) from internal data directory. 
+## Import the data for Existing Use Groundwater License Applications (CSV)
+## Data source is a manual export (MS Excel file) from 'Application Search' on
+## Virtual FrontCounter BC E-licensing Home
+## XLS converted to CSV and stored in local Data directoy
+
 ## Data license: Access Only http://www2.gov.bc.ca/gov/content/home/copyright 
-transition_lic_raw <- read_csv("Z:/water/groundwater/licensing/ApplicationSearch_eASP.csv")
+transition_lic_raw <- read_csv("Z:/water/groundwater/licensing/transition/ApplicationSearch_eASP.csv")
 
 
 ## Create tmp folder if not already there and store raw data in local repository

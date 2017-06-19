@@ -30,6 +30,7 @@ if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
 ## bar chart of total and estimated applications
 tot_est_plot <- ggplot(est.df, aes(1, y = val, fill = cat)) +
   geom_col(alpha = .7) +
+  geom_text(aes(label = val), position = position_stack(vjust = 0.5), size = 2) +
   labs(title = "Applications Received by FrontCounter BC") +
   scale_fill_manual(values = c("grey70", "#3182bd"), name = NULL, breaks = rev(levels(est.df$cat))) +
   xlab(NULL) +
@@ -59,6 +60,7 @@ colr.pal <- brewer.pal(type.no, "Set1")
 
 ta_type_plot <- ggplot(ta_type, aes(1, y = number, fill = StatusDescription)) +
   geom_col(alpha = 0.7) +
+  geom_text(aes(label = number), position = position_stack(vjust = 0.5), size = 2) +
   labs(title = "FrontCounter BC Process Status") +
   scale_fill_manual(values = colr.pal, name = NULL, breaks = rev(levels(ta_type$StatusDescription))) +
   xlab(NULL) +

@@ -31,10 +31,13 @@ if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
 ```{r estimate, fig.height = 2, fig.width = 4}
 
 ```
-```{r types, fig.height = 2, fig.width = 6.5}
+```{r in_progress, fig.height = 2, fig.width = 6}
 
 ```
 
-```{r in_progress, fig.height = 2, fig.width = 4}
+
+```{r types, fig.height = 2, fig.width = 10}
 
 ```
+
+

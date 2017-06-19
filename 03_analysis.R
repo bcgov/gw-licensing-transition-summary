@@ -51,20 +51,20 @@ tl_status <- transition_lic %>%
 tl_status$JobStatus[tl_status$JobStatus == "Grant"] <- "Granted"
 
 ## Subset for plotting only 2 categories
-tl_in_progress <- tl_status %>%
-  filter(JobStatus == "In Progress" | JobStatus == "Granted")
+# tl_in_progress <- tl_status %>%
+#   filter(JobStatus == "In Progress" | JobStatus == "Granted")
 
 ## order tl_in_progress dataframe & change JobStatus Name
-tl_in_progress<- order_df(tl_in_progress, target_col = "JobStatus", value_col = "number", fun = max, desc = TRUE)
+tl_status<- order_df(tl_status, target_col = "JobStatus", value_col = "number", fun = max, desc = TRUE)
 
 
 ## calculate number of parked and abandoned 
-tl_parked <- tl_status$number[tl_status$JobStatus == "Parked"]
-tl_abandon <- tl_status$number[tl_status$JobStatus == "Abandoned"]
+# tl_parked <- tl_status$number[tl_status$JobStatus == "Parked"]
+# tl_abandon <- tl_status$number[tl_status$JobStatus == "Abandoned"]
 
 
 ## Create tmp folder if not already there and store clean data in local repository
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
 
-save(tot_ta, ta_type, est.df, cat.order, tl_in_progress,
-     tl_parked, tl_abandon, file = "tmp/trans_gwlic_summaries.RData")
+save(tot_ta, ta_type, est.df, cat.order, tl_status,
+     file = "tmp/trans_gwlic_summaries.RData")

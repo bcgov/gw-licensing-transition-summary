@@ -37,7 +37,7 @@ tot_est_plot <- ggplot(est.df, aes(1, y = val, fill = cat)) +
   ylab(NULL) +
   theme_soe() +
   coord_flip() +
-  scale_y_continuous(limits = c(0, 20000), breaks = seq(0, 20000, 2000), expand=c(0, 0)) +
+  scale_y_continuous(limits = c(0, 20000), breaks = seq(0, 20000, 2000), expand=c(0.005, 0)) +
   theme(panel.grid.major.y = element_blank(),
         axis.text.y = element_blank(),
         axis.text = element_text(size=6),
@@ -58,6 +58,7 @@ plot(tot_est_plot)
 type.no <- length(cat.order)+1
 colr.pal <- brewer.pal(type.no, "Set1")
 
+
 ta_type_plot <- ggplot(ta_type, aes(1, y = number, fill = StatusDescription)) +
   geom_col(alpha = 0.7) +
   geom_text(aes(label = number), position = position_stack(vjust = 0.5), size = 2) +
@@ -67,7 +68,7 @@ ta_type_plot <- ggplot(ta_type, aes(1, y = number, fill = StatusDescription)) +
   ylab(NULL) +
   theme_soe() +
   coord_flip() +
-  scale_y_continuous(limits = c(0, 1200), breaks = seq(0, 1200, 200), expand=c(0, 0)) +
+  scale_y_continuous(limits = c(0, 1200), breaks = seq(0, 1200, 200), expand=c(0.005, 0)) +
   theme(panel.grid.major.y = element_blank(),
         axis.text.y = element_blank(),
         axis.text = element_text(size=6),
@@ -84,18 +85,18 @@ plot(ta_type_plot)
 ## @knitr in_progress
 
 ## bar chart of incoming licenses by status
-tl_status_plot <- ggplot(tl_in_progress, aes(1, y = number, fill = JobStatus)) +
+tl_status_plot <- ggplot(tl_status, aes(1, y = number, fill = JobStatus)) +
   geom_col(alpha = 0.7) +
   geom_text(aes(label = number), position = position_stack(vjust = 0.5), size = 2) +
-  labs(title = "Applications Granted & Under Adjudication by FLNRO",
-       subtitle = paste("Parked:", tl_parked, " ", "Abandoned:", tl_abandon)) +
-  scale_fill_manual(values = c("#6baed6", "#3182bd"), name = NULL,
-                    breaks = rev(levels(tl_in_progress$JobStatus))) +
+  labs(title = "Applications Granted & Under Adjudication by FLNRO") +
+       # subtitle = paste("Parked:", tl_parked, " ", "Abandoned:", tl_abandon)) +
+  scale_fill_manual(values = c("#6baed6", "#3182bd", "grey80", "#b15928"), name = NULL,
+                    breaks = rev(levels(tl_status$JobStatus))) +
   xlab(NULL) +
   ylab(NULL) +
   theme_soe() +
   coord_flip() +
-  scale_y_continuous(limits = c(0, 500), breaks = seq(0, 500, 50), expand=c(0, 0)) +
+  scale_y_continuous(limits = c(0, 500), breaks = seq(0, 500, 50), expand=c(0.005, 0)) +
   theme(panel.grid.major.y = element_blank(),
         axis.text.y = element_blank(),
         axis.text = element_text(size=6),

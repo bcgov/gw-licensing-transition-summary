@@ -80,7 +80,7 @@ transition_time_day$cumsum <- cumsum(transition_time_day$numperday)
 
 ## workshop df
 
-date <- as_date(as.POSIXct(c('2016-11-01','2017-03-01')))
+date <- as.POSIXct(c('2016-11-01','2017-03-01'))
 cumsum <- c(179, 802)
 label <- as.character(c("Start of\nWorkshops", "End of \nWorkshops"))
 

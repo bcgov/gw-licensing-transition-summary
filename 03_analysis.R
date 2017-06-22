@@ -12,11 +12,13 @@
 
 library(dplyr) # data munging
 library(envreportutils) # order_df
-
+library(lubridate)
 
 ## Load clean data if not already in local repository
 if (!exists("transition_app")) load("tmp/trans_gwlic_clean.RData")
 
+
+## transition_app summaries ##
 
 ## make a 'total transition applications with estimated transitions' dataframe
 tot_ta <- length(transition_app$AuthorizationType)
@@ -42,6 +44,9 @@ cat.order <- c("Accepted", "Under Review", "Pending", "Submitted", "Pre-Submitta
 ta_type$StatusDescription <- factor(ta_type$StatusDescription, levels = cat.order)
 
 
+
+## transition_lic summaries ##
+
 ## number of licenses by status category
 tl_status <- transition_lic %>% 
   group_by(JobStatus) %>% 
@@ -63,8 +68,26 @@ tl_status<- order_df(tl_status, target_col = "JobStatus", value_col = "number", 
 # tl_abandon <- tl_status$number[tl_status$JobStatus == "Abandoned"]
 
 
+## transition_time summaries ##
+
+## calculate the num applications per date
+transition_time_day <- transition_time %>%
+  group_by(`Business Area`, `Authorization Type`, `Received Date`) %>% 
+  summarise(numperday = n())
+
+## cumlative sum of applications  
+transition_time_day$cumsum <- cumsum(transition_time_day$numperday)
+
+## workshop df
+
+date <- as_date(as.POSIXct(c('2016-11-01','2017-03-01')))
+cumsum <- c(179, 802)
+label <- as.character(c("Start of\nWorkshops", "End of \nWorkshops"))
+
+wrkshops <- data.frame(date, cumsum, label)
+
 ## Create tmp folder if not already there and store clean data in local repository
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
 
 save(tot_ta, ta_type, est.df, cat.order, tl_status,
-     file = "tmp/trans_gwlic_summaries.RData")
+     transition_time_day, wrkshops, file = "tmp/trans_gwlic_summaries.RData")

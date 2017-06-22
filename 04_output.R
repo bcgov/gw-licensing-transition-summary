@@ -18,12 +18,9 @@ library(RColorBrewer) #for colour palette
 ## Load clean data if not already in local repository
 if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
 
-
 ## @knitr pre
 
-
 ## PLOTS
-
 
 ## @knitr estimate
 
@@ -37,7 +34,7 @@ tot_est_plot <- ggplot(est.df, aes(1, y = val, fill = cat)) +
   ylab(NULL) +
   theme_soe() +
   coord_flip() +
-  scale_y_continuous(limits = c(0, 20000), breaks = seq(0, 20000, 2000), expand=c(0.005, 0)) +
+  scale_y_continuous(expand=c(0.005, 0)) +
   theme(panel.grid.major.y = element_blank(),
         axis.text.y = element_blank(),
         axis.text = element_text(size=6),
@@ -68,7 +65,7 @@ ta_type_plot <- ggplot(ta_type, aes(1, y = number, fill = StatusDescription)) +
   ylab(NULL) +
   theme_soe() +
   coord_flip() +
-  scale_y_continuous(limits = c(0, 1200), breaks = seq(0, 1200, 200), expand=c(0.005, 0)) +
+  scale_y_continuous(expand=c(0.005, 0)) +
   theme(panel.grid.major.y = element_blank(),
         axis.text.y = element_blank(),
         axis.text = element_text(size=6),
@@ -96,12 +93,11 @@ tl_status_plot <- ggplot(tl_status, aes(1, y = number, fill = JobStatus)) +
   ylab(NULL) +
   theme_soe() +
   coord_flip() +
-  scale_y_continuous(limits = c(0, 500), breaks = seq(0, 500, 50), expand=c(0.005, 0)) +
+  scale_y_continuous(expand=c(0.005, 0)) +
   theme(panel.grid.major.y = element_blank(),
         axis.text.y = element_blank(),
         axis.text = element_text(size=6),
         plot.title = element_text(size = 8),
-        plot.subtitle = element_text(size = 8),
         plot.margin = unit(c(5,5,5,5),"mm"),
         legend.text = element_text(size=6),
         legend.position = "bottom",
@@ -109,6 +105,25 @@ tl_status_plot <- ggplot(tl_status, aes(1, y = number, fill = JobStatus)) +
   guides(fill = guide_legend(nrow = 1))
 
 plot(tl_status_plot)
+
+
+## @knitr app_rate
+
+## line chart of incoming transition licenses by date and rates
+tl_rate_plot <- ggplot(transition_time_day, aes(y = cumsum, x = `Received Date`)) +
+  geom_line(alpha = 0.7, colour = "#3182bd", size = 1) +
+  labs(title = "Transition Application Submission Date") +
+  geom_text(data = wrkshops, aes(x = date, y = cumsum, label = label)) +
+  xlab(NULL) +
+  ylab(NULL) +
+  theme_soe() +
+  theme(panel.grid.major.x = element_blank(),
+        axis.text = element_text(size=6),
+        plot.title = element_text(size = 8),
+        plot.margin = unit(c(5,5,5,5),"mm"))
+
+plot(tl_rate_plot)
+
 
 
 ## @knitr end

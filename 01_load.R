@@ -11,28 +11,36 @@
 # See the License for the specific language governing permissions and limitations under the License.
 
 
-library(readr) # data import 
-
+library(readxl) # MS Excel data import 
 
 ## Import the data for Existing Use Groundwater License Applications (CSV)
-## Data source is a manual export (MS Excel file) from 'Application Search' on
+## Data source is a manual export (MS Excel file) from 'FCBC Application Search' via
 ## Virtual FrontCounter BC E-licensing Home
-## XLS converted to CSV and stored in local Data directoy
 ## Data license: Access Only http://www2.gov.bc.ca/gov/content/home/copyright 
 
-transition_app_raw <- read_csv("Z:/water/groundwater/licensing/transition/ApplicationSearch_eASP.csv")
+transition_app_raw <- read_excel("Z:/water/groundwater/licensing/transition/FCBC ApplicationSearch_eASP Jun 19 2017.xlsx")
 
 
 ## Import the data for Existing Use Groundwater Incoming Licenses  (CSV)
 ## Data source is a manual export (MS Excel file) from 
-## 'Incoming Groundwater Licence Application Tracking Report' on
+## 'Incoming Groundwater Licence Application Tracking Report' via
 ## Virtual FrontCounter BC E-licensing Home
-## XLS converted to CSV and stored in local Data directoy
 ## Data license: Access Only http://www2.gov.bc.ca/gov/content/home/copyright 
 
-transition_lic_raw <- read_csv("Z:/water/groundwater/licensing/transition/Incoming Groundwater License Application Tracking Report.csv")
+transition_lic_raw <- read_excel("Z:/water/groundwater/licensing/transition/ApplicationPurposeUseSearch Jun 19 2017.xlsx")
+
+
+## Import the data for Existing Use Groundwater Incoming License Processing Time (CSV)
+## Data source is a manual export (MS Excel file) from 
+## 'FrontCounterBC ATS system application processing time report' via
+## email from FCBA staff (generted monthly)
+## Data license: Access Only http://www2.gov.bc.ca/gov/content/home/copyright 
+
+transition_processing_time_raw <- read_excel("Z:/water/groundwater/licensing/transition/Groundwater Data until May 30, 2017 - run on June 5th .xlsx")
 
 
 ## Create tmp folder if not already there and store raw data in local repository
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
-save(transition_app_raw, transition_lic_raw, file = "tmp/trans_gwlic_raw.RData")
+save(transition_app_raw, transition_lic_raw,
+     transition_processing_time_raw, file = "tmp/trans_gwlic_raw.RData")
+

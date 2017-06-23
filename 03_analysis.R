@@ -78,16 +78,31 @@ transition_time_day <- transition_time %>%
 ## cumlative sum of applications  
 transition_time_day$cumsum <- cumsum(transition_time_day$numperday)
 
+## Calculate current rate to-date
+
+appsum <- sum(transition_time_day$numperday)
+firstday <- min(transition_time_day$`Received Date`)
+lastday <- max(transition_time_day$`Received Date`)
+numdays <- as.integer(difftime(as.POSIXct(lastday), as.POSIXct(firstday), units="days"))
+current_rate <- appsum/numdays
+
+## Calculate rate forecast bassed on current rate
+enddate <- as.POSIXct(as.character("2019-03-01"))
+date <- seq(lastday, enddate, by="1 day")
+current_rate_forecast <- data.frame(date)
+current_rate_forecast$num <- current_rate
+current_rate_forecast$num[1] <- appsum
+current_rate_forecast$cumsum <- cumsum(current_rate_forecast$num)
+
+
 ## workshop df
-
-date <- as.POSIXct(c('2016-11-01','2017-03-01'))
-cumsum <- c(179, 802)
-label <- as.character(c("Start of\nWorkshops", "End of \nWorkshops"))
-
-wrkshops <- data.frame(date, cumsum, label)
+# date <- as.POSIXct(c('2016-11-01','2017-03-01'))
+# cumsum <- c(179, 802)
+# label <- as.character(c("Start of\nWorkshops", "End of \nWorkshops"))
+# wrkshops <- data.frame(date, cumsum, label)
 
 ## Create tmp folder if not already there and store clean data in local repository
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
 
 save(tot_ta, ta_type, est.df, cat.order, tl_status,
-     transition_time_day, wrkshops, file = "tmp/trans_gwlic_summaries.RData")
+     transition_time_day, current_rate_forecast, file = "tmp/trans_gwlic_summaries.RData")

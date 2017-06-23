@@ -110,10 +110,14 @@ plot(tl_status_plot)
 ## @knitr app_rate
 
 ## line chart of incoming transition licenses by date and rates
-tl_rate_plot <- ggplot(transition_time_day, aes(y = cumsum, x = `Received Date`)) +
-  geom_line(alpha = 0.7, colour = "#3182bd", size = 1) +
+tl_rate_plot <- ggplot() +
+  geom_line(data = transition_time_day, aes(y = cumsum, x = `Received Date`),
+            alpha = 0.7, colour = "#3182bd", size = 1) +
   labs(title = "Transition Application Submission Date") +
-  geom_text(data = wrkshops, aes(x = date, y = cumsum, label = label)) +
+  geom_line(data = current_rate_forecast, aes(y = cumsum, x = date), alpha = 0.7,
+            colour = "grey40", size = 1, linetype = 2) +
+ # geom_text(data = wrkshops, aes(x = date, y = cumsum, label = label)) +
+  scale_y_continuous(expand=c(0, 0), limits = c(0,20000), breaks=seq(0, 20000, 2000)) +
   xlab(NULL) +
   ylab(NULL) +
   theme_soe() +

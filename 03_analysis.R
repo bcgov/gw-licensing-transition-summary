@@ -70,7 +70,7 @@ tl_status<- order_df(tl_status, target_col = "JobStatus", value_col = "number", 
 
 ## transition_time summaries ##
 
-## calculate the num applications per date
+## calculate the num applications per day
 transition_time_day <- transition_time %>%
   group_by(`Business Area`, `Authorization Type`, `Received Date`) %>% 
   summarise(numperday = n())
@@ -86,13 +86,18 @@ lastday <- max(transition_time_day$`Received Date`)
 numdays <- as.integer(difftime(as.POSIXct(lastday), as.POSIXct(firstday), units="days"))
 current_rate <- appsum/numdays
 
-## Calculate rate forecast bassed on current rate
+## Calculate rate forecast based on current rate
 enddate <- as.POSIXct(as.character("2019-03-01"))
 date <- seq(lastday, enddate, by="1 day")
 current_rate_forecast <- data.frame(date)
 current_rate_forecast$num <- current_rate
 current_rate_forecast$num[1] <- appsum
 current_rate_forecast$cumsum <- cumsum(current_rate_forecast$num)
+
+## Calculate the required rate for March 2019 end date
+app_to_go <- est_ta - appsum
+days_to_go <- as.integer(enddate - lastday)
+rate_to_achieve <- app_to_go/days_to_go
 
 
 ## workshop df

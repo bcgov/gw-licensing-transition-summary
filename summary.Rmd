@@ -1,7 +1,8 @@
 ---
 output: pdf_document
 classoption: landscape
-geometry: margin=.5cm
+geometry: margin=1cm
+papersize: legal
 ---
 
 
@@ -28,19 +29,22 @@ if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
 ## Existing Use Groundwater License Applications Summary (`r tot_ta` applications as of `r Sys.Date()`)
 
 
-```{r estimate, fig.height = 2, fig.width = 3}
+```{r estimate, fig.height = 2, fig.width = 6}
 
 ```
-```{r types, fig.height = 2, fig.width = 7}
-
-```
-
-
 ```{r in_progress, fig.height = 2, fig.width = 6}
 
 ```
 
-
-```{r app_rate, fig.height = 2, fig.width = 4}
+```{r types, fig.height = 2, fig.width = 12}
 
 ```
+
+
+
+
+
+```{r app_rate, fig.height = 3, fig.width = 5}
+
+```
+

@@ -38,9 +38,10 @@ transition_lic_raw <- read_excel("Z:/water/groundwater/licensing/transition/Appl
 
 transition_processing_time_raw <- read_excel("Z:/water/groundwater/licensing/transition/Groundwater Data until May 30, 2017 - run on June 5th .xlsx")
 
+datadate <- "June 19th 2017"
 
 ## Create tmp folder if not already there and store raw data in local repository
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
-save(transition_app_raw, transition_lic_raw,
+save(transition_app_raw, transition_lic_raw, datadate,
      transition_processing_time_raw, file = "tmp/trans_gwlic_raw.RData")
 

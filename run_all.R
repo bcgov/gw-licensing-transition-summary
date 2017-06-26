@@ -17,3 +17,10 @@ source("03_analysis.R")
 source("04_output.R")
 
 
+outfile <- paste0("GW_Existing_License_Transition_Summary_asof_", datadate, ".pdf")
+
+rmarkdown::render("summary.Rmd",
+                  output_file = outfile)
+
+
+

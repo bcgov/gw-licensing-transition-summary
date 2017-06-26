@@ -10,7 +10,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 
-library(ggplot2) 
+library(ggplot2) #plotting
+library(dplyr) # data munging
 library(envreportutils) # theme_soe()
 library(RColorBrewer) #for colour palette
 
@@ -81,13 +82,15 @@ plot(ta_type_plot)
 
 ## @knitr in_progress
 
-## bar chart of incoming licenses by status
-tl_status_plot <- ggplot(tl_status, aes(1, y = number, fill = JobStatus)) +
+## bar chart of incoming licenses by status - in progress & parked
+tl_status_ip <- tl_status %>% 
+  filter(JobStatus == "Parked" | JobStatus == "In Progress")
+
+tl_status_ip_plot <- ggplot(tl_status_ip, aes(1, y = number, fill = JobStatus)) +
   geom_col(alpha = 0.7) +
   geom_text(aes(label = number), position = position_stack(vjust = 0.5), size = 2) +
-  labs(title = "Applications Granted & Under Adjudication by FLNRO") +
-       # subtitle = paste("Parked:", tl_parked, " ", "Abandoned:", tl_abandon)) +
-  scale_fill_manual(values = c("#6baed6", "#3182bd", "grey80", "#b15928"), name = NULL,
+  labs(title = "Applications Under Adjudication by FLNRO") +
+  scale_fill_manual(values = c("#6baed6", "grey80"), name = NULL,
                     breaks = rev(levels(tl_status$JobStatus))) +
   xlab(NULL) +
   ylab(NULL) +
@@ -104,8 +107,38 @@ tl_status_plot <- ggplot(tl_status, aes(1, y = number, fill = JobStatus)) +
         legend.direction = "horizontal") +
   guides(fill = guide_legend(nrow = 1))
 
-plot(tl_status_plot)
+plot(tl_status_ip_plot)
 
+
+## @knitr granted
+
+## bar chart of incoming licenses by status -abandoned & granted
+tl_status_gr <- tl_status %>% 
+  filter(JobStatus == "Abandoned" | JobStatus == "Granted")
+
+tl_status_gr_plot <- ggplot(tl_status_gr, aes(1, y = number, fill = JobStatus)) +
+  geom_col(alpha = 0.7) +
+  geom_text(aes(label = number), position = position_stack(vjust = 0.5), size = 2) +
+  labs(title = "Applications Granted/Abandoned by FLNRO") +
+  # subtitle = paste("Parked:", tl_parked, " ", "Abandoned:", tl_abandon)) +
+  scale_fill_manual(values = c("#3182bd", "#b15928"), name = NULL,
+                    breaks = rev(levels(tl_status$JobStatus))) +
+  xlab(NULL) +
+  ylab(NULL) +
+  theme_soe() +
+  coord_flip() +
+  scale_y_continuous(expand=c(0.005, 0)) +
+  theme(panel.grid.major.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.text = element_text(size=6),
+        plot.title = element_text(size = 8),
+        plot.margin = unit(c(5,5,5,5),"mm"),
+        legend.text = element_text(size=6),
+        legend.position = "bottom",
+        legend.direction = "horizontal") +
+  guides(fill = guide_legend(nrow = 1))
+
+plot(tl_status_gr_plot)
 
 ## @knitr app_rate
 

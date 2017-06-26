@@ -19,7 +19,7 @@ There are four core scripts that are required for the analysis, they need to be 
 
 The `run_all.R` script can be `source`ed to run it all at once.
 
-Most packages used in the analysis can be installed from CRAN using `install.packages()`, but you will need to install [envreportutils](https://github.com/bcgov/envreportutils) using devtools:
+Most packages used in the analysis can be installed from CRAN using `install.packages()`. The `rmarkdown` package is required to render the output document with `knitr`. You will need to install [envreportutils](https://github.com/bcgov/envreportutils) using devtools:
 
 ```r
 install.packages("devtools") # If you don't already have it installed
@@ -27,6 +27,7 @@ install.packages("devtools") # If you don't already have it installed
 library(devtools)
 install_github("bcgov/envreportutils")
 ```
+
 
 ### Getting Help or Reporting an Issue
 

@@ -48,6 +48,6 @@ transition_time <- filter(transition_time, `Authorization Type` == "Existing Gro
 
 ## Create tmp folder if not already there and store clean data in local repository
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
-save(transition_app, transition_lic, transition_time,
+save(transition_app, transition_lic, transition_time, datadate,
      file = "tmp/trans_gwlic_clean.RData")
 

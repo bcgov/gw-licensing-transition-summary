@@ -114,9 +114,14 @@ tl_rate_plot <- ggplot() +
   geom_line(data = transition_time_day, aes(y = cumsum, x = `Received Date`),
             alpha = 0.7, colour = "#3182bd", size = 1) +
   labs(title = "Transition Application Submission Date") +
-  geom_line(data = current_rate_forecast, aes(y = cumsum, x = date), alpha = 0.7,
-            colour = "grey40", size = 1, linetype = 2) +
- # geom_text(data = wrkshops, aes(x = date, y = cumsum, label = label)) +
+  geom_line(data = rate_forecasts, aes(y = curr_cumsum, x = date), alpha = 0.7,
+            colour = "grey20", size = 1, linetype = 2) +
+  geom_line(data = rate_forecasts, aes(y = req_cumsum, x = date), alpha = 0.7,
+            colour = "#4daf4a", size = 1, linetype = 2) +
+  annotate("text", label = paste("Current rate of application\nsubmissions:", round(current_rate, digits = 0), "/day"), colour = "grey20",
+           x = as.POSIXct(as.character("2017-02-01")), y = 18000, size = 3) +
+  annotate("text", label = paste("Required rate of application\nsubmissions:", round(rate_to_achieve, digits = 0), "/day"), colour = "#4daf4a",
+           x = as.POSIXct(as.character("2017-02-01")), y = 14000, size = 3) +
   scale_y_continuous(expand=c(0, 0), limits = c(0,20000), breaks=seq(0, 20000, 2000)) +
   xlab(NULL) +
   ylab(NULL) +

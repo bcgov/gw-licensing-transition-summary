@@ -79,7 +79,6 @@ transition_time_day <- transition_time %>%
 transition_time_day$cumsum <- cumsum(transition_time_day$numperday)
 
 ## Calculate current rate to-date
-
 appsum <- sum(transition_time_day$numperday)
 firstday <- min(transition_time_day$`Received Date`)
 lastday <- max(transition_time_day$`Received Date`)
@@ -89,16 +88,18 @@ current_rate <- appsum/numdays
 ## Calculate rate forecast based on current rate
 enddate <- as.POSIXct(as.character("2019-03-01"))
 date <- seq(lastday, enddate, by="1 day")
-current_rate_forecast <- data.frame(date)
-current_rate_forecast$num <- current_rate
-current_rate_forecast$num[1] <- appsum
-current_rate_forecast$cumsum <- cumsum(current_rate_forecast$num)
+rate_forecasts <- data.frame(date)
+rate_forecasts$curr_num <- current_rate
+rate_forecasts$curr_num[1] <- appsum
+rate_forecasts$curr_cumsum <- cumsum(rate_forecasts$curr_num)
 
 ## Calculate the required rate for March 2019 end date
 app_to_go <- est_ta - appsum
 days_to_go <- as.integer(enddate - lastday)
 rate_to_achieve <- app_to_go/days_to_go
-
+rate_forecasts$req_num <- rate_to_achieve
+rate_forecasts$req_num[1] <- appsum
+rate_forecasts$req_cumsum <- cumsum(rate_forecasts$req_num)
 
 ## workshop df
 # date <- as.POSIXct(c('2016-11-01','2017-03-01'))
@@ -110,4 +111,5 @@ rate_to_achieve <- app_to_go/days_to_go
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
 
 save(tot_ta, ta_type, est.df, cat.order, tl_status,
-     transition_time_day, current_rate_forecast, file = "tmp/trans_gwlic_summaries.RData")
+     transition_time_day, rate_forecasts, datadate,
+     current_rate, rate_to_achieve, file = "tmp/trans_gwlic_summaries.RData")

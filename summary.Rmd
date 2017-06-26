@@ -29,18 +29,23 @@ if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
 ## Existing Use Groundwater License Applications Summary (`r tot_ta` applications as of `r datadate`)
 
 
-```{r estimate, fig.height = 2, fig.width = 5}
+```{r estimate, fig.height = 2, fig.width = 4.5}
 
 ```
-```{r in_progress, fig.height = 2, fig.width = 8}
+```{r in_progress, fig.height = 2, fig.width = 4.5}
+
+```
+```{r granted, fig.height = 2, fig.width = 4.5}
 
 ```
 
-```{r types, fig.height = 2, fig.width = 13}
+```{r types, fig.height = 2, fig.width = 9}
 
 ```
 
-```{r app_rate, fig.height = 3, fig.width = 4}
+```{r app_rate, fig.height = 3, fig.width = 4.5}
 
 ```
+
+
 

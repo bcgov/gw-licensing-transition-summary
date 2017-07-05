@@ -15,10 +15,10 @@ library(readxl) # MS Excel data import
 
 ## Import the data for Existing Use Groundwater License Applications (CSV)
 ## Data source is a manual export (MS Excel file) from 'FCBC Application Search' via
-## Virtual FrontCounter BC E-licensing Home
+## email from FCBC staff (generated monthly)
 ## Data license: Access Only http://www2.gov.bc.ca/gov/content/home/copyright 
 
-transition_app_raw <- read_excel("Z:/water/groundwater/licensing/transition/FCBC ApplicationSearch_eASP Jun 19 2017.xlsx")
+transition_app_raw <- read_excel("Z:/water/groundwater/licensing/transition/Applications Summary.xlsx")
 
 
 ## Import the data for Existing Use Groundwater Incoming Licenses  (CSV)
@@ -33,7 +33,7 @@ transition_lic_raw <- read_excel("Z:/water/groundwater/licensing/transition/Appl
 ## Import the data for Existing Use Groundwater Incoming License Processing Time (CSV)
 ## Data source is a manual export (MS Excel file) from 
 ## 'FrontCounterBC ATS system application processing time report' via
-## email from FCBA staff (generted monthly)
+## email from FCBC staff (generated monthly)
 ## Data license: Access Only http://www2.gov.bc.ca/gov/content/home/copyright 
 
 transition_processing_time_raw <- read_excel("Z:/water/groundwater/licensing/transition/Groundwater Data until May 30, 2017 - run on June 5th .xlsx")

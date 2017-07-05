@@ -18,10 +18,13 @@ if (!exists("transition_app_raw")) load("tmp/trans_gwlic_raw.RData")
 ## clean transition_app_raw ##
 
 ## Only keep columns in transition_app necessary for data summaries
-keep_col_app <- c("AuthorizationType", "ApplicationDate", "StatusDescription", "VFCBCOffice")
+keep_col_app <- c("Application Type", "Region", "Purpose Use", "Date Submitted", "Job Status")
 
 transition_app <- transition_app_raw %>% 
   select(one_of(keep_col_app))
+
+## filter for Existing Groundwater Licenses only
+transition_app <- filter(transition_app, `Application Type` == "Existing Use Groundwater Application")
 
 
 ## clean transition_lic_raw ##
@@ -37,7 +40,7 @@ transition_lic <- transition_lic_raw %>%
 ## clean transition_processing_time_raw ##
 
 ## Only keep columns in transition_app necessary for data summaries
-keep_col_time <- c("Business Area", "Authorization Type", "Received Date")
+keep_col_time <- c("Region Name", "Business Area", "Authorization Type", "Received Date")
 
 transition_time <- transition_processing_time_raw %>% 
   select(one_of(keep_col_time))

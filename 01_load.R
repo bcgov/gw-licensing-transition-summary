@@ -15,7 +15,7 @@ library(readxl) # MS Excel data import
 
 
 ## Import the projected number of transition Existing Use Groundwater License Applications
-projected_app <- read_excel("Z:/water/groundwater/licensing/transition/Projected_GW_Transition_Licenses_ENVWaterBranch.xlsx")
+projected_app_raw <- read_excel("Z:/water/groundwater/licensing/transition/Projected_GW_Transition_Licenses_ENVWaterBranch.xlsx")
 
 
 ## Import the APPLICATION data for Existing Use Groundwater License Applications
@@ -50,5 +50,5 @@ proctime_date <- "June 30th 2017"
 ## Create tmp folder if not already there and store raw data in local repository
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
 save(transition_app_raw, transition_lic_raw, app_date, lic_date, proctime_date,
-     transition_processing_time_raw, file = "tmp/trans_gwlic_raw.RData")
+     transition_processing_time_raw, projected_app_raw, file = "tmp/trans_gwlic_raw.RData")
 

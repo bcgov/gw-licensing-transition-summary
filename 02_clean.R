@@ -15,6 +15,19 @@ library(dplyr) # data munging
 ## Load raw data if not already in local repository
 if (!exists("transition_app_raw")) load("tmp/trans_gwlic_raw.RData")
 
+
+## clean projected_app_raw ##
+
+## Only keep columns in transition_app necessary for data summaries
+names(projected_app_raw)[names(projected_app_raw) == "Projected (based on assumption of 20,000 wells)"] <- "Projected"
+keep_col_proj <- c("Region", "Projected")
+
+projected_app <- projected_app_raw %>% 
+  select(one_of(keep_col_proj)) %>% 
+  mutate(Projected = round(Projected, digits = 0))
+
+
+
 ## clean transition_app_raw ##
 
 ## Only keep columns in transition_app necessary for data summaries
@@ -40,17 +53,18 @@ transition_lic <- transition_lic_raw %>%
 ## clean transition_processing_time_raw ##
 
 ## Only keep columns in transition_app necessary for data summaries
-keep_col_time <- c("Region Name", "Business Area", "Authorization Type", "Received Date")
+keep_col_time <- c("Region Name", "Business Area", "Authorization Type", "Received Date", "Total Processing Time")
 
-transition_time <- transition_processing_time_raw %>% 
+processing_time <- processing_time_raw %>% 
   select(one_of(keep_col_time))
 
 ## filter for Existing Groundwater Licenses only
-transition_time <- filter(transition_time, `Authorization Type` == "Existing Groundwater Licence")
+processing_time <- filter(processing_time,
+                          `Authorization Type` == "Existing Groundwater Licence" | `Authorization Type` == "New Groundwater Licence" )
 
 
 ## Create tmp folder if not already there and store clean data in local repository
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
-save(transition_app, transition_lic, transition_time, datadate,
-     file = "tmp/trans_gwlic_clean.RData")
+save(projected_app, transition_app, transition_lic, processing_time, 
+     app_date, lic_date, proctime_date, file = "tmp/trans_gwlic_clean.RData")
 

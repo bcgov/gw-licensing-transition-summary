@@ -42,13 +42,14 @@ lic_date <- "June 19th 2017"
 ## 'FrontCounterBC ATS system application processing time report' provided by
 ## email from FCBC FLNRO staff (generated monthly)
 ## Data license: Access Only http://www2.gov.bc.ca/gov/content/home/copyright 
-transition_processing_time_raw <- read_excel("Z:/water/groundwater/licensing/transition/GroundWater-June2017.xlsx")
+processing_time_raw <- read_excel("Z:/water/groundwater/licensing/transition/GroundWater-June2017.xlsx")
 ## Data as of date
 proctime_date <- "June 30th 2017"
 
 
 ## Create tmp folder if not already there and store raw data in local repository
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
-save(transition_app_raw, transition_lic_raw, app_date, lic_date, proctime_date,
-     transition_processing_time_raw, projected_app_raw, file = "tmp/trans_gwlic_raw.RData")
+save(projected_app_raw, transition_app_raw, transition_lic_raw,
+     processing_time_raw, app_date, lic_date, proctime_date,
+     file = "tmp/trans_gwlic_raw.RData")
 

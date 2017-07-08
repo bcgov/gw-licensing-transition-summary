@@ -21,7 +21,7 @@ if (!exists("transition_app")) load("tmp/trans_gwlic_clean.RData")
 ## transition_app summaries ##
 
 ## make a 'total transition applications with estimated transitions' dataframe
-tot_ta <- length(transition_app$AuthorizationType)
+tot_ta <- length(transition_app$Application_Type)
 est_ta <- 20000
 remaining <- est_ta-tot_ta
 cat <- c("Estimated Outstanding", "Current Number")
@@ -33,11 +33,12 @@ est.df<- order_df(est.df, target_col = "cat", value_col = "val", fun = max, desc
 
 ## number of applications by application category
 ta_type <- transition_app %>% 
-  group_by(StatusDescription) %>% 
-  summarise(number = length(StatusDescription))
+ # group_by(Job_Status) %>% 
+  count(Job_Status) %>% 
+  summarise(number = ta_type$freq.x)
 
 ## arranging the order of the categories to be plotted
-cat.order <- c("Accepted", "Under Review", "Pending", "Submitted", "Pre-Submittal", 
+cat.order <- c("Under Review", "Pending", "Submitted", "Pre-Submittal", 
                 "Not Accepted", "Cancelled", "Editing")
 
 ## reordering the categories for plotting

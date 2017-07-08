@@ -16,7 +16,7 @@ library(dplyr) # data munging
 if (!exists("transition_app_raw")) load("tmp/trans_gwlic_raw.RData")
 
 
-## clean projected_app_raw ##
+## Clean projected_app_raw ##
 
 ## Only keep columns in transition_app necessary for data summaries
 names(projected_app_raw)[names(projected_app_raw) == "Projected (based on assumption of 20,000 wells)"] <- "Projected"
@@ -28,7 +28,7 @@ projected_app <- projected_app_raw %>%
 
 
 
-## clean transition_app_raw ##
+## Clean transition_app_raw ##
 
 ## Only keep columns in transition_app necessary for data summaries
 keep_col_app <- c("Application Type", "Region", "Purpose Use", "Date Submitted", "Job Status")
@@ -36,11 +36,14 @@ keep_col_app <- c("Application Type", "Region", "Purpose Use", "Date Submitted",
 transition_app <- transition_app_raw %>% 
   select(one_of(keep_col_app))
 
-## filter for Existing Groundwater Licenses only
-transition_app <- filter(transition_app, `Application Type` == "Existing Use Groundwater Application")
+## Remove spaces in col names
+colnames(transition_app) <- gsub(" ", "_", colnames(transition_app))
+
+## Filter for Existing Groundwater Licenses only
+transition_app <- filter(transition_app, Application_Type == "Existing Use Groundwater Application")
 
 
-## clean transition_lic_raw ##
+## Clean transition_lic_raw ##
 
 ## Only keep columns in transition_lic necessary for data summaries
 keep_col_lic <- c("ApplicationType", "NewExistingUse", "JobStatus", "Region",
@@ -50,7 +53,7 @@ transition_lic <- transition_lic_raw %>%
   select(one_of(keep_col_lic))
 
 
-## clean transition_processing_time_raw ##
+## Clean transition_processing_time_raw ##
 
 ## Only keep columns in transition_app necessary for data summaries
 keep_col_time <- c("Region Name", "Business Area", "Authorization Type", "Received Date", "Total Processing Time")
@@ -58,9 +61,12 @@ keep_col_time <- c("Region Name", "Business Area", "Authorization Type", "Receiv
 processing_time <- processing_time_raw %>% 
   select(one_of(keep_col_time))
 
-## filter for Existing Groundwater Licenses only
+## Remove spaces in col names
+colnames(processing_time) <- gsub(" ", "_", colnames(processing_time))
+
+## Filter for Existing Groundwater Licenses only
 processing_time <- filter(processing_time,
-                          `Authorization Type` == "Existing Groundwater Licence" | `Authorization Type` == "New Groundwater Licence" )
+                          Authorization_Type == "Existing Groundwater Licence" | Authorization_Type == "New Groundwater Licence" )
 
 
 ## Create tmp folder if not already there and store clean data in local repository

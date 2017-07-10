@@ -18,10 +18,10 @@ library(lubridate)
 if (!exists("transition_app")) load("tmp/trans_gwlic_clean.RData")
 
 
-## transition_app summaries ##
 
+## transition_app summaries ##
 ## make a 'total transition applications with estimated transitions' dataframe
-tot_ta <- length(transition_app$Application_Type)
+tot_ta <- length(transition_app$StatusDescription)
 est_ta <- 20000
 remaining <- est_ta-tot_ta
 cat <- c("Estimated Outstanding", "Current Number")
@@ -33,53 +33,28 @@ est.df<- order_df(est.df, target_col = "cat", value_col = "val", fun = max, desc
 
 ## number of applications by application category
 ta_type <- transition_app %>% 
-  count(Job_Status) %>% 
+  count(StatusDescription) 
 
 ## arranging the order of the categories to be plotted
-cat.order <- c("Under Review", "Pending", "Submitted", "Pre-Submittal", 
+cat.order <- c("Accepted", "Under Review", "Pending", "Submitted", "Pre-Submittal", 
                 "Not Accepted", "Cancelled", "Editing")
 
 ## reordering the categories for plotting
-ta_type$Job_Status <- factor(ta_type$StatusDescription, levels = cat.order)
+ta_type$StatusDescription <- factor(ta_type$StatusDescription, levels = cat.order)
 
-
-## transition_lic summaries ##
-
-## number of licenses by status category
-tl_status <- transition_lic %>% 
-  group_by(JobStatus) %>% 
-  summarise(number = length(JobStatus))
-
-## Change 'Grant' to 'Granted'
-tl_status$JobStatus[tl_status$JobStatus == "Grant"] <- "Granted"
-
-## Subset for plotting only 2 categories
-# tl_in_progress <- tl_status %>%
-#   filter(JobStatus == "In Progress" | JobStatus == "Granted")
-
-## order tl_in_progress dataframe & change JobStatus Name
-tl_status<- order_df(tl_status, target_col = "JobStatus", value_col = "number", fun = max, desc = TRUE)
-
-
-## calculate number of parked and abandoned 
-# tl_parked <- tl_status$number[tl_status$JobStatus == "Parked"]
-# tl_abandon <- tl_status$number[tl_status$JobStatus == "Abandoned"]
-
-
-## transition_time summaries ##
 
 ## calculate the num applications per day
-transition_time_day <- transition_time %>%
-  group_by(`Business Area`, `Authorization Type`, `Received Date`) %>% 
+transition_time_day <- transition_app %>%
+  group_by(ApplicationDate) %>%
   summarise(numperday = n())
 
-## cumlative sum of applications  
+## cumlative sum of applications
 transition_time_day$cumsum <- cumsum(transition_time_day$numperday)
 
 ## Calculate current rate to-date
 appsum <- sum(transition_time_day$numperday)
-firstday <- min(transition_time_day$`Received Date`)
-lastday <- max(transition_time_day$`Received Date`)
+firstday <- min(transition_time_day$ApplicationDate)
+lastday <- max(transition_time_day$ApplicationDate)
 numdays <- as.integer(difftime(as.POSIXct(lastday), as.POSIXct(firstday), units="days"))
 current_rate <- appsum/numdays
 
@@ -99,15 +74,69 @@ rate_forecasts$req_num <- rate_to_achieve
 rate_forecasts$req_num[1] <- appsum
 rate_forecasts$req_cumsum <- cumsum(rate_forecasts$req_num)
 
+# ## calculate the num applications per day
+# transition_time_day <- processing_time %>%
+#   group_by(Business_Area, Authorization_Type, Received_Date) %>% 
+#   summarise(numperday = n())
+# 
+# ## cumlative sum of applications  
+# transition_time_day$cumsum <- cumsum(transition_time_day$numperday)
+# 
+# ## Calculate current rate to-date
+# appsum <- sum(transition_time_day$numperday)
+# firstday <- min(transition_time_day$`Received Date`)
+# lastday <- max(transition_time_day$`Received Date`)
+# numdays <- as.integer(difftime(as.POSIXct(lastday), as.POSIXct(firstday), units="days"))
+# current_rate <- appsum/numdays
+# 
+# ## Calculate rate forecast based on current rate
+# enddate <- as.POSIXct(as.character("2019-03-01"))
+# date <- seq(lastday, enddate, by="1 day")
+# rate_forecasts <- data.frame(date)
+# rate_forecasts$curr_num <- current_rate
+# rate_forecasts$curr_num[1] <- appsum
+# rate_forecasts$curr_cumsum <- cumsum(rate_forecasts$curr_num)
+# 
+# ## Calculate the required rate for March 2019 end date
+# app_to_go <- est_ta - appsum
+# days_to_go <- as.integer(enddate - lastday)
+# rate_to_achieve <- app_to_go/days_to_go
+# rate_forecasts$req_num <- rate_to_achieve
+# rate_forecasts$req_num[1] <- appsum
+# rate_forecasts$req_cumsum <- cumsum(rate_forecasts$req_num)
+
 ## workshop df
 # date <- as.POSIXct(c('2016-11-01','2017-03-01'))
 # cumsum <- c(179, 802)
 # label <- as.character(c("Start of\nWorkshops", "End of \nWorkshops"))
 # wrkshops <- data.frame(date, cumsum, label)
 
+
+
+## transition_lic summaries ##
+## number of licenses by status category
+tl_status <- transition_lic %>% 
+  group_by(JobStatus) %>% 
+  summarise(number = length(JobStatus))
+
+## Change 'Grant' to 'Granted'
+tl_status$JobStatus[tl_status$JobStatus == "Grant"] <- "Granted"
+
+## arranging the order of the categories to be plotted
+cat.order2 <- c("Granted", "In Progress", "Parked")
+
+## reordering the categories for plotting
+tl_status$JobStatus <- factor(tl_status$JobStatus, levels = cat.order2)
+
+
+
+## transition_time summaries ##
+
+
+
 ## Create tmp folder if not already there and store clean data in local repository
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
 
 save(tot_ta, ta_type, est.df, cat.order, tl_status,
-     transition_time_day, rate_forecasts, datadate,
+     transition_time_day, rate_forecasts,  app_date, lic_date, proctime_date,
      current_rate, rate_to_achieve, file = "tmp/trans_gwlic_summaries.RData")

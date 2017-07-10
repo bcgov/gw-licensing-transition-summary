@@ -26,12 +26,12 @@ transition_app_raw <- read_excel("Z:/water/groundwater/licensing/transition/Appl
 app_date <- "July 4th 2017"
 
 
-# Import the APPLICATION data (version 2) for Existing Use Groundwater License Applications
-# Data source is a MS Excel file provided by email from FLNRO staff (generated on demand)
-# Data license: Access Only http://www2.gov.bc.ca/gov/content/home/copyright
-transition_appv2_raw <- read_excel("Z:/water/groundwater/licensing/transition/Applications Summary.xlsx")
-## Data 'as of' date
-appv2_date <- "June 30th 2017"
+# # Import the APPLICATION data (version 2) for Existing Use Groundwater License Applications
+# # Data source is a MS Excel file provided by email from FLNRO staff (generated on demand)
+# # Data license: Access Only http://www2.gov.bc.ca/gov/content/home/copyright
+# transition_appv2_raw <- read_excel("Z:/water/groundwater/licensing/transition/Applications Summary.xlsx")
+# ## Data 'as of' date
+# appv2_date <- "June 30th 2017"
 
 
 ## Import the LICENSING data for Existing Use Groundwater Incoming Licenses
@@ -55,7 +55,7 @@ proctime_date <- "June 30th 2017"
 
 ## Create tmp folder if not already there and store raw data in local repository
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
-save(projected_app_raw, transition_app_raw, transition_appv2_raw, transition_lic_raw,
-     processing_time_raw, app_date, appv2_date, lic_date, proctime_date, 
+save(projected_app_raw, transition_app_raw, transition_lic_raw,
+     processing_time_raw, app_date, lic_date, proctime_date, 
      file = "tmp/trans_gwlic_raw.RData")
 

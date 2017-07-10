@@ -16,8 +16,8 @@ library(dplyr) # data munging
 if (!exists("transition_app_raw")) load("tmp/trans_gwlic_raw.RData")
 
 
-## Clean projected_app_raw ##
 
+## Clean projected_app_raw ##
 ## Only keep columns in transition_app necessary for data summaries
 names(projected_app_raw)[names(projected_app_raw) == "Projected (based on assumption of 20,000 wells)"] <- "Projected"
 keep_col_proj <- c("Region", "Projected")
@@ -29,22 +29,30 @@ projected_app <- projected_app_raw %>%
 
 
 ## Clean transition_app_raw ##
-
 ## Only keep columns in transition_app necessary for data summaries
-keep_col_app <- c("Application Type", "Region", "Purpose Use", "Date Submitted", "Job Status")
+keep_col_app <- c("AuthorizationType", "ApplicationDate", "StatusDescription")
 
 transition_app <- transition_app_raw %>% 
   select(one_of(keep_col_app))
 
+
+
+## Clean transition_appv2_raw ##
+## Only keep columns in transition_app necessary for data summaries
+keep_col_appv2 <- c("Application Type", "Region", "Purpose Use", "Date Submitted", "Job Status")
+
+transition_appv2 <- transition_appv2_raw %>%
+  select(one_of(keep_col_appv2))
+
 ## Remove spaces in col names
-colnames(transition_app) <- gsub(" ", "_", colnames(transition_app))
+colnames(transition_appv2) <- gsub(" ", "_", colnames(transition_appv2))
 
 ## Filter for Existing Groundwater Licenses only
-transition_app <- filter(transition_app, Application_Type == "Existing Use Groundwater Application")
+transition_appv2 <- filter(transition_appv2, Application_Type == "Existing Use Groundwater Application")
+
 
 
 ## Clean transition_lic_raw ##
-
 ## Only keep columns in transition_lic necessary for data summaries
 keep_col_lic <- c("ApplicationType", "NewExistingUse", "JobStatus", "Region",
                   "PurposeUse", "Volume1000m3y")
@@ -53,8 +61,8 @@ transition_lic <- transition_lic_raw %>%
   select(one_of(keep_col_lic))
 
 
-## Clean transition_processing_time_raw ##
 
+## Clean transition_processing_time_raw ##
 ## Only keep columns in transition_app necessary for data summaries
 keep_col_time <- c("Region Name", "Business Area", "Authorization Type", "Received Date", "Total Processing Time")
 
@@ -69,8 +77,9 @@ processing_time <- filter(processing_time,
                           Authorization_Type == "Existing Groundwater Licence" | Authorization_Type == "New Groundwater Licence" )
 
 
+
 ## Create tmp folder if not already there and store clean data in local repository
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
-save(projected_app, transition_app, transition_lic, processing_time, 
-     app_date, lic_date, proctime_date, file = "tmp/trans_gwlic_clean.RData")
+save(projected_app, transition_app, transition_appv2, transition_lic, processing_time, 
+      app_date, appv2_date, lic_date, proctime_date, file = "tmp/trans_gwlic_clean.RData")
 

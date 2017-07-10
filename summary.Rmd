@@ -1,8 +1,6 @@
 ---
 output: pdf_document
-classoption: landscape
-geometry: margin=1cm
-papersize: legal
+#geometry: margin=1cm
 ---
 
 
@@ -26,26 +24,32 @@ if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
 ```
 \pagenumbering{gobble}
 
-## Existing Use Groundwater License Applications Summary (`r tot_ta` applications as of `r datadate`)
 
+# Groundwater License Application Dashboard
 
-```{r estimate, fig.height = 2, fig.width = 4.5}
+\vspace{12pt}
 
-```
-```{r in_progress, fig.height = 2, fig.width = 4.5}
-
-```
-```{r granted, fig.height = 2, fig.width = 4.5}
-
-```
-
-```{r types, fig.height = 2, fig.width = 9}
+## Applications Received To-Date: Transitioning Users (`r app_date`)
+  
+  
+```{r estimate, fig.height = 2, fig.width = 7}
 
 ```
 
-```{r app_rate, fig.height = 3, fig.width = 4.5}
+```{r app_rate, fig.height = 4, fig.width = 7}
 
 ```
+
+```{r types, fig.height = 2, fig.width = 7}
+
+```
+
+## Status of Applications Received To-Date: Transitioning Users (`r lic_date`)
+
+```{r incoming, fig.height = 2, fig.width = 7}
+
+```
+
 
 
 

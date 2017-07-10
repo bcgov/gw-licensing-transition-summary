@@ -32,9 +32,9 @@ app_date <- "June 30th 2017"
 ## 'Incoming Groundwater Licence Application Tracking Report' through
 ## Virtual FrontCounter BC E-licensing Home, generated manually by ENV staff
 ## Data license: Access Only http://www2.gov.bc.ca/gov/content/home/copyright 
-transition_lic_raw <- read_excel("Z:/water/groundwater/licensing/transition/ApplicationPurposeUseSearch Jun 19 2017.xlsx")
+transition_lic_raw <- read_excel("Z:/water/groundwater/licensing/transition/ApplicationPurposeUseSearch.xlsx")
 ## Data as of date
-lic_date <- "June 19th 2017"
+lic_date <- "July 10th 2017"
 
 
 ## Import the PROCESSING TIME data for Existing Use Groundwater Incoming Licensing

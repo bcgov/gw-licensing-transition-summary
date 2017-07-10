@@ -14,7 +14,7 @@
 library(readxl) # MS Excel data import 
 
 
-## Import the projected number of transition Existing Use Groundwater License Applications
+## Import the projected number of transition Existing Use Groundwater License Applications (from ENV Water Branch)
 projected_app_raw <- read_excel("Z:/water/groundwater/licensing/transition/Projected_GW_Transition_Licenses_ENVWaterBranch.xlsx")
 
 
@@ -23,7 +23,7 @@ projected_app_raw <- read_excel("Z:/water/groundwater/licensing/transition/Proje
 ## provided by email from FLNRO staff (generated on demand)
 ## Data license: Access Only http://www2.gov.bc.ca/gov/content/home/copyright 
 transition_app_raw <- read_excel("Z:/water/groundwater/licensing/transition/Applications Summary.xlsx")
-## Data as of date
+## Data 'as of' date
 app_date <- "June 30th 2017"
 
 
@@ -33,7 +33,7 @@ app_date <- "June 30th 2017"
 ## Virtual FrontCounter BC E-licensing Home, generated manually by ENV staff
 ## Data license: Access Only http://www2.gov.bc.ca/gov/content/home/copyright 
 transition_lic_raw <- read_excel("Z:/water/groundwater/licensing/transition/ApplicationPurposeUseSearch.xlsx")
-## Data as of date
+## Data 'as of' date
 lic_date <- "July 10th 2017"
 
 
@@ -43,7 +43,7 @@ lic_date <- "July 10th 2017"
 ## email from FCBC FLNRO staff (generated monthly)
 ## Data license: Access Only http://www2.gov.bc.ca/gov/content/home/copyright 
 processing_time_raw <- read_excel("Z:/water/groundwater/licensing/transition/GroundWater-June2017.xlsx")
-## Data as of date
+## Data 'as of' date
 proctime_date <- "June 30th 2017"
 
 

@@ -48,7 +48,8 @@ ta_region <- transition_app %>%
   group_by(nrs_region) %>%
   summarise(actual = n()) %>%
   merge(projected_app, by = "nrs_region", all.y=TRUE) %>% 
-  gather(type, value, -nrs_region)
+  gather(type, value, -nrs_region) %>% 
+  mutate(value = ifelse(is.na(value), 0, value))
 
 
 ## Rate of applications

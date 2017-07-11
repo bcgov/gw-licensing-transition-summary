@@ -30,26 +30,23 @@ projected_app <- projected_app_raw %>%
 
 ## Clean transition_app_raw ##
 ## Only keep columns in transition_app necessary for data summaries
-keep_col_app <- c("AuthorizationType", "ApplicationDate", "StatusDescription")
+keep_col_app <- c("AuthorizationType", "ApplicationDate", "VFCBCOffice", "StatusDescription")
 
 transition_app <- transition_app_raw %>% 
   select(one_of(keep_col_app))
 
+## Add Regions to transition_all df
+## Get regions for each office from ATS report
+office_regions <- processing_time_raw %>%
+  mutate(nrs_region = `Region Name`, VFCBCOffice = `Office Name`) %>% 
+  select(nrs_region, VFCBCOffice) %>% 
+  group_by(VFCBCOffice, nrs_region) %>% 
+  summarise(n = n()) %>% 
+  select(-(n))
 
-
-# ## Clean transition_appv2_raw ##
-# ## Only keep columns in transition_app necessary for data summaries
-# keep_col_appv2 <- c("Application Type", "Region", "Purpose Use", "Date Submitted", "Job Status")
-# 
-# transition_appv2 <- transition_appv2_raw %>%
-#   select(one_of(keep_col_appv2))
-# 
-# ## Remove spaces in col names
-# colnames(transition_appv2) <- gsub(" ", "_", colnames(transition_appv2))
-# 
-# ## Filter for Existing Groundwater Licenses only
-# transition_appv2 <- filter(transition_appv2, Application_Type == "Existing Use Groundwater Application")
-
+## Merge nrs_regions into transition_all df
+transition_app <- merge(transition_app, office_regions, by = "VFCBCOffice", all.x = TRUE)
+  
 
 
 ## Clean transition_lic_raw ##

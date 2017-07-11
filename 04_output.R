@@ -24,41 +24,13 @@ if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
 ## PLOTS
 
 
-## @knitr app_rate
-
-## line chart of incoming transition licenses by date and rates
-tl_rate_plot <- ggplot() +
-  geom_line(data = transition_time_day, aes(y = cumsum, x = ApplicationDate),
-            alpha = 0.7, colour = "#08519c", size = 1) +
-#  labs(title = paste("Applications Received To Date: Transitioning Users (",app_date,")", sep = "")) +
-  labs(title = "Rate of Applications Received To Date Compared to Required Rate") +
-  geom_line(data = rate_forecasts, aes(y = curr_cumsum, x = date), alpha = 0.7,
-            colour = "#08519c", size = 1, linetype = 2) +
-  geom_line(data = rate_forecasts, aes(y = req_cumsum, x = date), alpha = 0.7,
-            colour = "#006d2c", size = 1, linetype = 2) +
-  annotate("text", label = paste("Current Rate of Application\nSubmissions: ", round(current_rate, digits = 0), "/day", sep = ""), colour = "#08519c",
-           x = as.POSIXct(as.character("2016-11-01")), y = 4000, size = 4) +
-  annotate("text", label = paste("Required Rate of Application\nSubmissions: ", round(rate_to_achieve, digits = 0), "/day", sep = ""), colour = "#006d2c",
-           x = as.POSIXct(as.character("2017-11-01")), y = 16000, size = 4) +
-  scale_y_continuous(expand=c(0, 0), limits = c(0,20000), breaks=seq(0, 20000, 2000)) +
-  xlab(NULL) +
-  ylab(NULL) +
-  theme_soe() +
-  theme(panel.grid.major.x = element_blank(),
-        axis.text = element_text(size=8),
-        plot.title = element_text(size = 10),
-        plot.margin = unit(c(5,5,5,5),"mm"))
-
-plot(tl_rate_plot)
-
-
 ## @knitr estimate
 
 ## bar chart of total and estimated applications
 tot_est_plot <- ggplot(est.df, aes(1, y = val, fill = cat)) +
   geom_col(alpha = .7) +
   geom_text(aes(label = val), position = position_stack(vjust = 0.5), size = 3) +
-#  labs(title = paste("Applications Received To Date: Transitioning Users (",app_date,")", sep = "")) +
+  #  labs(title = paste("Applications Received To Date: Transitioning Users (",app_date,")", sep = "")) +
   labs(title = "Transitioning Applications Received Compared to Estimated") +
   scale_fill_manual(values = c("grey70", "#3182bd"), name = NULL, breaks = rev(levels(est.df$cat))) +
   xlab(NULL) +
@@ -76,6 +48,37 @@ tot_est_plot <- ggplot(est.df, aes(1, y = val, fill = cat)) +
         legend.direction = "horizontal")
 
 plot(tot_est_plot)
+
+
+
+## @knitr app_rate
+
+## line chart of incoming transition licenses by date and rates
+tl_rate_plot <- ggplot() +
+  geom_line(data = transition_time_day, aes(y = cumsum, x = ApplicationDate),
+            alpha = 0.7, colour = "#08519c", size = 1) +
+#  labs(title = paste("Applications Received To Date: Transitioning Users (",app_date,")", sep = "")) +
+  labs(title = "Rate of Applications Received To Date Compared to Required Rate") +
+  geom_line(data = rate_forecasts, aes(y = curr_cumsum, x = date), alpha = 0.7,
+            colour = "#08519c", size = 1, linetype = 2) +
+  geom_line(data = rate_forecasts, aes(y = req_cumsum, x = date), alpha = 0.7,
+            colour = "#006d2c", size = 1, linetype = 2) +
+  annotate("text", label = paste("Average Rate of Application\nSubmissions To Date:\n", round(current_rate, digits = 1), "/day", sep = ""), colour = "#08519c",
+           x = as.POSIXct(as.character("2016-11-01")), y = 4000, size = 4) +
+  annotate("text", label = paste("Required Rate of Application\nSubmissions Starting ", lastday,":\n", round(rate_to_achieve, digits = 0), "/day", sep = ""), colour = "#006d2c",
+           x = as.POSIXct(as.character("2017-11-01")), y = 16000, size = 4) +
+  scale_y_continuous(expand=c(0, 0), limits = c(0,20000), breaks=seq(0, 20000, 2000)) +
+  xlab(NULL) +
+  ylab(NULL) +
+  theme_soe() +
+  theme(panel.grid.major.x = element_blank(),
+        axis.text = element_text(size=8),
+        plot.title = element_text(size = 10, hjust = -.25),
+        plot.margin = unit(c(5,5,5,5),"mm"))
+
+plot(tl_rate_plot)
+
+
 
 
 ## @knitr types

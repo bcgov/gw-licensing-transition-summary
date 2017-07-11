@@ -23,7 +23,7 @@ projected_app_raw <- read_excel("Z:/water/groundwater/licensing/transition/Proje
 ## Data license: Access Only http://www2.gov.bc.ca/gov/content/home/copyright 
 transition_app_raw <- read_excel("Z:/water/groundwater/licensing/transition/ApplicationSearch_eASP.xlsx")
 ## Data 'as of' date
-app_date <- "July 4th 2017"
+app_date <- "July 10th 2017"
 
 
 # # Import the APPLICATION data (version 2) for Existing Use Groundwater License Applications

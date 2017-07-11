@@ -42,7 +42,14 @@ cat.order <- c("Accepted", "Under Review", "Pending", "Submitted", "Pre-Submitta
 ## reordering the categories for plotting
 ta_type$StatusDescription <- factor(ta_type$StatusDescription, levels = cat.order)
 
+## Number applications by Region
+ta_region <- transition_app %>% 
+  group_by(nrs_region) %>%
+  summarise(number = n()) %>% 
+  merge(regions, by = "nrs_region", all.y=TRUE)
 
+
+## Rate of applications
 ## calculate the num applications per day
 transition_time_day <- transition_app %>%
   group_by(ApplicationDate) %>%

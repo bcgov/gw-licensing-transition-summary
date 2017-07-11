@@ -127,4 +127,4 @@ if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
 save(tot_ta, ta_type, est.df, cat.order, tl_status,
      transition_time_day, rate_forecasts,  app_date, lic_date, proctime_date,
      current_rate, rate_to_achieve, lastday,
-     work_day_rate_to_achieve, file = "tmp/trans_gwlic_summaries.RData")
+     work_day_rate_to_achieve, ta_region, file = "tmp/trans_gwlic_summaries.RData")

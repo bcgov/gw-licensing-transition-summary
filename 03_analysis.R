@@ -13,6 +13,7 @@
 library(dplyr) # data munging
 library(envreportutils) # order_df
 library(lubridate)
+library(tidyr) # reshape df
 
 ## Load clean data if not already in local repository
 if (!exists("transition_app")) load("tmp/trans_gwlic_clean.RData")
@@ -42,11 +43,12 @@ cat.order <- c("Accepted", "Under Review", "Pending", "Submitted", "Pre-Submitta
 ## reordering the categories for plotting
 ta_type$StatusDescription <- factor(ta_type$StatusDescription, levels = cat.order)
 
-## Number applications by Region
+## Number applications and predicted number by Region
 ta_region <- transition_app %>% 
   group_by(nrs_region) %>%
-  summarise(number = n()) %>% 
-  merge(regions, by = "nrs_region", all.y=TRUE)
+  summarise(actual = n()) %>%
+  merge(projected_app, by = "nrs_region", all.y=TRUE) %>% 
+  gather(type, value, -nrs_region)
 
 
 ## Rate of applications

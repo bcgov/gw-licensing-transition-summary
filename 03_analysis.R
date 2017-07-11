@@ -55,7 +55,7 @@ mean_rate_per_day <- mean(transition_time_day$numperday)
 #   geom_col(alpha = 0.7)
 # plot(day_plot)
 
-## cumlative sum of applications
+## cumlative sum of applications and add to df
 transition_time_day$cumsum <- cumsum(transition_time_day$numperday)
 
 ## Calculate current rate to-date
@@ -65,7 +65,7 @@ lastday <- max(transition_time_day$ApplicationDate)
 numdays <- as.integer(difftime(as.POSIXct(lastday), as.POSIXct(firstday), units="days"))
 current_rate <- appsum/numdays
 
-## Calculate rate forecast based on current rate
+## Calculate rate forecast based on current rate and add to df
 enddate <- as.POSIXct(as.character("2019-03-01"))
 date <- seq(lastday, enddate, by="1 day")
 rate_forecasts <- data.frame(date)
@@ -73,7 +73,7 @@ rate_forecasts$curr_num <- current_rate
 rate_forecasts$curr_num[1] <- appsum
 rate_forecasts$curr_cumsum <- cumsum(rate_forecasts$curr_num)
 
-## Calculate the required rate for March 2019 end date
+## Calculate the required rate for March 2019 end date and add to df
 app_to_go <- est_ta - appsum
 days_to_go <- as.integer(enddate - lastday)
 rate_to_achieve <- app_to_go/days_to_go
@@ -81,36 +81,9 @@ rate_forecasts$req_num <- rate_to_achieve
 rate_forecasts$req_num[1] <- appsum
 rate_forecasts$req_cumsum <- cumsum(rate_forecasts$req_num)
 
-# ## calculate the num applications per day
-# transition_time_day <- processing_time %>%
-#   group_by(Business_Area, Authorization_Type, Received_Date) %>% 
-#   summarise(numperday = n())
-# 
-# ## cumlative sum of applications  
-# transition_time_day$cumsum <- cumsum(transition_time_day$numperday)
-# 
-# ## Calculate current rate to-date
-# appsum <- sum(transition_time_day$numperday)
-# firstday <- min(transition_time_day$`Received Date`)
-# lastday <- max(transition_time_day$`Received Date`)
-# numdays <- as.integer(difftime(as.POSIXct(lastday), as.POSIXct(firstday), units="days"))
-# current_rate <- appsum/numdays
-# 
-# ## Calculate rate forecast based on current rate
-# enddate <- as.POSIXct(as.character("2019-03-01"))
-# date <- seq(lastday, enddate, by="1 day")
-# rate_forecasts <- data.frame(date)
-# rate_forecasts$curr_num <- current_rate
-# rate_forecasts$curr_num[1] <- appsum
-# rate_forecasts$curr_cumsum <- cumsum(rate_forecasts$curr_num)
-# 
-# ## Calculate the required rate for March 2019 end date
-# app_to_go <- est_ta - appsum
-# days_to_go <- as.integer(enddate - lastday)
-# rate_to_achieve <- app_to_go/days_to_go
-# rate_forecasts$req_num <- rate_to_achieve
-# rate_forecasts$req_num[1] <- appsum
-# rate_forecasts$req_cumsum <- cumsum(rate_forecasts$req_num)
+## Calculate the required rate for March 2019 end date for workdays only
+work_days_to_go <- sum(!weekdays(seq(lastday, enddate, "days")) %in% c("Saturday", "Sunday"))
+work_day_rate_to_achieve <- app_to_go/work_days_to_go
 
 ## workshop df
 # date <- as.POSIXct(c('2016-11-01','2017-03-01'))

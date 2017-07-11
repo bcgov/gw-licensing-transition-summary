@@ -19,13 +19,13 @@ if (!exists("transition_app_raw")) load("tmp/trans_gwlic_raw.RData")
 
 ## Clean projected_app_raw ##
 ## Only keep columns in transition_app necessary for data summaries
-names(projected_app_raw)[names(projected_app_raw) == "Projected (based on assumption of 20,000 wells)"] <- "Projected"
-keep_col_proj <- c("Region", "Projected")
+names(projected_app_raw)[names(projected_app_raw) == "Projected (based on assumption of 20,000 wells)"] <- "projected"
+names(projected_app_raw)[names(projected_app_raw) == "Region"] <- "nrs_region"
+keep_col_proj <- c("nrs_region", "projected")
 
 projected_app <- projected_app_raw %>% 
   select(one_of(keep_col_proj)) %>% 
-  mutate(Projected = round(Projected, digits = 0))
-
+  mutate(projected = round(projected, digits = 0))
 
 
 ## Clean transition_app_raw ##
@@ -44,6 +44,10 @@ office_regions <- processing_time_raw %>%
   summarise(n = n()) %>% 
   select(-(n))
 
+## Change 'North East' to 'Northeast'
+office_regions$nrs_region[office_regions$nrs_region == "North East"] <- "Northeast"
+
+## Region file
 regions <- office_regions %>% 
   group_by(nrs_region) %>% 
   summarise(n = n()) %>% 

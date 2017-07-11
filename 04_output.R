@@ -65,7 +65,8 @@ tl_rate_plot <- ggplot() +
             colour = "#006d2c", size = 1, linetype = 2) +
   annotate("text", label = paste("Average Rate of Application\nSubmissions To Date:\n", round(current_rate, digits = 1), "/day", sep = ""), colour = "#08519c",
            x = as.POSIXct(as.character("2016-11-01")), y = 4000, size = 4) +
-  annotate("text", label = paste("Required Rate of Application\nSubmissions Starting ", lastday,":\n", round(rate_to_achieve, digits = 0), "/day", sep = ""), colour = "#006d2c",
+  annotate("text", label = paste("Required Rate of Application\nSubmissions Starting ", lastday,":\n",
+                                 round(rate_to_achieve, digits = 0), "/day", " (or ", round(work_day_rate_to_achieve, digits = 0),"/weekday)",  sep = ""), colour = "#006d2c",
            x = as.POSIXct(as.character("2017-11-01")), y = 16000, size = 4) +
   scale_y_continuous(expand=c(0, 0), limits = c(0,20000), breaks=seq(0, 20000, 2000)) +
   xlab(NULL) +

@@ -47,6 +47,13 @@ ta_type$StatusDescription <- factor(ta_type$StatusDescription, levels = cat.orde
 transition_time_day <- transition_app %>%
   group_by(ApplicationDate) %>%
   summarise(numperday = n())
+mean_rate_per_day <- mean(transition_time_day$numperday)
+
+## What days are people applying
+# transition_time_day$day <- wday(as.Date(transition_time_day$ApplicationDate), label=TRUE, abbr = FALSE)
+# day_plot <- ggplot(transition_time_day, aes(day, numperday)) +
+#   geom_col(alpha = 0.7)
+# plot(day_plot)
 
 ## cumlative sum of applications
 transition_time_day$cumsum <- cumsum(transition_time_day$numperday)
@@ -139,4 +146,4 @@ if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
 
 save(tot_ta, ta_type, est.df, cat.order, tl_status,
      transition_time_day, rate_forecasts,  app_date, lic_date, proctime_date,
-     current_rate, rate_to_achieve, file = "tmp/trans_gwlic_summaries.RData")
+     current_rate, rate_to_achieve, lastday, file = "tmp/trans_gwlic_summaries.RData")

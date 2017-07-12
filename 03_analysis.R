@@ -114,7 +114,7 @@ tl_status <- transition_lic %>%
 tl_status$JobStatus[tl_status$JobStatus == "Grant"] <- "Granted"
 
 ## arranging the order of the categories to be plotted
-cat.order2 <- c("Granted", "In Progress", "Parked")
+cat.order2 <- c("Granted", "In Progress", "Parked", "Abandoned")
 
 ## reordering the categories for plotting
 tl_status$JobStatus <- factor(tl_status$JobStatus, levels = cat.order2)

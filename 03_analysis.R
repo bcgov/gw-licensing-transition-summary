@@ -14,6 +14,7 @@ library(dplyr) # data munging
 library(envreportutils) # order_df
 library(lubridate)
 library(tidyr) # reshape df
+library(scales) # percent()
 
 ## Load clean data if not already in local repository
 if (!exists("transition_app")) load("tmp/trans_gwlic_clean.RData")
@@ -119,7 +120,13 @@ cat.order2 <- c("Granted", "In Progress", "Parked", "Abandoned")
 ## reordering the categories for plotting
 tl_status$JobStatus <- factor(tl_status$JobStatus, levels = cat.order2)
 
+## number of licenses by purpose use category
+tl_purpose <- transition_lic %>% 
+  group_by(PurposeUse) %>% 
+  summarise(number = length(PurposeUse)) %>% 
+  mutate(perc_tot = paste0(round((number/sum(number)*100), digits = 0),"%"))
 
+tl_purpose <- order_df(tl_purpose, target_col = "PurposeUse", value_col = "number", fun = max, desc = TRUE)
 
 ## transition_time summaries ##
 
@@ -131,4 +138,5 @@ if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
 save(tot_ta, ta_type, est.df, cat.order, tl_status,
      transition_time_day, rate_forecasts,  app_date, lic_date, proctime_date,
      current_rate, rate_to_achieve, lastday,
-     work_day_rate_to_achieve, ta_region, file = "tmp/trans_gwlic_summaries.RData")
+     work_day_rate_to_achieve, ta_region,
+     tl_purpose, file = "tmp/trans_gwlic_summaries.RData")

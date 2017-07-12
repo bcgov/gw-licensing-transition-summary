@@ -51,6 +51,7 @@ ta_region <- transition_app %>%
   gather(type, value, -nrs_region) %>% 
   mutate(value = ifelse(is.na(value), 0, value))
 
+ta_region<- order_df(ta_region, target_col = "nrs_region", value_col = "value", fun = max, desc = TRUE)
 
 ## Rate of applications
 ## calculate the num applications per day

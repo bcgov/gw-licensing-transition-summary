@@ -119,10 +119,10 @@ plot(ta_type_plot)
 app_regions_plot <- ggplot(data = ta_region, aes(x = nrs_region, y = value, fill = type)) +
   geom_bar(stat="identity", position = "dodge", alpha = 0.7) +
   geom_text(aes(label = value), position = position_dodge(.9),  vjust = -.5, size = 3) +
-  labs(title = "Accepted Applications by vFCBC Compared with Projected Numbers By NRS Region",
+  labs(title = "Applications Received by vFCBC Compared with Projected Numbers By NRS Region",
        subtitle = paste("Data as of: ",app_date, sep = "")) +
-  scale_fill_manual(values = c("orange", "#3182bd"), name=NULL,
-                    labels=c("Accepted", "Projected")) +
+  scale_fill_manual(values = c("#3182bd", "orange"), name=NULL,
+                    labels=c("Projected", "Received")) +
   xlab(NULL) +
   ylab("Number of Applications") +
   theme_soe() +

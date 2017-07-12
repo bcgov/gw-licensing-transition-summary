@@ -47,7 +47,7 @@ ta_type$StatusDescription <- factor(ta_type$StatusDescription, levels = cat.orde
 ## Number applications and predicted number by Region
 ta_region <- transition_app %>% 
   group_by(nrs_region) %>%
-  summarise(actual = n()) %>%
+  summarise(received = n()) %>%
   merge(projected_app, by = "nrs_region", all.y=TRUE) %>% 
   gather(type, value, -nrs_region) %>% 
   mutate(value = ifelse(is.na(value), 0, value))

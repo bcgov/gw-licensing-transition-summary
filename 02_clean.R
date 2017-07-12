@@ -81,8 +81,10 @@ processing_time <- processing_time_raw %>%
 colnames(processing_time) <- gsub(" ", "_", colnames(processing_time))
 
 ## Filter for Existing Groundwater Licenses only
-processing_time <- filter(processing_time,
-                          Authorization_Type == "Existing Groundwater Licence" | Authorization_Type == "New Groundwater Licence" )
+processing_time <- processing_time %>% 
+  filter(Authorization_Type == "Existing Groundwater Licence" | Authorization_Type == "New Groundwater Licence") %>% 
+  filter(Authorization_Status == "Closed")
+  
 
 
 

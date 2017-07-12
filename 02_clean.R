@@ -70,7 +70,9 @@ transition_lic <- transition_lic_raw %>%
 
 ## Clean transition_processing_time_raw ##
 ## Only keep columns in transition_app necessary for data summaries
-keep_col_time <- c("Region Name", "Business Area", "Authorization Type", "Received Date", "Total Processing Time")
+keep_col_time <- c("Region Name", "Authorization Type", "Authorization Status",
+                   "Received Date", "Accepted Date", "Rejected Date", "Granted/Offered Date", "Total Processing Time",
+                   "Net Processing Time")
 
 processing_time <- processing_time_raw %>% 
   select(one_of(keep_col_time))

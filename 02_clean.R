@@ -48,10 +48,10 @@ office_regions <- processing_time_raw %>%
 office_regions$nrs_region[office_regions$nrs_region == "North East"] <- "Northeast"
 
 ## Region file
-regions <- office_regions %>% 
-  group_by(nrs_region) %>% 
-  summarise(n = n()) %>% 
-  select(-(n))
+# regions <- office_regions %>% 
+#   group_by(nrs_region) %>% 
+#   summarise(n = n()) %>% 
+#   select(-(n))
 
 ## Merge nrs_regions into transition_all df
 transition_app <- merge(transition_app, office_regions, by = "VFCBCOffice", all.x = TRUE)
@@ -87,6 +87,5 @@ processing_time <- filter(processing_time,
 ## Create tmp folder if not already there and store clean data in local repository
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
 save(projected_app, transition_app, transition_lic, processing_time, 
-      app_date, lic_date, proctime_date, office_regions,
-     regions, file = "tmp/trans_gwlic_clean.RData")
+      app_date, lic_date, proctime_date, office_regions, file = "tmp/trans_gwlic_clean.RData")
 

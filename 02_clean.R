@@ -71,8 +71,9 @@ transition_lic <- transition_lic_raw %>%
 ## Clean transition_processing_time_raw ##
 ## Only keep columns in transition_app necessary for data summaries
 keep_col_time <- c("Region Name", "Authorization Type", "Authorization Status",
-                   "Received Date", "Accepted Date", "Rejected Date", "Granted/Offered Date", "Total Processing Time",
-                   "Net Processing Time")
+                    "Total Processing Time", "Net Processing Time")
+
+## "Received Date", "Accepted Date", "Rejected Date", "Granted/Offered Date",
 
 processing_time <- processing_time_raw %>% 
   select(one_of(keep_col_time))
@@ -83,7 +84,8 @@ colnames(processing_time) <- gsub(" ", "_", colnames(processing_time))
 ## Filter for Existing Groundwater Licenses only
 processing_time <- processing_time %>% 
   filter(Authorization_Type == "Existing Groundwater Licence" | Authorization_Type == "New Groundwater Licence") %>% 
-  filter(Authorization_Status == "Closed")
+  filter(Authorization_Status == "Closed") %>% 
+  select(-Authorization_Status)
   
 
 

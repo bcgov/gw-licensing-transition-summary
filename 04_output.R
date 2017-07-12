@@ -172,7 +172,31 @@ tl_status_plot <- ggplot(tl_status, aes(1, y = number, fill = JobStatus)) +
 plot(tl_status_plot)
 
 
+## @knitr water_use
+## bar chart of Water Use Purposes for incoming licenses
 
+tl_use_plot <- ggplot(tl_purpose, aes(x = PurposeUse, y = number)) +
+  geom_col(alpha = 0.7, fill = "#377eb8") +
+  geom_text(aes(label = perc_tot), vjust = .2, hjust = -.2, size = 3) +
+  labs(title = "Incoming Licenses: Water Use Purposes",
+       subtitle = paste("Data as of: ",lic_date, sep = "")) +
+  xlab(NULL) +
+  ylab("Number of Incoming Licenses") +
+  theme_soe() +
+  coord_flip() +
+  scale_y_continuous(expand=c(0, 0), limits = c(0, max(tl_purpose$number) + max(tl_purpose$number/10))) +
+  theme(panel.grid.major.y = element_blank(),
+        axis.title.x = element_text(size=10),
+        axis.text.x = element_text(size=9),
+        axis.text.y = element_text(size=9),
+        plot.title = element_text(size = 10),
+        plot.subtitle = element_text(size = 8),
+        plot.margin = unit(c(5,5,5,5),"mm"),
+        legend.text = element_text(size=9),
+        legend.position = "bottom",
+        legend.direction = "horizontal")
+
+plot(tl_use_plot)
 
 
 

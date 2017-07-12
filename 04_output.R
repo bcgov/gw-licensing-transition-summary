@@ -13,43 +13,17 @@
 library(ggplot2) #plotting
 library(dplyr) # data munging
 library(envreportutils) # theme_soe()
+library(stringr) # for label wrapping
 library(RColorBrewer) #for colour palette
 
 
 ## Load clean data if not already in local repository
 if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
 
+
 ## @knitr pre
 
 ## PLOTS
-
-
-## @knitr estimate
-
-## bar chart of total and estimated applications
-tot_est_plot <- ggplot(est.df, aes(1, y = val, fill = cat)) +
-  geom_col(alpha = .7) +
-  geom_text(aes(label = val), position = position_stack(vjust = 0.5), size = 3) +
-  #  labs(title = paste("Applications Received To Date: Transitioning Users (",app_date,")", sep = "")) +
-  labs(title = "Transitioning Applications Received Compared to Estimated") +
-  scale_fill_manual(values = c("grey70", "#3182bd"), name = NULL, breaks = rev(levels(est.df$cat))) +
-  xlab(NULL) +
-  ylab(NULL) +
-  theme_soe() +
-  coord_flip() +
-  scale_y_continuous(expand=c(0.005, 0)) +
-  theme(panel.grid.major.y = element_blank(),
-        axis.text.y = element_blank(),
-        axis.text = element_text(size=8),
-        plot.title = element_text(size = 10),
-        plot.margin = unit(c(5,5,5,5),"mm"),
-        legend.text = element_text(size=9),
-        legend.position = "bottom",
-        legend.direction = "horizontal")
-
-plot(tot_est_plot)
-
-
 
 ## @knitr app_rate
 
@@ -57,8 +31,8 @@ plot(tot_est_plot)
 tl_rate_plot <- ggplot() +
   geom_line(data = transition_time_day, aes(y = cumsum, x = ApplicationDate),
             alpha = 0.7, colour = "#08519c", size = 1) +
-#  labs(title = paste("Applications Received To Date: Transitioning Users (",app_date,")", sep = "")) +
-  labs(title = "Rate of Applications Received To Date Compared to Required Rate") +
+  labs(title = "Rate of Applications Received To Date Compared to Required Rate To Achieve 20K",
+       subtitle = paste("Data as of: ",app_date, sep = "")) +
   geom_line(data = rate_forecasts, aes(y = curr_cumsum, x = date), alpha = 0.7,
             colour = "#08519c", size = 1, linetype = 2) +
   geom_line(data = rate_forecasts, aes(y = req_cumsum, x = date), alpha = 0.7,
@@ -74,12 +48,38 @@ tl_rate_plot <- ggplot() +
   theme_soe() +
   theme(panel.grid.major.x = element_blank(),
         axis.text = element_text(size=8),
-        plot.title = element_text(size = 10, hjust = -.25),
+        plot.title = element_text(size = 10),
+        plot.subtitle = element_text(size = 8),
         plot.margin = unit(c(5,5,5,5),"mm"))
 
 plot(tl_rate_plot)
 
 
+## @knitr estimate
+
+## bar chart of total and estimated applications
+tot_est_plot <- ggplot(est.df, aes(1, y = val, fill = cat)) +
+  geom_col(alpha = .7) +
+  geom_text(aes(label = val), position = position_stack(vjust = 0.5), size = 3) +
+  labs(title = "Number of Transitioning Applications Received Compared to Estimated Number",
+       subtitle = paste("Data as of: ",app_date, sep = "")) +
+  scale_fill_manual(values = c("grey70", "#3182bd"), name = NULL, breaks = rev(levels(est.df$cat))) +
+  xlab(NULL) +
+  ylab(NULL) +
+  theme_soe() +
+  coord_flip() +
+  scale_y_continuous(expand=c(0, 0)) +
+  theme(panel.grid.major.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.text = element_text(size=8),
+        plot.title = element_text(size = 10),
+        plot.subtitle = element_text(size = 8),
+        plot.margin = unit(c(5,5,5,5),"mm"),
+        legend.text = element_text(size=9),
+        legend.position = "bottom",
+        legend.direction = "horizontal")
+
+plot(tot_est_plot)
 
 
 ## @knitr types
@@ -92,18 +92,20 @@ colr.pal <- brewer.pal(type.no, "Set1")
 
 ta_type_plot <- ggplot(ta_type, aes(1, y = n, fill = StatusDescription)) +
   geom_col(alpha = 0.7) +
-  geom_text(aes(label = n), size = 2) +
-  labs(title = paste("FrontCounter BC Transitioning User Application Intake Process Status: (",app_date,")", sep = "")) +
+  geom_text(aes(label = n), position = position_stack(vjust = 0.5), size = 2) +
+  labs(title = "Status of FrontCounter BC Transitioning User Application Intake Process",
+       subtitle = paste("Data as of: ",lic_date, sep = "")) +
   scale_fill_manual(values = colr.pal, name = NULL, breaks = rev(levels(ta_type$StatusDescription))) +
   xlab(NULL) +
   ylab(NULL) +
   theme_soe() +
   coord_flip() +
-  scale_y_continuous(expand=c(0.005, 0)) +
+  scale_y_continuous(expand=c(0, 0)) +
   theme(panel.grid.major.y = element_blank(),
         axis.text.y = element_blank(),
         axis.text = element_text(size=8),
         plot.title = element_text(size = 10),
+        plot.subtitle = element_text(size = 8),
         plot.margin = unit(c(5,5,5,5),"mm"),
         legend.text = element_text(size=7),
         legend.position = "bottom",
@@ -115,29 +117,29 @@ plot(ta_type_plot)
 
 ## @knitr app_regions
 app_regions_plot <- ggplot(data = ta_region, aes(x = nrs_region, y = value, fill = type)) +
-  geom_bar(stat="identity", position=position_dodge(), alpha = 0.7) +
-  geom_text(aes(label = value), size = 3) +
-  #  labs(title = paste("FLNRO Application Adjudication Status: Transitioning Users (",lic_date,")", sep = "")) +
-  labs(title = "Projected Transitioning Licenses & Accepted Applications by vFCBC") +
-  scale_fill_manual(values = c("orange", "#3182bd"), name=NULL) +
+  geom_bar(stat="identity", position = "dodge", alpha = 0.7) +
+  geom_text(aes(label = value), position = position_dodge(.9),  vjust = -.5, size = 3) +
+  labs(title = "Accepted Applications by vFCBC Compared with Projected Numbers By NRS Region",
+       subtitle = paste("Data as of: ",app_date, sep = "")) +
+  scale_fill_manual(values = c("orange", "#3182bd"), name=NULL,
+                    labels=c("Accepted", "Projected")) +
   xlab(NULL) +
   ylab("Number of Applications") +
   theme_soe() +
-  scale_y_continuous(expand=c(0.005, 0)) +
+  scale_y_continuous(expand=c(0, 0), limits = c(0, 6000), breaks = seq(0, 6000, 1000)) +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 8)) +
   theme(panel.grid.major.x = element_blank(),
         axis.title.y = element_text(size=10),
-        axis.text.x = element_text(size=10),
+        axis.text.x = element_text(size=9),
         axis.text.y = element_text(size=8),
         plot.title = element_text(size = 10),
+        plot.subtitle = element_text(size = 8),
         plot.margin = unit(c(5,5,5,5),"mm"),
         legend.text = element_text(size=9),
-        legend.position = c(.75,.89),
+        legend.position = c(.75,.93),
         legend.background = element_rect(fill = "transparent"))
 
 plot(app_regions_plot)
-
-
-
 
 
 
@@ -147,19 +149,20 @@ plot(app_regions_plot)
 tl_status_plot <- ggplot(tl_status, aes(1, y = number, fill = JobStatus)) +
   geom_col(alpha = 0.7) +
   geom_text(aes(label = number), position = position_stack(vjust = 0.5), size = 3) +
-#  labs(title = paste("FLNRO Application Adjudication Status: Transitioning Users (",lic_date,")", sep = "")) +
-  labs(title = "FLNRO Transitioning User Application Adjudication Status") +
-  scale_fill_manual(values = c("#3182bd", "#6baed6", "grey80"), name = NULL,
+  labs(title = "Status of FLNRO Transitioning User Application Adjudication",
+       subtitle = paste("Data as of: ",lic_date, sep = "")) +
+  scale_fill_manual(values = c("#e41a1c", "#377eb8", "#4daf4a" ,"#a65628"), name = NULL,
                     breaks = rev(levels(tl_status$JobStatus))) +
   xlab(NULL) +
   ylab(NULL) +
   theme_soe() +
   coord_flip() +
-  scale_y_continuous(expand=c(0.005, 0)) +
+  scale_y_continuous(expand=c(0, 0)) +
   theme(panel.grid.major.y = element_blank(),
         axis.text.y = element_blank(),
-        axis.text = element_text(size=8),
+        axis.text = element_text(size=7),
         plot.title = element_text(size = 10),
+        plot.subtitle = element_text(size = 8),
         plot.margin = unit(c(5,5,5,5),"mm"),
         legend.text = element_text(size=9),
         legend.position = "bottom",

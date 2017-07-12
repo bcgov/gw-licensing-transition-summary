@@ -92,7 +92,7 @@ colr.pal <- brewer.pal(type.no, "Set1")
 
 ta_type_plot <- ggplot(ta_type, aes(1, y = n, fill = StatusDescription)) +
   geom_col(alpha = 0.7) +
-  geom_text(aes(label = n), position = position_stack(vjust = 0.5), size = 2) +
+  geom_text(aes(label = n), size = 2) +
   labs(title = paste("FrontCounter BC Transitioning User Application Intake Process Status: (",app_date,")", sep = "")) +
   scale_fill_manual(values = colr.pal, name = NULL, breaks = rev(levels(ta_type$StatusDescription))) +
   xlab(NULL) +
@@ -111,6 +111,34 @@ ta_type_plot <- ggplot(ta_type, aes(1, y = n, fill = StatusDescription)) +
   guides(fill = guide_legend(nrow = 1))
 
 plot(ta_type_plot)
+
+
+## @knitr app_regions
+app_regions_plot <- ggplot(data = ta_region, aes(x = nrs_region, y = value, fill = type)) +
+  geom_bar(stat="identity", position=position_dodge(), alpha = 0.7) +
+  geom_text(aes(label = value), size = 3) +
+  #  labs(title = paste("FLNRO Application Adjudication Status: Transitioning Users (",lic_date,")", sep = "")) +
+  labs(title = "Projected Transitioning Licenses & Accepted Applications by vFCBC") +
+  scale_fill_manual(values = c("orange", "#3182bd"), name=NULL) +
+  xlab(NULL) +
+  ylab("Number of Applications") +
+  theme_soe() +
+  scale_y_continuous(expand=c(0.005, 0)) +
+  theme(panel.grid.major.x = element_blank(),
+        axis.title.y = element_text(size=10),
+        axis.text.x = element_text(size=10),
+        axis.text.y = element_text(size=8),
+        plot.title = element_text(size = 10),
+        plot.margin = unit(c(5,5,5,5),"mm"),
+        legend.text = element_text(size=9),
+        legend.position = c(.75,.89),
+        legend.background = element_rect(fill = "transparent"))
+
+plot(app_regions_plot)
+
+
+
+
 
 
 ## @knitr incoming

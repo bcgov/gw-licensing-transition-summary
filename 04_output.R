@@ -178,7 +178,7 @@ plot(tl_status_plot)
 tl_use_plot <- ggplot(tl_purpose, aes(x = PurposeUse, y = number)) +
   geom_col(alpha = 0.7, fill = "#377eb8") +
   geom_text(aes(label = perc_tot), vjust = .2, hjust = -.2, size = 3) +
-  labs(title = "Incoming Licenses: Water Use Purposes",
+  labs(title = "Incoming Transition User Licenses: Water Use Purposes",
        subtitle = paste("Data as of: ",lic_date, sep = "")) +
   xlab(NULL) +
   ylab("Number of Incoming Licenses") +

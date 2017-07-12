@@ -55,9 +55,18 @@ if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
 
 ```
 
+
+\newpage
+
 ## Applications Accepted To-Date: Transitioning Users
 
 ```{r incoming, fig.height = 2, fig.width = 7}
+
+```
+
+\vspace{12pt}
+
+```{r water_use, fig.height = 7, fig.width = 7}
 
 ```
 

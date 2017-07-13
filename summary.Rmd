@@ -23,7 +23,7 @@ if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
 
 ```{r pre}
 ```
-\pagenumbering{gobble}
+<!--\pagenumbering{gobble}-->
 
 
 # Groundwater License Application Dashboard
@@ -58,7 +58,7 @@ if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
 
 \newpage
 
-## Applications Accepted To-Date: Transitioning Users
+## Applications Under Adjudication: Transitioning Users
 
 ```{r incoming, fig.height = 2, fig.width = 7}
 
@@ -71,5 +71,7 @@ if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
 ```
 
 
+\newpage
 
+## Average Processing Time to Licensing Decisions: Transitioning & New Users
 

@@ -47,11 +47,18 @@ ta_type$StatusDescription <- factor(ta_type$StatusDescription, levels = cat.orde
 ## Number applications and predicted number by Region
 ta_region <- transition_app %>% 
   group_by(nrs_region) %>%
-  summarise(received = n()) %>%
+  summarise(received = n() , accepted = sum(StatusDescription == "Accepted")) %>%
   merge(projected_app, by = "nrs_region", all.y=TRUE) %>% 
   gather(type, value, -nrs_region) %>% 
   mutate(value = ifelse(is.na(value), 0, value))
 
+## arranging the order of the categories to be plotted
+cat.order2 <- c("projected", "received", "accepted")
+
+## reordering the categories for plotting
+ta_region$type <- factor(ta_region$type, levels = cat.order2)
+
+## oder df for plotting
 ta_region<- order_df(ta_region, target_col = "nrs_region", value_col = "value", fun = max, desc = TRUE)
 
 ## Rate of applications

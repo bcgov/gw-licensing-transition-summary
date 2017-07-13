@@ -15,7 +15,7 @@ library(readxl) # MS Excel data import
 
 
 ## Import the projected number of transition Existing Use Groundwater License Applications (from ENV Water Branch)
-projected_app_raw <- read_excel("Z:/water/groundwater/licensing/transition/Projected_GW_Transition_Licenses_ENVWaterBranch.xlsx")
+projected_app_raw <- read_excel("Z:/water/groundwater/licensing/transition/Projected_GW_Transition_Licences_ENVWaterBranch.xlsx")
 
 
 ## Import the APPLICATION data for Existing Use Groundwater License Applications

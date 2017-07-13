@@ -26,47 +26,59 @@ if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
 <!--\pagenumbering{gobble}-->
 
 
-# Groundwater License Application Dashboard
+# Groundwater Licensing Transition Summary
 
-\vspace{6pt}
+\vspace{18pt}
 
-## Applications Received To-Date: Transitioning Users
+# Transition Applications **Received** by FrontCounter BC
 
-\vspace{6pt}
+### Data sourced from 'vFCBC Application Search' and accessed on `r app_date`
+
+\vspace{24pt}
   
-```{r app_rate, fig.height = 4, fig.width = 7}
-
-```
-
-\vspace{6pt}
-
 ```{r estimate, fig.height = 2, fig.width = 7}
 
 ```
 
-\vspace{6pt}
+\vspace{48pt}
+
+```{r app_rate, fig.height = 4, fig.width = 7}
+
+```
+
+\newpage
+
+# Application **Processing & Acceptance** by FrontCounter BC
+
+### Data sourced from 'vFCBC Application Search' and accessed on `r app_date`, projected estimates from ENV Water Protection & Sustainability Branch
+
+\vspace{24pt}
 
 ```{r types, fig.height = 2, fig.width = 7}
 
 ```
 
+\vspace{48pt}
 
-```{r app_regions, fig.height = 4, fig.width = 7}
+```{r app_regions, fig.height = 5, fig.width = 7}
 
 ```
 
-
 \newpage
 
-## Applications Under Adjudication: Transitioning Users
+## Applications Under **Adjudication & Decisions** by FLNRO E-Licensing
+
+### Data sourced from FLNRO's E-licensing Home 'Incoming Groundwater Licence Application Tracking Report' and accessed on `r lic_date`
+
+\vspace{16pt}
 
 ```{r incoming, fig.height = 2, fig.width = 7}
 
 ```
 
-\vspace{12pt}
+\vspace{16pt}
 
-```{r water_use, fig.height = 7, fig.width = 7}
+```{r water_use, fig.height = 6, fig.width = 7}
 
 ```
 

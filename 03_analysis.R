@@ -129,6 +129,15 @@ tl_purpose <- transition_lic %>%
 tl_purpose <- order_df(tl_purpose, target_col = "PurposeUse", value_col = "number", fun = max, desc = TRUE)
 
 ## transition_time summaries ##
+## Number applications and predicted number by Region
+time_region <- processing_time %>% 
+  group_by(Region_Name) %>%
+  summarise(received = n()) %>%
+  merge(projected_app, by = "nrs_region", all.y=TRUE) %>% 
+  gather(type, value, -nrs_region) %>% 
+  mutate(value = ifelse(is.na(value), 0, value))
+
+ta_region<- order_df(ta_region, target_col = "nrs_region", value_col = "value", fun = max, desc = TRUE)
 
 
 

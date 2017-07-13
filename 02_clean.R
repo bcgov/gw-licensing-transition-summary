@@ -87,7 +87,8 @@ processing_time <- processing_time %>%
   filter(Authorization_Status == "Closed") %>% 
   select(-Authorization_Status)
   
-
+## Change 'North East' to 'Northeast'
+processing_time$Region_Name[processing_time$Region_Name == "North East"] <- "Northeast"
 
 
 ## Create tmp folder if not already there and store clean data in local repository

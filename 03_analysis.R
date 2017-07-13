@@ -122,10 +122,10 @@ tl_status <- transition_lic %>%
 tl_status$JobStatus[tl_status$JobStatus == "Grant"] <- "Granted"
 
 ## arranging the order of the categories to be plotted
-cat.order2 <- c("Granted", "In Progress", "Parked", "Abandoned")
+cat.order3 <- c("Granted", "In Progress", "Parked", "Abandoned")
 
 ## reordering the categories for plotting
-tl_status$JobStatus <- factor(tl_status$JobStatus, levels = cat.order2)
+tl_status$JobStatus <- factor(tl_status$JobStatus, levels = cat.order3)
 
 ## number of licenses by purpose use category
 tl_purpose <- transition_lic %>% 
@@ -144,7 +144,7 @@ time_region <- processing_time %>%
   gather(type, value, -nrs_region) %>% 
   mutate(value = ifelse(is.na(value), 0, value))
 
-ta_region<- order_df(ta_region, target_col = "nrs_region", value_col = "value", fun = max, desc = TRUE)
+time_region<- order_df(ta_region, target_col = "nrs_region", value_col = "value", fun = max, desc = TRUE)
 
 
 

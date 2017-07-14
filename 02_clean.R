@@ -93,11 +93,9 @@ processing_time <- processing_time_raw %>%
 ## Remove spaces in col names
 colnames(processing_time) <- gsub(" ", "_", colnames(processing_time))
 
-## Filter for Existing Groundwater Licenses only
+## Filter for Existing & New Groundwater Licences only 
 processing_time <- processing_time %>% 
   filter(Authorization_Type == "Existing Groundwater Licence" | Authorization_Type == "New Groundwater Licence") %>% 
-  filter(Authorization_Status == "Closed") %>% 
-  select(-Authorization_Status) %>% 
   rename(nrs_region = Region_Name)
   
 ## Change 'North East' to 'Northeast'

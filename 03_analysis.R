@@ -158,6 +158,8 @@ tl_purpose <- order_df(tl_purpose, target_col = "PurposeUse", value_col = "numbe
 
 ## Number decisions and avg days and net avg days df
 time_region <- processing_time %>% 
+  filter(Authorization_Status == "Closed") %>% 
+  select(-Authorization_Status) %>% 
   group_by(nrs_region, Authorization_Type) %>%
   summarise(num_dec = n(),
             avg_tot_time = round(mean(Total_Processing_Time), digits = 0),
@@ -168,7 +170,25 @@ time_region <- processing_time %>%
   complete(nrs_region, Authorization_Type, measure, fill = list(value = 0)) %>% 
   mutate(num_dec = ifelse(is.na(num_dec), 0, num_dec)) 
 
-#time_region<- order_df(ta_region, target_col = "nrs_region", value_col = "value", fun = max, desc = TRUE)
+
+## Throughput rates for recieved, accepted and decisions using processing time report
+## calculate the num recieved applications per day
+proc_time_app <- processing_time %>%
+  filter(Authorization_Type == "Existing Groundwater Licence") %>% 
+  group_by(Received_Date) %>%
+  summarise(recperday = n())
+
+received_rate <- mean(proc_time_app$recperday)
+
+## cumlative sum of received
+proc_time_app$cumsum <- cumsum(proc_time_app$recperday)
+
+## Calculate received rate to-date
+recsum <- sum(proc_time_app$recperday)
+recnumdays <- as.integer(difftime(as.POSIXct(max(proc_time_app$Received_Date)), as.POSIXct(min(proc_time_app$Received_Date)), units="days"))
+rec_rate <- appsum/recnumdays
+
+## Do same as above for accepted and decisions
 
 
 

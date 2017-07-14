@@ -1,11 +1,12 @@
 ---
 output: pdf_document
-#geometry: margin=1cm
+papersize: letter
+fontfamily: Verdana
 ---
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, cache = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, cache = FALSE, dev = "cairo_pdf")
 
 library(knitr) #for rendering the PDF
 library(dplyr) # data munging
@@ -30,9 +31,9 @@ if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
 
 \vspace{18pt}
 
-# Transition Applications **Received** by FrontCounter BC
+## Transition Applications Received by FrontCounter BC
 
-### Data sourced from 'vFCBC Application Search' and accessed on `r app_date`
+Data sourced from 'vFCBC Application Search' and accessed on `r app_date`
 
 \vspace{24pt}
   
@@ -48,9 +49,9 @@ if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
 
 \newpage
 
-# Application **Processing & Acceptance** by FrontCounter BC
+## Application Processing & Acceptance by FrontCounter BC
 
-### Data sourced from 'vFCBC Application Search' and accessed on `r app_date`, projected estimates from ENV Water Protection & Sustainability Branch
+Data sourced from 'vFCBC Application Search' and accessed on `r app_date`, projected estimates from ENV Water Protection & Sustainability Branch
 
 \vspace{24pt}
 
@@ -66,17 +67,17 @@ if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
 
 \newpage
 
-## Applications Under **Adjudication & Decisions** by FLNRO E-Licensing
+## Applications Under Adjudication & Decisions by FLNRO E-Licensing
 
-### Data sourced from FLNRO's E-licensing Home 'Incoming Groundwater Licence Application Tracking Report' and accessed on `r lic_date`
+Data sourced from FLNRO's E-licensing Home 'Incoming Groundwater Licence Application Tracking Report' and accessed on `r lic_date`
 
-\vspace{16pt}
+\vspace{12pt}
 
 ```{r incoming, fig.height = 2, fig.width = 7}
 
 ```
 
-\vspace{16pt}
+\vspace{14pt}
 
 ```{r water_use, fig.height = 6, fig.width = 7}
 
@@ -85,5 +86,5 @@ if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
 
 \newpage
 
-## Average Processing Time to Licensing Decisions: Transitioning & New Users
+Average Processing Time to Licensing Decisions: Transitioning & New Users
 

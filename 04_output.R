@@ -225,8 +225,8 @@ proc_time_data$measure <- factor(proc_time_data$measure, levels = time.order)
 lic_colrs <- c("avg_net_time" = "#3182bd",
                "diff_time" = "grey70")
 
-time_lab <- c("avg_net_time" = "Average Net Processing Time",
-              "diff_time" = "Average Number Days on Hold")
+time_lab <- c("avg_net_time" = "Average Net Processing Time (excludes days on hold)",
+              "diff_time" = "Average Total Processing Time (includes days on hold)")
 
 
 proc_time_plot <- ggplot(data = proc_time_data) +
@@ -234,11 +234,12 @@ proc_time_plot <- ggplot(data = proc_time_data) +
   geom_text(data = proc_time_labels, aes(x = Authorization_Type, y = value, label = num_dec),
             vjust = -.4, size = 3, show.legend = FALSE) +
   facet_wrap(~ nrs_region, ncol = 2) +
-  labs(title = "Number of Decisions & Average Processing Time to Decision\nby Licence Type & NRS Region") +
+  labs(title = "Average Processing Time and Number of Decisions by NRS Region",
+       caption = "Bars Labelled with Number of Decisions") +
   scale_fill_manual(values = lic_colrs, name=NULL,
                     labels=time_lab, drop = TRUE) +
   xlab(NULL) +
-  ylab("Days") +
+  ylab("Time in Days") +
   theme_soe_facet() +
   scale_y_continuous(expand=c(0, 0), limits = c(0, max(proc_time_labels$value) + max(proc_time_labels$value/5))) +
   scale_x_discrete(labels = function(x) str_wrap(x, width = 8)) +
@@ -246,10 +247,11 @@ proc_time_plot <- ggplot(data = proc_time_data) +
         axis.title.y = element_text(size=10),
         axis.text = element_text(size=10),
         plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
+        plot.caption = element_text(size = 10, hjust = 0.5),
         plot.margin = unit(c(5,5,5,5),"mm"),
         legend.text = element_text(size=10),
-        legend.position = "top",
-        legend.direction = "horizontal")
+        legend.position = "bottom",
+        legend.direction = "vertical")
 
 plot(proc_time_plot)
 

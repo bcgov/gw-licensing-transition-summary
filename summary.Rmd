@@ -67,7 +67,7 @@ Data sourced from 'vFCBC Application Search' and accessed on `r app_date`, proje
 
 \newpage
 
-## Applications Under Adjudication & Decisions by FLNRO E-Licensing
+## Applications Under Adjudication by FLNRO E-Licensing
 
 Data sourced from FLNRO's E-licensing Home 'Incoming Groundwater Licence Application Tracking Report' and accessed on `r lic_date`
 
@@ -83,8 +83,16 @@ Data sourced from FLNRO's E-licensing Home 'Incoming Groundwater Licence Applica
 
 ```
 
-
 \newpage
 
-Average Processing Time to Licensing Decisions: Transitioning & New Users
+## Number of Decisions & Processing Time
+
+Data sourced from FLNRO FCBC 'ATS system application processing time report' and accessed on `r proctime_date`
+
+\vspace{24pt}
+
+```{r proc_time, fig.height = 8, fig.width = 7}
+
+```
+
 

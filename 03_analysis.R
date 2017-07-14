@@ -22,6 +22,7 @@ if (!exists("transition_app")) load("tmp/trans_gwlic_clean.RData")
 
 
 ## transition_app summaries ##
+
 ## make a 'total transition applications with estimated transitions' dataframe
 tot_ta <- length(transition_app$StatusDescription)
 est_ta <- 20000
@@ -32,17 +33,31 @@ est.df <- data.frame(cat, val)
 
 est.df<- order_df(est.df, target_col = "cat", value_col = "val", fun = max, desc = TRUE)
 
+## collapse some categories for plotting
+transition_app$StatusDescription[transition_app$StatusDescription == "Cancelled"] <-  "Cancelled & Not Accepted"
+transition_app$StatusDescription[transition_app$StatusDescription == "Not Accepted"] <-  "Cancelled & Not Accepted"
+transition_app$StatusDescription[transition_app$StatusDescription == "Editing"] <-  "Submitted & Pre-Submittal Steps"
+transition_app$StatusDescription[transition_app$StatusDescription == "Submitted"] <-  "Submitted & Pre-Submittal Steps"
+transition_app$StatusDescription[transition_app$StatusDescription == "Pending"] <-  "Submitted & Pre-Submittal Steps"
+transition_app$StatusDescription[transition_app$StatusDescription == "Pre-Submittal"] <-  "Submitted & Pre-Submittal Steps"
 
 ## number of applications by application category
 ta_type <- transition_app %>% 
   count(StatusDescription) 
-
+  
 ## arranging the order of the categories to be plotted
-cat.order <- c("Accepted", "Under Review", "Pending", "Submitted", "Pre-Submittal", 
-                "Not Accepted", "Cancelled", "Editing")
+cat.order <- c("Accepted", "Under Review", "Submitted & Pre-Submittal Steps", "Cancelled & Not Accepted")
 
 ## reordering the categories for plotting
 ta_type$StatusDescription <- factor(ta_type$StatusDescription, levels = cat.order)
+
+## Number applications and predicted number by Region
+ta_region <- transition_app %>% 
+  group_by(nrs_region) %>%
+  summarise(received = n() , accepted = sum(StatusDescription == "Accepted")) %>%
+  merge(projected_app, by = "nrs_region", all.y=TRUE) %>% 
+  gather(type, value, -nrs_region) %>% 
+  mutate(value = ifelse(is.na(value), 0, value))
 
 ## Number applications and predicted number by Region
 ta_region <- transition_app %>% 
@@ -113,6 +128,7 @@ work_day_rate_to_achieve <- app_to_go/work_days_to_go
 
 
 ## transition_lic summaries ##
+
 ## number of licenses by status category with duplicate rows removed
 tl_status <- transition_lic %>% 
   distinct(TrackingNumber, .keep_all = TRUE) %>% 
@@ -136,14 +152,21 @@ tl_purpose <- transition_lic %>%
 
 tl_purpose <- order_df(tl_purpose, target_col = "PurposeUse", value_col = "number", fun = max, desc = TRUE)
 
+
+
 ## transition_time summaries ##
+
 ## Number decisions and avg days and net avg days df
 time_region <- processing_time %>% 
   group_by(nrs_region, Authorization_Type) %>%
   summarise(num_dec = n(),
             avg_tot_time = round(mean(Total_Processing_Time), digits = 0),
-            avg_net_time = round(mean(Net_Processing_Time), digits = 0)) %>%
-  gather(type, value, -c(nrs_region, Authorization_Type))
+            avg_net_time = round(mean(Net_Processing_Time), digits = 0),
+            diff_time = round(mean(Total_Processing_Time-Net_Processing_Time), digits = 0)) %>%
+  ungroup() %>% 
+  gather(measure, value, -nrs_region, -Authorization_Type, -num_dec) %>% 
+  complete(nrs_region, Authorization_Type, measure, fill = list(value = 0)) %>% 
+  mutate(num_dec = ifelse(is.na(num_dec), 0, num_dec)) 
 
 #time_region<- order_df(ta_region, target_col = "nrs_region", value_col = "value", fun = max, desc = TRUE)
 

@@ -15,6 +15,7 @@ library(dplyr) # data munging
 ## Load raw data if not already in local repository
 if (!exists("transition_app_raw")) load("tmp/trans_gwlic_raw.RData")
 
+
 # ## how many IDs  and unique IDs in vFCBC file 
 # length(na.omit(transition_app_raw$BusinessAreaNumber))
 # length(unique(na.omit(transition_app_raw$BusinessAreaNumber)))
@@ -47,7 +48,7 @@ keep_col_app <- c("AuthorizationType", "ApplicationDate", "VFCBCOffice", "Status
 transition_app <- transition_app_raw %>% 
   select(one_of(keep_col_app))
 
-## Add Regions to transition_all df
+## Add Regions to transition_app df
 ## Get regions for each office from ATS report
 office_regions <- processing_time_raw %>%
   mutate(nrs_region = `Region Name`, VFCBCOffice = `Office Name`) %>% 
@@ -60,10 +61,10 @@ office_regions <- processing_time_raw %>%
 office_regions$nrs_region[office_regions$nrs_region == "North East"] <- "Northeast"
 
 ## Region file
-# regions <- office_regions %>% 
-#   group_by(nrs_region) %>% 
-#   summarise(n = n()) %>% 
-#   select(-(n))
+regions <- office_regions %>%
+  group_by(nrs_region) %>%
+  summarise(n = n()) %>%
+  select(-(n))
 
 ## Merge nrs_regions into transition_all df
 transition_app <- merge(transition_app, office_regions, by = "VFCBCOffice", all.x = TRUE)
@@ -72,7 +73,7 @@ transition_app <- merge(transition_app, office_regions, by = "VFCBCOffice", all.
 
 ## Clean transition_lic_raw ##
 ## Only keep columns in transition_lic necessary for data summaries
-keep_col_lic <- c("ApplicationType", "NewExistingUse", "JobStatus", "Region",
+keep_col_lic <- c("TrackingNumber", "ApplicationType", "NewExistingUse", "JobStatus", "Region",
                   "PurposeUse", "Volume1000m3y")
 
 transition_lic <- transition_lic_raw %>% 
@@ -96,10 +97,11 @@ colnames(processing_time) <- gsub(" ", "_", colnames(processing_time))
 processing_time <- processing_time %>% 
   filter(Authorization_Type == "Existing Groundwater Licence" | Authorization_Type == "New Groundwater Licence") %>% 
   filter(Authorization_Status == "Closed") %>% 
-  select(-Authorization_Status)
+  select(-Authorization_Status) %>% 
+  rename(nrs_region = Region_Name)
   
 ## Change 'North East' to 'Northeast'
-processing_time$Region_Name[processing_time$Region_Name == "North East"] <- "Northeast"
+processing_time$nrs_region[processing_time$nrs_region == "North East"] <- "Northeast"
 
 
 ## Create tmp folder if not already there and store clean data in local repository

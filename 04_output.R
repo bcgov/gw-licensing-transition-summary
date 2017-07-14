@@ -226,7 +226,7 @@ lic_colrs <- c("avg_net_time" = "#3182bd",
                "diff_time" = "grey70")
 
 time_lab <- c("avg_net_time" = "Average Net Processing Time (excludes days on hold)",
-              "diff_time" = "Average Total Processing Time (includes days on hold)")
+              "diff_time" = "Time On Hold")
 
 
 proc_time_plot <- ggplot(data = proc_time_data) +
@@ -247,7 +247,7 @@ proc_time_plot <- ggplot(data = proc_time_data) +
         axis.title.y = element_text(size=10),
         axis.text = element_text(size=10),
         plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
-        plot.caption = element_text(size = 10, hjust = 0.5),
+        plot.caption = element_text(size = 10, hjust = 0.3),
         plot.margin = unit(c(5,5,5,5),"mm"),
         legend.text = element_text(size=10),
         legend.position = "bottom",

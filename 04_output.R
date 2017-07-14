@@ -97,7 +97,7 @@ colr.pal <- brewer.pal(type.no, "Set1")
 ta_type_plot <- ggplot(ta_type, aes(1, y = n, fill = StatusDescription)) +
   geom_col(alpha = 0.7) +
   geom_text(aes(label = n), position = position_stack(vjust = 0.5), size = 2) +
-  labs(title = "Status of FrontCounter BC Transition\nUser Application Intake Process") +
+  labs(title = "Status of FrontCounter BC Transition\nApplication Intake Process") +
   scale_fill_manual(values = colr.pal, name = NULL, breaks = rev(levels(ta_type$StatusDescription))) +
   xlab(NULL) +
   ylab(NULL) +
@@ -143,7 +143,7 @@ app_regions_plot <- ggplot(data = ta_region, aes(x = nrs_region, y = value, fill
         plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
         plot.margin = unit(c(5,5,5,5),"mm"),
         legend.text = element_text(size=10),
-        legend.position = c(.75,.75),
+        legend.position = c(.75,.76),
         legend.background = element_rect(fill = "transparent"))
 
 plot(app_regions_plot)
@@ -163,7 +163,7 @@ colr2 <- c("Abandoned" = "#a65628",
 tl_status_plot <- ggplot(tl_status, aes(1, y = number, fill = JobStatus)) +
   geom_col(alpha = 0.7) +
   geom_text(aes(label = number), position = position_stack(vjust = 0.5), size = 2) +
-  labs(title = "Status of FLNRO Adjudication: Transition User Applications") +
+  labs(title = "Status of FLNRO Adjudication: Transition Applications") +
   scale_fill_manual(values = colr2, name = NULL,
                     breaks = rev(levels(tl_status$JobStatus))) +
   xlab(NULL) +
@@ -190,7 +190,7 @@ plot(tl_status_plot)
 tl_use_plot <- ggplot(tl_purpose, aes(x = PurposeUse, y = number)) +
   geom_col(alpha = 0.7, fill = "#377eb8") +
   geom_text(aes(label = perc_tot), vjust = .2, hjust = -.2, size = 3) +
-  labs(title = "Number & Percent of Incoming Transition Licences by Water Use Purposes") +
+  labs(title = "Incoming Transition Licences by Water Use Purpose") +
   xlab(NULL) +
   ylab("Number of Incoming Licences") +
   theme_soe() +
@@ -200,7 +200,7 @@ tl_use_plot <- ggplot(tl_purpose, aes(x = PurposeUse, y = number)) +
         axis.title = element_text(size=10),
         axis.text.x = element_text(size=10),
         axis.text.y = element_text(size=10),
-        plot.title = element_text(size = 12, hjust = 1.1, face = "bold"),
+        plot.title = element_text(size = 12, hjust = 1.5, face = "bold"),
         plot.margin = unit(c(5,5,5,5),"mm"),
         legend.text = element_text(size=9))
 
@@ -210,4 +210,8 @@ plot(tl_use_plot)
 
 
 ## @knitr end
+
+
+
+
 

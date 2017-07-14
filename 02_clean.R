@@ -60,11 +60,11 @@ office_regions <- processing_time_raw %>%
 ## Change 'North East' to 'Northeast'
 office_regions$nrs_region[office_regions$nrs_region == "North East"] <- "Northeast"
 
-## Region file
-regions <- office_regions %>%
-  group_by(nrs_region) %>%
-  summarise(n = n()) %>%
-  select(-(n))
+## Region file 
+# regions <- office_regions %>%
+#   group_by(nrs_region) %>%
+#   summarise(n = n()) %>%
+#   select(-(n))
 
 ## Merge nrs_regions into transition_all df
 transition_app <- merge(transition_app, office_regions, by = "VFCBCOffice", all.x = TRUE)
@@ -102,6 +102,7 @@ processing_time <- processing_time %>%
   
 ## Change 'North East' to 'Northeast'
 processing_time$nrs_region[processing_time$nrs_region == "North East"] <- "Northeast"
+
 
 
 ## Create tmp folder if not already there and store clean data in local repository

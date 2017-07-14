@@ -15,6 +15,18 @@ library(dplyr) # data munging
 ## Load raw data if not already in local repository
 if (!exists("transition_app_raw")) load("tmp/trans_gwlic_raw.RData")
 
+# ## how many IDs  and unique IDs in vFCBC file 
+# length(na.omit(transition_app_raw$BusinessAreaNumber))
+# length(unique(na.omit(transition_app_raw$BusinessAreaNumber)))
+# 
+# ## how many IDs and unique IDs in E-Lisensing file       
+# length(na.omit(transition_lic_raw$TrackingNumber))
+# length(unique(na.omit(transition_lic_raw$TrackingNumber)))
+# 
+# ## what is in vFCBC but not in E-Licensing
+# setdiff(na.omit(transition_app_raw$BusinessAreaNumber), transition_lic_raw$TrackingNumber)
+# ## what is in E-Licensing but not in vFCBC
+# setdiff(transition_lic_raw$TrackingNumber, transition_app_raw$BusinessAreaNumber)
 
 
 ## Clean projected_app_raw ##
@@ -71,9 +83,8 @@ transition_lic <- transition_lic_raw %>%
 ## Clean transition_processing_time_raw ##
 ## Only keep columns in transition_app necessary for data summaries
 keep_col_time <- c("Region Name", "Authorization Type", "Authorization Status",
-                    "Total Processing Time", "Net Processing Time")
-
-## "Received Date", "Accepted Date", "Rejected Date", "Granted/Offered Date",
+                    "Received Date", "Accepted Date", "Granted/Offered Date",
+                   "Total Processing Time", "Net Processing Time")
 
 processing_time <- processing_time_raw %>% 
   select(one_of(keep_col_time))

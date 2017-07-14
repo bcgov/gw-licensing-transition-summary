@@ -36,17 +36,17 @@ est.df<- order_df(est.df, target_col = "cat", value_col = "val", fun = max, desc
 ## collapse some categories for plotting
 transition_app$StatusDescription[transition_app$StatusDescription == "Cancelled"] <-  "Cancelled & Not Accepted"
 transition_app$StatusDescription[transition_app$StatusDescription == "Not Accepted"] <-  "Cancelled & Not Accepted"
-transition_app$StatusDescription[transition_app$StatusDescription == "Editing"] <-  "Submitted & Pre-Submittal Steps"
-transition_app$StatusDescription[transition_app$StatusDescription == "Submitted"] <-  "Submitted & Pre-Submittal Steps"
-transition_app$StatusDescription[transition_app$StatusDescription == "Pending"] <-  "Submitted & Pre-Submittal Steps"
-transition_app$StatusDescription[transition_app$StatusDescription == "Pre-Submittal"] <-  "Submitted & Pre-Submittal Steps"
+transition_app$StatusDescription[transition_app$StatusDescription == "Editing"] <-  "Submitted & Pre-Review Steps"
+transition_app$StatusDescription[transition_app$StatusDescription == "Submitted"] <-  "Submitted & Pre-Review Steps"
+transition_app$StatusDescription[transition_app$StatusDescription == "Pending"] <-  "Submitted & Pre-Review Steps"
+transition_app$StatusDescription[transition_app$StatusDescription == "Pre-Submittal"] <-  "Submitted & Pre-Review Steps"
 
 ## number of applications by application category
 ta_type <- transition_app %>% 
   count(StatusDescription) 
   
 ## arranging the order of the categories to be plotted
-cat.order <- c("Accepted", "Under Review", "Submitted & Pre-Submittal Steps", "Cancelled & Not Accepted")
+cat.order <- c("Accepted", "Under Review", "Submitted & Pre-Review Steps", "Cancelled & Not Accepted")
 
 ## reordering the categories for plotting
 ta_type$StatusDescription <- factor(ta_type$StatusDescription, levels = cat.order)

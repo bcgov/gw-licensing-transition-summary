@@ -138,8 +138,8 @@ tl_purpose <- order_df(tl_purpose, target_col = "PurposeUse", value_col = "numbe
 ## transition_time summaries ##
 ## Number applications and predicted number by Region
 time_region <- processing_time %>% 
-  group_by(Region_Name) %>%
-  summarise(received = n()) %>%
+  group_by(Region_Name, Authorization_Type) %>%
+  summarise(num_dec = n(), avg_tot_time = mean(Total_Processing_Time), avg_net_time = mean(Net_Processing_Time)) %>%
   merge(projected_app, by = "nrs_region", all.y=TRUE) %>% 
   gather(type, value, -nrs_region) %>% 
   mutate(value = ifelse(is.na(value), 0, value))

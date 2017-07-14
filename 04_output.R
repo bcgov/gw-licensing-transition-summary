@@ -14,7 +14,6 @@ library(ggplot2) #plotting
 library(dplyr) # data munging
 library(envreportutils) # theme_soe()
 library(stringr) # for label wrapping
-library(RColorBrewer) #for colour palette
 
 
 ## Load clean data if not already in local repository
@@ -90,15 +89,17 @@ plot(tl_rate_plot)
 
 ## bar chart of all applications by status description
 
-## get number of categories and set colour palette
-type.no <- length(cat.order)+1
-colr.pal <- brewer.pal(type.no, "Set1")
+## set colour palette
+colours <- c("Accepted" = "#e41a1c",
+           "Under Review" = "#377eb8",
+           "Submitted & Pre-Submittal Steps" = "#4daf4a",
+           "Cancelled & Not Accepted" = "#a65628")
 
 ta_type_plot <- ggplot(ta_type, aes(1, y = n, fill = StatusDescription)) +
   geom_col(alpha = 0.7) +
   geom_text(aes(label = n), position = position_stack(vjust = 0.5), size = 2) +
   labs(title = "Status of FrontCounter BC Transition\nApplication Intake Process") +
-  scale_fill_manual(values = colr.pal, name = NULL, breaks = rev(levels(ta_type$StatusDescription))) +
+  scale_fill_manual(values = colours, name = NULL, breaks = rev(levels(ta_type$StatusDescription))) +
   xlab(NULL) +
   ylab(NULL) +
   theme_soe() +
@@ -153,7 +154,7 @@ plot(app_regions_plot)
 
 ## @knitr incoming
 
-## bar chart of incoming licenses by status
+## bar chart of incoming licence applications by status
 
 colr2 <- c("Abandoned" = "#a65628",
           "Parked" = "#4daf4a",
@@ -185,12 +186,13 @@ plot(tl_status_plot)
 
 
 ## @knitr water_use
-## bar chart of Water Use Purposes for incoming licenses
+## bar chart of Water Use Purposes for incoming licence applications
 
 tl_use_plot <- ggplot(tl_purpose, aes(x = PurposeUse, y = number)) +
   geom_col(alpha = 0.7, fill = "#377eb8") +
   geom_text(aes(label = perc_tot), vjust = .2, hjust = -.2, size = 3) +
-  labs(title = "Incoming Transition Licences by Water Use Purpose") +
+  labs(title = "Incoming Transition Licences by Water Use Purpose",
+       caption = "\n**Note: Some licences have more than one water use purpose") +
   xlab(NULL) +
   ylab("Number of Incoming Licences") +
   theme_soe() +
@@ -207,6 +209,49 @@ tl_use_plot <- ggplot(tl_purpose, aes(x = PurposeUse, y = number)) +
 plot(tl_use_plot)
 
 
+##### PROCESSING TIME ######
+
+## @knitr proc_time
+
+proc_time_data <- filter(time_region, measure == "diff_time" | measure == "avg_net_time")
+proc_time_labels <-  filter(time_region, measure == "avg_tot_time")
+
+## arranging the order of the categories to be plotted
+time.order <-  c("diff_time", "avg_net_time")
+
+## ordering the categories for plotting
+proc_time_data$measure <- factor(proc_time_data$measure, levels = time.order)
+
+lic_colrs <- c("avg_net_time" = "#3182bd",
+               "diff_time" = "grey70")
+
+time_lab <- c("avg_net_time" = "Average Net Processing Time",
+              "diff_time" = "Average Number Days on Hold")
+
+
+proc_time_plot <- ggplot(data = proc_time_data) +
+  geom_col(aes(x = Authorization_Type, y = value, fill = measure), alpha = 0.7) +
+  geom_text(data = proc_time_labels, aes(x = Authorization_Type, y = value, label = num_dec),
+            vjust = -.4, size = 3, show.legend = FALSE) +
+  facet_wrap(~ nrs_region, ncol = 2) +
+  labs(title = "Number of Decisions & Average Processing Time to Decision\nby Licence Type & NRS Region") +
+  scale_fill_manual(values = lic_colrs, name=NULL,
+                    labels=time_lab, drop = TRUE) +
+  xlab(NULL) +
+  ylab("Days") +
+  theme_soe_facet() +
+  scale_y_continuous(expand=c(0, 0), limits = c(0, max(proc_time_labels$value) + max(proc_time_labels$value/5))) +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 8)) +
+  theme(panel.grid.major.x = element_blank(),
+        axis.title.y = element_text(size=10),
+        axis.text = element_text(size=10),
+        plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
+        plot.margin = unit(c(5,5,5,5),"mm"),
+        legend.text = element_text(size=10),
+        legend.position = "top",
+        legend.direction = "horizontal")
+
+plot(proc_time_plot)
 
 
 ## @knitr end

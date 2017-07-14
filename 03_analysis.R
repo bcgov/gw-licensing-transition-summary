@@ -113,8 +113,9 @@ work_day_rate_to_achieve <- app_to_go/work_days_to_go
 
 
 ## transition_lic summaries ##
-## number of licenses by status category
+## number of licenses by status category with duplicate rows removed
 tl_status <- transition_lic %>% 
+  distinct(TrackingNumber, .keep_all = TRUE) %>% 
   group_by(JobStatus) %>% 
   summarise(number = length(JobStatus))
 
@@ -127,7 +128,7 @@ cat.order3 <- c("Granted", "In Progress", "Parked", "Abandoned")
 ## reordering the categories for plotting
 tl_status$JobStatus <- factor(tl_status$JobStatus, levels = cat.order3)
 
-## number of licenses by purpose use category
+## number of licenses by purpose use category, includes duplicate IDs
 tl_purpose <- transition_lic %>% 
   group_by(PurposeUse) %>% 
   summarise(number = length(PurposeUse)) %>% 
@@ -136,15 +137,15 @@ tl_purpose <- transition_lic %>%
 tl_purpose <- order_df(tl_purpose, target_col = "PurposeUse", value_col = "number", fun = max, desc = TRUE)
 
 ## transition_time summaries ##
-## Number applications and predicted number by Region
+## Number decisions and avg days and net avg days df
 time_region <- processing_time %>% 
-  group_by(Region_Name, Authorization_Type) %>%
-  summarise(num_dec = n(), avg_tot_time = mean(Total_Processing_Time), avg_net_time = mean(Net_Processing_Time)) %>%
-  merge(projected_app, by = "nrs_region", all.y=TRUE) %>% 
-  gather(type, value, -nrs_region) %>% 
-  mutate(value = ifelse(is.na(value), 0, value))
+  group_by(nrs_region, Authorization_Type) %>%
+  summarise(num_dec = n(),
+            avg_tot_time = round(mean(Total_Processing_Time), digits = 0),
+            avg_net_time = round(mean(Net_Processing_Time), digits = 0)) %>%
+  gather(type, value, -c(nrs_region, Authorization_Type))
 
-time_region<- order_df(ta_region, target_col = "nrs_region", value_col = "value", fun = max, desc = TRUE)
+#time_region<- order_df(ta_region, target_col = "nrs_region", value_col = "value", fun = max, desc = TRUE)
 
 
 
@@ -155,4 +156,4 @@ save(tot_ta, ta_type, est.df, cat.order, tl_status,
      transition_time_day, rate_forecasts,  app_date, lic_date, proctime_date,
      current_rate, rate_to_achieve, lastday,
      work_day_rate_to_achieve, ta_region,
-     tl_purpose, file = "tmp/trans_gwlic_summaries.RData")
+     tl_purpose, time_region, file = "tmp/trans_gwlic_summaries.RData")

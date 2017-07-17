@@ -172,24 +172,48 @@ time_region <- processing_time %>%
 
 
 ## Throughput rates for recieved, accepted and decisions using processing time report
+
 ## calculate the num recieved applications per day
-proc_time_app <- processing_time %>%
-  filter(Authorization_Type == "Existing Groundwater Licence") %>% 
+proc_time_rec <- processing_time %>%
+  filter(Authorization_Type == "Existing Groundwater Licence") %>% #  Authorization_Status == "Closed"
   group_by(Received_Date) %>%
-  summarise(recperday = n())
+  summarise(recperday = n()) %>%
+  mutate(reccumsum =  cumsum(recperday), Date = Received_Date)
 
-received_rate <- mean(proc_time_app$recperday)
+## Calculate received rate to-date starting March 2016
+recsum <- sum(proc_time_rec$recperday)
+recnumdays <- as.integer(difftime(as.POSIXct(max(proc_time_rec$Received_Date)), as.POSIXct(min(proc_time_rec$Received_Date)), units="days"))
+rec_rate <- recsum/recnumdays
 
-## cumlative sum of received
-proc_time_app$cumsum <- cumsum(proc_time_app$recperday)
+## calculate the num accepted applications per day
+proc_time_acc <- processing_time %>%
+  filter(Authorization_Type == "Existing Groundwater Licence", !is.na(Accepted_Date)) %>% #  Authorization_Status == "Closed"
+  group_by(Accepted_Date) %>%
+  summarise(accperday = n()) %>% 
+  mutate(acccumsum =  cumsum(accperday), Date = Accepted_Date)
 
-## Calculate received rate to-date
-recsum <- sum(proc_time_app$recperday)
-recnumdays <- as.integer(difftime(as.POSIXct(max(proc_time_app$Received_Date)), as.POSIXct(min(proc_time_app$Received_Date)), units="days"))
-rec_rate <- appsum/recnumdays
+## Calculate received rate to-date starting March 2016
+accsum <- sum(proc_time_acc$accperday)
+accnumdays <- as.integer(difftime(as.POSIXct(max(proc_time_acc$Accepted_Date)), as.POSIXct(min(proc_time_acc$Accepted_Date)), units="days"))
+acc_rate <- accsum/accnumdays
 
-## Do same as above for accepted and decisions
+## calculate the num decisions per day
+proc_time_dec <- processing_time %>%
+  filter(Authorization_Type == "Existing Groundwater Licence", !is.na(`Granted/Offered_Date`)) %>% #  Authorization_Status == "Closed"
+  group_by(`Granted/Offered_Date`) %>%
+  summarise(decperday = n()) %>% 
+  mutate(deccumsum =  cumsum(decperday), Date = `Granted/Offered_Date`)
 
+## Calculate decisions rate to-date starting March 2016
+decsum <- sum(proc_time_dec$decperday)
+decnumdays <- as.integer(difftime(as.POSIXct(max(proc_time_dec$Date)), as.POSIXct(min(proc_time_dec$Date)), units="days"))
+dec_rate <- decsum/decnumdays
+
+## Merge 3 dfs
+stage_rates <- left_join(proc_time_rec, proc_time_acc, by = "Date")
+stage_rates <- left_join(stage_rates, proc_time_dec, by = "Date")
+stage_rates <- select(stage_rates, c(Date, recperday, reccumsum,
+                                     accperday, acccumsum, decperday, deccumsum))
 
 
 ## Create tmp folder if not already there and store clean data in local repository

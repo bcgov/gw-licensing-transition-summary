@@ -59,7 +59,7 @@ plot(tot_est_plot)
 
 ## line chart of incoming transition licenses by date and rates
 tl_rate_plot <- ggplot() +
-  geom_line(data = transition_time_day, aes(y = cumsum, x = ApplicationDate),
+  geom_point(data = transition_time_day, aes(y = cumsum, x = ApplicationDate),
             alpha = 0.7, colour = "#08519c", size = 1) +
   labs(title = "Observed Submission Rate of Transition\nApplications Compared to Target Rate") +
   geom_line(data = rate_forecasts, aes(y = curr_cumsum, x = date), alpha = 0.7,
@@ -255,10 +255,54 @@ proc_time_plot <- ggplot(data = proc_time_data) +
 
 plot(proc_time_plot)
 
+## @knitr stage_rates
+
+## line chart of rates 3 stages of licensing 
+
+rate_colrs <- c("reccumsum" = "#999999",
+           "acccumsum" = "#377eb8",
+           "deccumsum" = "#e41a1c")
+
+rate_lab <- c("reccumsum" = "Received",
+              "acccumsum" = "Accepted",
+              "deccumsum" = "Decisions")
+
+## arranging the order of the categories to be plotted
+rate.order <-  c("reccumsum", "acccumsum", "deccumsum")
+
+## ordering the categories for plotting
+stage_rates$measure <- factor(stage_rates$measure, levels = rate.order)
+
+
+stage_rate_plot <- ggplot(stage_rates, aes(x = Date, y = value, colour = measure)) +
+  geom_point(size = 3) +
+#  geom_smooth(method = "loess") +
+  labs(title = "Observed Rates of Processing Groundwater Transition Licences",
+       subtitle = paste("Data sourced from FLNRO FCBC 'ATS system application processing time report' and accessed on", proctime_date)) +
+  scale_y_continuous(expand=c(0, 0), limits = c(0, 1200), breaks=seq(0, 1200, 200), labels = scales::comma) +
+  scale_colour_manual(values = rate_colrs, name=NULL,
+                    labels=rate_lab) +
+  xlab(NULL) +
+  ylab("Cumulative Number") +
+  theme_soe() +
+  theme(panel.grid.major.x = element_blank(),
+        axis.title.y = element_text(size=14),
+        axis.text = element_text(size=14),
+        plot.title = element_text(size = 16,face = "bold"), # hjust = 0.5,
+        plot.subtitle = element_text(size = 12),
+        legend.text = element_text(size=14),
+        legend.position = c(.25,.58),
+        legend.background = element_rect(fill = "transparent"),
+        plot.margin = unit(c(5,5,5,5),"mm"))
+
+plot(stage_rate_plot)
 
 ## @knitr end
 
-
+## Save PNG of plot
+png(filename = "./tmp/gw_translic_proc_rates.png", width = 836, height = 489, units = "px", type = "cairo-png")
+plot(stage_rate_plot)
+dev.off()
 
 
 

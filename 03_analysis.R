@@ -224,4 +224,4 @@ save(tot_ta, ta_type, est.df, cat.order, tl_status,
      transition_time_day, rate_forecasts,  app_date, lic_date, proctime_date,
      current_rate, rate_to_achieve, lastday,
      work_day_rate_to_achieve, ta_region,
-     tl_purpose, time_region, file = "tmp/trans_gwlic_summaries.RData")
+     tl_purpose, time_region, stage_rates, file = "tmp/trans_gwlic_summaries.RData")

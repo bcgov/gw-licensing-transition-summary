@@ -209,11 +209,12 @@ decsum <- sum(proc_time_dec$decperday)
 decnumdays <- as.integer(difftime(as.POSIXct(max(proc_time_dec$Date)), as.POSIXct(min(proc_time_dec$Date)), units="days"))
 dec_rate <- decsum/decnumdays
 
-## Merge 3 dfs
-stage_rates <- left_join(proc_time_rec, proc_time_acc, by = "Date")
-stage_rates <- left_join(stage_rates, proc_time_dec, by = "Date")
-stage_rates <- select(stage_rates, c(Date, recperday, reccumsum,
-                                     accperday, acccumsum, decperday, deccumsum))
+## Merge 3 dfs and tody df
+stage_rates <- proc_time_rec %>% 
+  left_join(proc_time_acc, by = "Date") %>% 
+  left_join(proc_time_dec, by = "Date") %>% 
+  select(c(Date, reccumsum, acccumsum, deccumsum)) %>% 
+  gather(measure, value, -Date) 
 
 
 ## Create tmp folder if not already there and store clean data in local repository

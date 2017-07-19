@@ -17,7 +17,7 @@ source("03_analysis.R")
 source("04_output.R")
 
 
-outfile <- paste0("ENV_GW_Licensing_Transition_Summary_asof_", app_date, ".pdf")
+outfile <- paste0("ENV_GW_Licensing_Transition_Summary_asof_", proctime_date, ".pdf")
 
 rmarkdown::render("summary.Rmd",
                   output_file = outfile)

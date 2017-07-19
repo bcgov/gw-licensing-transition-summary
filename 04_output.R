@@ -92,7 +92,7 @@ plot(tl_rate_plot)
 ## set colour palette
 colours <- c("Accepted" = "#e41a1c",
            "Under Review" = "#377eb8",
-           "Submitted & Pre-Submittal Steps" = "#4daf4a",
+           "Submitted & Pre-Review Steps" = "#4daf4a",
            "Cancelled & Not Accepted" = "#a65628")
 
 ta_type_plot <- ggplot(ta_type, aes(1, y = n, fill = StatusDescription)) +
@@ -234,7 +234,7 @@ proc_time_plot <- ggplot(data = proc_time_data) +
   geom_text(data = proc_time_labels, aes(x = Authorization_Type, y = value, label = num_dec),
             vjust = -.4, size = 3, show.legend = FALSE) +
   facet_wrap(~ nrs_region, ncol = 2) +
-  labs(title = "Average Processing Time and Number of Decisions by NRS Region",
+  labs(title = "Average Processing Time and Number of Decisions\nby NRS Region Since March 2016",
        caption = "Bars Labelled with Number of Decisions") +
   scale_fill_manual(values = lic_colrs, name=NULL,
                     labels=time_lab, drop = TRUE) +
@@ -277,8 +277,8 @@ stage_rates$measure <- factor(stage_rates$measure, levels = rate.order)
 stage_rate_plot <- ggplot(stage_rates, aes(x = Date, y = value, colour = measure)) +
   geom_point(size = 3) +
 #  geom_smooth(method = "loess") +
-  labs(title = "Observed Rates of Processing Groundwater Transition Licences",
-       subtitle = paste("Data sourced from FLNRO FCBC 'ATS system application processing time report' and accessed on", proctime_date)) +
+  labs(title = "Number of Transition Licences by Processing Stage") +
+#       subtitle = paste("Data sourced from FLNRO FCBC 'ATS system application processing time report' and accessed on", proctime_date)) +
   scale_y_continuous(expand=c(0, 0), limits = c(0, 1200), breaks=seq(0, 1200, 200), labels = scales::comma) +
   scale_colour_manual(values = rate_colrs, name=NULL,
                     labels=rate_lab) +
@@ -286,11 +286,11 @@ stage_rate_plot <- ggplot(stage_rates, aes(x = Date, y = value, colour = measure
   ylab("Cumulative Number") +
   theme_soe() +
   theme(panel.grid.major.x = element_blank(),
-        axis.title.y = element_text(size=14),
-        axis.text = element_text(size=14),
-        plot.title = element_text(size = 16,face = "bold"), # hjust = 0.5,
-        plot.subtitle = element_text(size = 12),
-        legend.text = element_text(size=14),
+        axis.title.y = element_text(size=10),
+        axis.text = element_text(size=10),
+        plot.title = element_text(size = 12,face = "bold", hjust = 0.5), # hjust = 0.5,
+   #     plot.subtitle = element_text(size = 8),
+        legend.text = element_text(size=12),
         legend.position = c(.25,.58),
         legend.background = element_rect(fill = "transparent"),
         plot.margin = unit(c(5,5,5,5),"mm"))

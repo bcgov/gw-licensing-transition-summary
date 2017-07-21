@@ -27,39 +27,54 @@ if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
 <!--\pagenumbering{gobble}-->
 
 
-# Groundwater Licensing Transition Summary
+# B.C. Groundwater Licensing Transition Project
 
-\vspace{18pt}
+\vspace{12pt}
 
-## Transition Applications Received by FrontCounter BC
+# STATUS DASHBOARD: `r proctime_date`
 
-Data sourced from 'vFCBC Application Search' and accessed on `r app_date`
+\vspace{32pt}
 
-\vspace{24pt}
-  
 ```{r estimate, fig.height = 2, fig.width = 7}
 
 ```
 
-\vspace{48pt}
+\vspace{32pt}
+
+```{r stage_rates, fig.height = 4, fig.width = 7}
+
+```
+
+\vspace{24pt}
+
+Dashboard plot data sourced from (i) 'vFCBC Application Search' accessed on `r app_date` and (ii) FLNRO FCBC 'ATS system application processing time report' accessed on `r proctime_date`.
+
+\newpage
+
+# B.C. Groundwater Licensing Transition Project
+
+\vspace{12pt}
+
+# STATUS SUMMARIES
+
+\vspace{32pt}
+
+## FrontCounter BC: Applications Recieved, Processing & Acceptance 
+
+Data sourced from 'vFCBC Application Search' and accessed on `r app_date`, projected estimates from ENV Water Protection & Sustainability Branch
+
+\vspace{12pt}
+  
+```{r types, fig.height = 2, fig.width = 7}
+
+```
+
+\vspace{24pt}
 
 ```{r app_rate, fig.height = 4, fig.width = 7}
 
 ```
 
-\newpage
-
-## Application Processing & Acceptance by FrontCounter BC
-
-Data sourced from 'vFCBC Application Search' and accessed on `r app_date`, projected estimates from ENV Water Protection & Sustainability Branch
-
-\vspace{24pt}
-
-```{r types, fig.height = 2, fig.width = 7}
-
-```
-
-\vspace{48pt}
 
 ```{r app_regions, fig.height = 5, fig.width = 7}
 
@@ -67,7 +82,7 @@ Data sourced from 'vFCBC Application Search' and accessed on `r app_date`, proje
 
 \newpage
 
-## Applications Under Adjudication by FLNRO E-Licensing
+## FLNRO E-Licensing: Applications Under Adjudication 
 
 Data sourced from FLNRO's E-licensing Home 'Incoming Groundwater Licence Application Tracking Report' and accessed on `r lic_date`
 
@@ -85,7 +100,7 @@ Data sourced from FLNRO's E-licensing Home 'Incoming Groundwater Licence Applica
 
 \newpage
 
-## Number of Decisions & Processing Time
+## Transition Licence Decisions & Processing Time
 
 Data sourced from FLNRO FCBC 'ATS system application processing time report' and accessed on `r proctime_date`
 

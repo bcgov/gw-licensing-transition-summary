@@ -209,12 +209,29 @@ decsum <- sum(proc_time_dec$decperday)
 decnumdays <- as.integer(difftime(as.POSIXct(max(proc_time_dec$Date)), as.POSIXct(min(proc_time_dec$Date)), units="days"))
 dec_rate <- decsum/decnumdays
 
-## Merge 3 dfs and tody df
+## Merge 3 dfs and tidy df
 stage_rates <- proc_time_rec %>% 
   left_join(proc_time_acc, by = "Date") %>% 
   left_join(proc_time_dec, by = "Date") %>% 
   select(c(Date, reccumsum, acccumsum, deccumsum)) %>% 
   gather(measure, value, -Date) 
+
+## Individual lines for each transition licence 
+ind_proc_time <- processing_time %>%
+  filter(Authorization_Type == "Existing Groundwater Licence") %>% 
+  rename(Decision_Date = `Granted/Offered_Date`) 
+
+ind_proc_time <- rownames_to_column(ind_proc_time, "ID")
+
+ind_proc_time <- ind_proc_time %>% 
+  mutate(Received = 0, Accepted = difftime(as.POSIXct(ind_proc_time$Accepted_Date),
+                                             as.POSIXct(ind_proc_time$Received_Date),
+         units="days"),
+         Decision = difftime(as.POSIXct(ind_proc_time$Decision_Date),
+                             as.POSIXct(ind_proc_time$Received_Date),
+                             units="days")) %>% 
+  select(ID, nrs_region, Authorization_Status, Received, Accepted, Decision) %>% 
+  gather(stage, days, -ID, -nrs_region, -Authorization_Status) 
 
 
 ## Create tmp folder if not already there and store clean data in local repository
@@ -224,4 +241,5 @@ save(tot_ta, ta_type, est.df, cat.order, tl_status,
      transition_time_day, rate_forecasts,  app_date, lic_date, proctime_date,
      current_rate, rate_to_achieve, lastday,
      work_day_rate_to_achieve, ta_region,
-     tl_purpose, time_region, stage_rates, file = "tmp/trans_gwlic_summaries.RData")
+     tl_purpose, time_region, stage_rates,
+     ind_proc_time, file = "tmp/trans_gwlic_summaries.RData")

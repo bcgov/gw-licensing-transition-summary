@@ -304,5 +304,44 @@ png(filename = "./tmp/gw_translic_proc_rates.png", width = 836, height = 489, un
 plot(stage_rate_plot)
 dev.off()
 
+## line plot for individual transitiotn lic applications timelines
+## arranging the order of the categories to be plotted
+stage.order <-  c("Received", "Accepted", "Decision")
+
+## ordering the categories for plotting
+ind_proc_time$stage <- factor(ind_proc_time$stage, levels = stage.order)
+
+## colours for categories
+line_colrs <- c("Active" = "#377eb8",
+                "Closed" = "#e41a1c",
+                "On Hold" = "#4daf4a")
+
+ind_ta_plot <- ggplot(ind_proc_time, aes(x = stage, y = days, group = ID, colour = Authorization_Status)) +
+  geom_line(size = .75) +
+  facet_wrap(~ nrs_region, ncol = 2) +
+  labs(title = "Status & Processing Time of Individual Groundwater\nTransition License Applications by NRS Region",
+       subtitle = "Each line is an individual application, where recieved = day zero",
+       caption = "\nNote: No applications have been submitted to-date in the Kootenay Boundary\n& Cariboo NRS Regions and number of days includes days on hold") +
+  scale_colour_manual(values = line_colrs, name= "Status of Application") +
+  scale_y_continuous(expand=c(0, 0)) +
+  xlab(NULL) +
+  ylab("Number of Days") +
+  theme_soe_facet() +
+  theme(panel.grid.major.x = element_blank(),
+        axis.title.y = element_text(size=10),
+        axis.text = element_text(size=10),
+        plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
+        plot.subtitle = element_text(size = 10,  hjust = 0.5),
+        plot.caption = element_text(size = 9),
+        plot.margin = unit(c(5,5,5,5),"mm"),
+        legend.text = element_text(size=10))
+
+plot(ind_ta_plot)
+
+## Save PNG of plot
+png(filename = "./tmp/indiviual_gw_translic_status_byregion.png", width = 836, height = 689, units = "px", type = "cairo-png")
+plot(ind_ta_plot)
+dev.off()
+
 
 

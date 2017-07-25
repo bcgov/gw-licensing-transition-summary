@@ -318,11 +318,11 @@ line_colrs <- c("Active" = "#377eb8",
 
 ind_ta_plot <- ggplot(ind_proc_time, aes(x = days, y = stage, group = ID, colour = Authorization_Status)) +
   geom_line(size = .75) +
-  geom_vline(xintercept = 140, linetype = 2, colour = "grey60") +
-  annotate("text", label ="140 days", colour = "grey60",
+  geom_vline(xintercept = 140, linetype = 2, colour = "grey40") +
+  annotate("text", label ="140 days", colour = "grey40",
            x = 170, y = .7, size = 3.5) +
-  geom_vline(xintercept = 280, linetype = 2, colour = "grey60") +
-  annotate("text", label ="280 days", colour = "grey60",
+  geom_vline(xintercept = 280, linetype = 2, colour = "grey40") +
+  annotate("text", label ="280 days", colour = "grey40",
            x = 310, y = .7, size = 3.5) +
   facet_wrap(~ nrs_region, ncol = 2) +
   labs(title = "Status & Processing Time of Individual Groundwater\nTransition License Applications by NRS Region",

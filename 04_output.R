@@ -316,16 +316,22 @@ line_colrs <- c("Active" = "#377eb8",
                 "Closed" = "#e41a1c",
                 "On Hold" = "#4daf4a")
 
-ind_ta_plot <- ggplot(ind_proc_time, aes(x = stage, y = days, group = ID, colour = Authorization_Status)) +
+ind_ta_plot <- ggplot(ind_proc_time, aes(x = days, y = stage, group = ID, colour = Authorization_Status)) +
   geom_line(size = .75) +
+  geom_vline(xintercept = 140, linetype = 2, colour = "grey60") +
+  annotate("text", label ="140 days", colour = "grey60",
+           x = 170, y = .7, size = 3.5) +
+  geom_vline(xintercept = 280, linetype = 2, colour = "grey60") +
+  annotate("text", label ="280 days", colour = "grey60",
+           x = 310, y = .7, size = 3.5) +
   facet_wrap(~ nrs_region, ncol = 2) +
   labs(title = "Status & Processing Time of Individual Groundwater\nTransition License Applications by NRS Region",
        subtitle = "Each line is an individual application, where recieved = day zero",
        caption = "\nNote: No applications have been submitted to-date in the Kootenay Boundary\n& Cariboo NRS Regions and number of days includes days on hold") +
-  scale_colour_manual(values = line_colrs, name= "Status of Application") +
-  scale_y_continuous(expand=c(0, 0)) +
-  xlab(NULL) +
-  ylab("Number of Days") +
+   scale_colour_manual(values = line_colrs, name= "Status of Application") +
+#   scale_y_continuous(expand=c(0, 0)) +
+  ylab(NULL) +
+  xlab("Number of Days") +
   theme_soe_facet() +
   theme(panel.grid.major.x = element_blank(),
         axis.title.y = element_text(size=10),

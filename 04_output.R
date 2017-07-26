@@ -327,7 +327,7 @@ ind_ta_plot <- ggplot(ind_proc_time, aes(x = days, y = stage, group = ID, colour
   facet_wrap(~ nrs_region, ncol = 2) +
   labs(title = "Status & Processing Time of Individual Groundwater\nTransition License Applications by NRS Region",
        subtitle = "Each line is an individual application, where recieved = day zero",
-       caption = "\nNote: No applications have been submitted to-date in the Kootenay Boundary\n& Cariboo NRS Regions and number of days includes days on hold") +
+       caption = "\nNote: No applications have been submitted to-date in the Kootenay Boundary\n& Northeast NRS Regions and number of days includes days on hold") +
    scale_colour_manual(values = line_colrs, name= "Status of Application") +
 #   scale_y_continuous(expand=c(0, 0)) +
   ylab(NULL) +

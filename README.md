@@ -4,9 +4,9 @@
 
 ---
 
-# Summarizing and visualizing B.C. ground water license transition data 
+# Summarizing and visualizing B.C. ground water licensing transition data 
 
-This repository contains R code for summarizing and visualizing B.C. ground water license transition data and generates a summary of the static data visualizations in a PDF document.
+This repository contains R code for summarizing and visualizing B.C. ground water licensing transition data and generates a summary of the static data visualizations in a PDF document.
 
 ### Usage
 

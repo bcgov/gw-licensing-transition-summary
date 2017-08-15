@@ -15,6 +15,7 @@ library(envreportutils) # order_df
 library(lubridate)
 library(tidyr) # reshape df
 library(scales) # percent()
+library(tibble) # rownames_to_column()
 
 ## Load clean data if not already in local repository
 if (!exists("transition_app")) load("tmp/trans_gwlic_clean.RData")
@@ -50,14 +51,6 @@ cat.order <- c("Accepted", "Under Review", "Submitted & Pre-Review Steps", "Canc
 
 ## reordering the categories for plotting
 ta_type$StatusDescription <- factor(ta_type$StatusDescription, levels = cat.order)
-
-## Number applications and predicted number by Region
-ta_region <- transition_app %>% 
-  group_by(nrs_region) %>%
-  summarise(received = n() , accepted = sum(StatusDescription == "Accepted")) %>%
-  merge(projected_app, by = "nrs_region", all.y=TRUE) %>% 
-  gather(type, value, -nrs_region) %>% 
-  mutate(value = ifelse(is.na(value), 0, value))
 
 ## Number applications and predicted number by Region
 ta_region <- transition_app %>% 

@@ -234,7 +234,7 @@ proc_time_plot <- ggplot(data = proc_time_data) +
   geom_text(data = proc_time_labels, aes(x = Authorization_Type, y = value, label = num_dec),
             vjust = -.4, size = 3, show.legend = FALSE) +
   facet_wrap(~ nrs_region, ncol = 2) +
-  labs(title = "Average Processing Time and Number of Decisions\nby NRS Region Since March 2016",
+  labs(title = "Number of Decisions & Average Processing Time\nby NRS Region Since March 2016",
        caption = "Bars Labelled with Number of Decisions") +
   scale_fill_manual(values = lic_colrs, name=NULL,
                     labels=time_lab, drop = TRUE) +
@@ -320,14 +320,14 @@ ind_ta_plot <- ggplot(ind_proc_time, aes(x = days, y = stage, group = ID, colour
   geom_line(size = .75) +
   geom_vline(xintercept = 140, linetype = 2, colour = "grey40") +
   annotate("text", label ="140 days", colour = "grey40",
-           x = 170, y = .7, size = 3.5) +
+           x = 185, y = .7, size = 3.5) +
   geom_vline(xintercept = 280, linetype = 2, colour = "grey40") +
   annotate("text", label ="280 days", colour = "grey40",
-           x = 310, y = .7, size = 3.5) +
+           x = 325, y = .7, size = 3.5) +
   facet_wrap(~ nrs_region, ncol = 2) +
-  labs(title = "Status & Processing Time of Individual Groundwater\nTransition License Applications by NRS Region",
+  labs(title = "Status & Processing Time of Individual Groundwater\nTransition LicenCe Applications by NRS Region",
        subtitle = "Each line is an individual application, where recieved = day zero",
-       caption = "\nNote: No applications have been submitted to-date in the Kootenay Boundary\n& Northeast NRS Regions and number of days includes days on hold") +
+       caption = "\nNote: No applications have been submitted to-date in the Kootenay Boundary NRS Region and number of days includes days on hold") +
    scale_colour_manual(values = line_colrs, name= "Status of Application") +
 #   scale_y_continuous(expand=c(0, 0)) +
   ylab(NULL) +

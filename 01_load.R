@@ -23,7 +23,7 @@ projected_app_raw <- read_excel("Z:/water/groundwater/licensing/transition/Proje
 ## Data license: Access Only http://www2.gov.bc.ca/gov/content/home/copyright 
 transition_app_raw <- read_excel("Z:/water/groundwater/licensing/transition/ApplicationSearch_eASP.xlsx")
 ## Data 'as of' date
-app_date <- "July 10th 2017"
+app_date <- "August 14th 2017"
 
 
 
@@ -33,7 +33,7 @@ app_date <- "July 10th 2017"
 ## Data license: Access Only http://www2.gov.bc.ca/gov/content/home/copyright 
 transition_lic_raw <- read_excel("Z:/water/groundwater/licensing/transition/ApplicationPurposeUseSearch.xlsx")
 ## Data 'as of' date
-lic_date <- "July 10th 2017"
+lic_date <- "August 14th 2017"
 
 
 ## Import the PROCESSING TIME data for Existing Use Groundwater Incoming Licensing
@@ -41,9 +41,9 @@ lic_date <- "July 10th 2017"
 ## 'FrontCounterBC ATS system application processing time report' provided by
 ## email from FCBC FLNRO staff (generated monthly)
 ## Data license: Access Only http://www2.gov.bc.ca/gov/content/home/copyright 
-processing_time_raw <- read_excel("Z:/water/groundwater/licensing/transition/GroundWater-June2017.xlsx")
+processing_time_raw <- read_excel("Z:/water/groundwater/licensing/transition/Groundwater Data for July 2017v2.xlsx")
 ## Data 'as of' date
-proctime_date <- "June 30th 2017"
+proctime_date <- "July 31st 2017"
 
 
 ## Create tmp folder if not already there and store raw data in local repository

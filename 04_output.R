@@ -297,12 +297,14 @@ stage_rate_plot <- ggplot(stage_rates, aes(x = Date, y = value, colour = measure
 
 plot(stage_rate_plot)
 
-## @knitr end
+## @knitr end stage_rates
 
 ## Save PNG of plot
 png(filename = "./tmp/gw_translic_proc_rates.png", width = 836, height = 489, units = "px", type = "cairo-png")
 plot(stage_rate_plot)
 dev.off()
+
+## @knitr line_facet
 
 ## line plot for individual transitiotn lic applications timelines
 ## arranging the order of the categories to be plotted
@@ -316,19 +318,23 @@ line_colrs <- c("Active" = "#377eb8",
                 "Closed" = "#e41a1c",
                 "On Hold" = "#4daf4a")
 
+line_labs <- c("Active" = "In Progress",
+               "Closed" = "Completed",
+               "On Hold" = "On Hold")
+
 ind_ta_plot <- ggplot(ind_proc_time, aes(x = days, y = stage, group = ID, colour = Authorization_Status)) +
   geom_line(size = .75) +
   geom_vline(xintercept = 140, linetype = 2, colour = "grey40") +
   annotate("text", label ="140 days", colour = "grey40",
-           x = 185, y = .7, size = 3.5) +
+           x = 190, y = .7, size = 3.5) +
   geom_vline(xintercept = 280, linetype = 2, colour = "grey40") +
   annotate("text", label ="280 days", colour = "grey40",
-           x = 325, y = .7, size = 3.5) +
+           x = 335, y = .7, size = 3.5) +
   facet_wrap(~ nrs_region, ncol = 2) +
-  labs(title = "Status & Processing Time of Individual Groundwater\nTransition LicenCe Applications by NRS Region",
+  labs(title = "Status & Processing Time of Individual Groundwater\nTransition Licence Applications by NRS Region",
        subtitle = "Each line is an individual application, where recieved = day zero",
-       caption = "\nNote: No applications have been submitted to-date in the Kootenay Boundary NRS Region and number of days includes days on hold") +
-   scale_colour_manual(values = line_colrs, name= "Status of Application") +
+       caption = "\nNote: No applications have been submitted to-date in the Kootenay Boundary NRS Region\nand number of days includes days on hold") +
+   scale_colour_manual(values = line_colrs, labels=line_labs, name= NULL) +
 #   scale_y_continuous(expand=c(0, 0)) +
   ylab(NULL) +
   xlab("Number of Days") +
@@ -338,11 +344,15 @@ ind_ta_plot <- ggplot(ind_proc_time, aes(x = days, y = stage, group = ID, colour
         axis.text = element_text(size=10),
         plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
         plot.subtitle = element_text(size = 10,  hjust = 0.5),
-        plot.caption = element_text(size = 9),
+        plot.caption = element_text(size = 9, hjust = 0.5),
         plot.margin = unit(c(5,5,5,5),"mm"),
-        legend.text = element_text(size=10))
+        legend.text = element_text(size=12),
+        legend.position = "top",
+        legend.direction = "horizontal")
 
 plot(ind_ta_plot)
+
+## @knitr end
 
 ## Save PNG of plot
 png(filename = "./tmp/indiviual_gw_translic_status_byregion.png", width = 836, height = 689, units = "px", type = "cairo-png")

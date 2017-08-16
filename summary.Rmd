@@ -47,7 +47,7 @@ if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
 
 \vspace{24pt}
 
-Dashboard plot data sourced from (i) 'vFCBC Application Search' accessed on `r app_date` and (ii) FLNRO FCBC 'ATS system application processing time report' accessed on `r proctime_date`.
+Dashboard plot data sourced from (i) 'vFCBC Application Search' accessed on `r app_date` and (ii) FLNRO 'ATS system application processing time report' accessed on `r proctime_date`.
 
 \newpage
 
@@ -61,7 +61,8 @@ Dashboard plot data sourced from (i) 'vFCBC Application Search' accessed on `r a
 
 ## FrontCounter BC: Applications Recieved, Processing & Acceptance 
 
-Data sourced from 'vFCBC Application Search' and accessed on `r app_date`, projected estimates from ENV Water Protection & Sustainability Branch
+Data sourced from 'vFCBC Application Search' and accessed on `r app_date` 
+<!--projected estimates from ENV Water Protection & Sustainability Branch-->
 
 \vspace{12pt}
   
@@ -75,10 +76,11 @@ Data sourced from 'vFCBC Application Search' and accessed on `r app_date`, proje
 
 ```
 
-
+<!--
 ```{r app_regions, fig.height = 5, fig.width = 7}
 
 ```
+-->
 
 \newpage
 
@@ -100,9 +102,9 @@ Data sourced from FLNRO's E-licensing Home 'Incoming Groundwater Licence Applica
 
 \newpage
 
-## FLNRO E-Licensing: Transition Licence Status & Processing Time
+## FLNRO ATS System: Transition Licence Status & Processing Time
 
-Data sourced from FLNRO FCBC 'ATS system application processing time report' and accessed on `r proctime_date`
+Data sourced from FLNRO 'ATS system application processing time report' and accessed on `r proctime_date`
 
 \vspace{24pt}
 

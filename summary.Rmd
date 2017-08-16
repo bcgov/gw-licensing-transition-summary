@@ -100,13 +100,13 @@ Data sourced from FLNRO's E-licensing Home 'Incoming Groundwater Licence Applica
 
 \newpage
 
-## Transition Licence Decisions & Processing Time
+## FLNRO E-Licensing: Transition Licence Status & Processing Time
 
 Data sourced from FLNRO FCBC 'ATS system application processing time report' and accessed on `r proctime_date`
 
 \vspace{24pt}
 
-```{r proc_time, fig.height = 8, fig.width = 7}
+```{r line_facet, fig.height = 8, fig.width = 7}
 
 ```
 

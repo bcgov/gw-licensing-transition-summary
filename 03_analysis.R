@@ -52,23 +52,6 @@ cat.order <- c("Accepted", "Under Review", "Submitted & Pre-Review Steps", "Canc
 ## reordering the categories for plotting
 ta_type$StatusDescription <- factor(ta_type$StatusDescription, levels = cat.order)
 
-## Number applications and predicted number by Region
-ta_region <- transition_app %>% 
-  group_by(nrs_region) %>%
-  summarise(received = n() , accepted = sum(StatusDescription == "Accepted")) %>%
-  merge(projected_app, by = "nrs_region", all.y=TRUE) %>% 
-  gather(type, value, -nrs_region) %>% 
-  mutate(value = ifelse(is.na(value), 0, value))
-
-## arranging the order of the categories to be plotted
-cat.order2 <- c("projected", "received", "accepted")
-
-## reordering the categories for plotting
-ta_region$type <- factor(ta_region$type, levels = cat.order2)
-
-## oder df for plotting
-ta_region<- order_df(ta_region, target_col = "nrs_region", value_col = "value", fun = max, desc = TRUE)
-
 ## Rate of applications
 ## calculate the num applications per day
 transition_time_day <- transition_app %>%
@@ -136,6 +119,27 @@ cat.order3 <- c("Granted", "In Progress", "Parked", "Abandoned")
 
 ## reordering the categories for plotting
 tl_status$JobStatus <- factor(tl_status$JobStatus, levels = cat.order3)
+
+
+## Number applications and predicted number by Region
+tl_region <- transition_lic %>%
+  distinct(TrackingNumber, .keep_all = TRUE) %>% 
+  group_by(nrs_region) %>%
+  summarise(accepted = n() , granted = sum(JobStatus == "Grant")) %>%
+  merge(projected_app, by = "nrs_region", all.y=TRUE) %>%
+  gather(type, value, -nrs_region) %>%
+  mutate(value = ifelse(is.na(value), 0, value))
+
+## arranging the order of the categories to be plotted
+cat.order2 <- c("projected", "accepted", "granted")
+
+## reordering the categories for plotting
+tl_region$type <- factor(tl_region$type, levels = cat.order2)
+
+## order df for plotting
+tl_region<- order_df(tl_region, target_col = "nrs_region", value_col = "value", fun = max, desc = TRUE)
+
+
 
 ## number of licenses by purpose use category, includes duplicate IDs
 tl_purpose <- transition_lic %>% 
@@ -233,6 +237,6 @@ if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
 save(tot_ta, ta_type, est.df, cat.order, tl_status,
      transition_time_day, rate_forecasts,  app_date, lic_date, proctime_date,
      current_rate, rate_to_achieve, lastday,
-     work_day_rate_to_achieve, ta_region,
+     work_day_rate_to_achieve, tl_region,
      tl_purpose, time_region, stage_rates,
      ind_proc_time, file = "tmp/trans_gwlic_summaries.RData")

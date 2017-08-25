@@ -25,11 +25,11 @@ if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
 ## PLOTS
 
 
-##### RECEIVED APPLICATIONS ######
+##### VFCBC RECEIVED & ACCEPTED APPLICATIONS ######
 
 ## @knitr estimate
 
-## bar chart of total and estimated applications
+## bar chart of total received and estimated applications
 
 two_colrs <- c("Current Number" = "#3182bd",
                "Estimated Outstanding" = "grey70")
@@ -55,9 +55,11 @@ tot_est_plot <- ggplot(est.df, aes(1, y = val, fill = cat)) +
 
 plot(tot_est_plot)
 
+
 ## @knitr app_rate
 
-## line chart of incoming transition licenses by date and rates
+
+## line chart of incoming transition license applications to VFCBC by date and rates
 tl_rate_plot <- ggplot() +
   geom_point(data = transition_time_day, aes(y = cumsum, x = ApplicationDate),
             alpha = 0.7, colour = "#08519c", size = 1) +
@@ -83,11 +85,9 @@ tl_rate_plot <- ggplot() +
 plot(tl_rate_plot)
 
 
-##### ACCEPTED APPLICATIONS ######
-
 ## @knitr types
 
-## bar chart of all applications by status description
+## bar chart of all applications into VFCBC by status description
 
 ## set colour palette
 colours <- c("Accepted" = "#e41a1c",
@@ -117,44 +117,14 @@ ta_type_plot <- ggplot(ta_type, aes(1, y = n, fill = StatusDescription)) +
 
 plot(ta_type_plot)
 
-## @knitr app_regions
-
-colrs <- c("projected" = "#999999",
-           "received" = "#377eb8",
-           "accepted" = "#e41a1c")
-
-new_lab <- c("projected" = "Projected",
-             "received" = "Received",
-             "accepted" = "Accepted")
-
-app_regions_plot <- ggplot(data = ta_region, aes(x = nrs_region, y = value, fill = type)) +
-  geom_bar(stat="identity", position = "dodge", alpha = 0.7) +
-  geom_text(aes(label = value), position = position_dodge(.9),  vjust = -.5, size = 2) +
-  labs(title = "Received & Accepted Transition Applications Compared with\nProjected Numbers By NRS Region") +
-  scale_fill_manual(values = colrs, name=NULL,
-                    labels=new_lab) +
-  xlab(NULL) +
-  ylab("Number of Applications") +
-  theme_soe() +
-  scale_y_continuous(expand=c(0, 0), limits = c(0, 6000), breaks = seq(0, 6000, 1000), labels = scales::comma) +
-  scale_x_discrete(labels = function(x) str_wrap(x, width = 8)) +
-  theme(panel.grid.major.x = element_blank(),
-        axis.title.y = element_text(size=10),
-        axis.text = element_text(size=10),
-        plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
-        plot.margin = unit(c(5,5,5,5),"mm"),
-        legend.text = element_text(size=10),
-        legend.position = c(.75,.76),
-        legend.background = element_rect(fill = "transparent"))
-
-plot(app_regions_plot)
 
 
-##### ADJUDICATION AND DECISION OF APPLICATIONS ######
+##### E-Licensing ADJUDICATION AND DECISION OF APPLICATIONS ######
+
 
 ## @knitr incoming
 
-## bar chart of incoming licence applications by status
+## bar chart of incoming E-licence applications by status
 
 colr2 <- c("Abandoned" = "#a65628",
           "Parked" = "#4daf4a",
@@ -185,8 +155,42 @@ tl_status_plot <- ggplot(tl_status, aes(1, y = number, fill = JobStatus)) +
 plot(tl_status_plot)
 
 
+## @knitr app_regions
+
+colrs <- c("projected" = "#999999",
+           "accepted" = "#377eb8",
+           "granted" = "#e41a1c")
+
+new_lab <- c("projected" = "Projected",
+             "granted" = "Granted",
+             "accepted" = "Accepted")
+
+app_regions_plot <- ggplot(data = tl_region, aes(x = nrs_region, y = value, fill = type)) +
+  geom_bar(stat="identity", position = "dodge", alpha = 0.7) +
+  geom_text(aes(label = value), position = position_dodge(.9),  vjust = -.5, size = 2) +
+  labs(title = "Accepted & Granted Transition Applications Compared with\nProjected Numbers By NRS Region") +
+  scale_fill_manual(values = colrs, name=NULL,
+                    labels=new_lab) +
+  xlab(NULL) +
+  ylab("Number of Applications") +
+  theme_soe() +
+  scale_y_continuous(expand=c(0, 0), limits = c(0, 5200), breaks = seq(0, 5200, 1000), labels = scales::comma) +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 8)) +
+  theme(panel.grid.major.x = element_blank(),
+        axis.title.y = element_text(size=10),
+        axis.text = element_text(size=10),
+        plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
+        plot.margin = unit(c(5,5,5,5),"mm"),
+        legend.text = element_text(size=10),
+        legend.position = c(.75,.76),
+        legend.background = element_rect(fill = "transparent"))
+
+plot(app_regions_plot)
+
+
 ## @knitr water_use
-## bar chart of Water Use Purposes for incoming licence applications
+
+## bar chart of Water Use Purposes for incoming E-licence applications
 
 tl_use_plot <- ggplot(tl_purpose, aes(x = PurposeUse, y = number)) +
   geom_col(alpha = 0.7, fill = "#377eb8") +
@@ -213,47 +217,47 @@ plot(tl_use_plot)
 
 ## @knitr proc_time
 
-proc_time_data <- filter(time_region, measure == "diff_time" | measure == "avg_net_time")
-proc_time_labels <-  filter(time_region, measure == "avg_tot_time")
-
-## arranging the order of the categories to be plotted
-time.order <-  c("diff_time", "avg_net_time")
-
-## ordering the categories for plotting
-proc_time_data$measure <- factor(proc_time_data$measure, levels = time.order)
-
-lic_colrs <- c("avg_net_time" = "#3182bd",
-               "diff_time" = "grey70")
-
-time_lab <- c("avg_net_time" = "Average Net Processing Time (excludes days on hold)",
-              "diff_time" = "Time On Hold")
-
-
-proc_time_plot <- ggplot(data = proc_time_data) +
-  geom_col(aes(x = Authorization_Type, y = value, fill = measure), alpha = 0.7) +
-  geom_text(data = proc_time_labels, aes(x = Authorization_Type, y = value, label = num_dec),
-            vjust = -.4, size = 3, show.legend = FALSE) +
-  facet_wrap(~ nrs_region, ncol = 2) +
-  labs(title = "Number of Decisions & Average Processing Time\nby NRS Region Since March 2016",
-       caption = "Bars Labelled with Number of Decisions") +
-  scale_fill_manual(values = lic_colrs, name=NULL,
-                    labels=time_lab, drop = TRUE) +
-  xlab(NULL) +
-  ylab("Time in Days") +
-  theme_soe_facet() +
-  scale_y_continuous(expand=c(0, 0), limits = c(0, max(proc_time_labels$value) + max(proc_time_labels$value/5))) +
-  scale_x_discrete(labels = function(x) str_wrap(x, width = 8)) +
-  theme(panel.grid.major.x = element_blank(),
-        axis.title.y = element_text(size=10),
-        axis.text = element_text(size=10),
-        plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
-        plot.caption = element_text(size = 10, hjust = 0.3),
-        plot.margin = unit(c(5,5,5,5),"mm"),
-        legend.text = element_text(size=10),
-        legend.position = "bottom",
-        legend.direction = "vertical")
-
-plot(proc_time_plot)
+# proc_time_data <- filter(time_region, measure == "diff_time" | measure == "avg_net_time")
+# proc_time_labels <-  filter(time_region, measure == "avg_tot_time")
+# 
+# ## arranging the order of the categories to be plotted
+# time.order <-  c("diff_time", "avg_net_time")
+# 
+# ## ordering the categories for plotting
+# proc_time_data$measure <- factor(proc_time_data$measure, levels = time.order)
+# 
+# lic_colrs <- c("avg_net_time" = "#3182bd",
+#                "diff_time" = "grey70")
+# 
+# time_lab <- c("avg_net_time" = "Average Net Processing Time (excludes days on hold)",
+#               "diff_time" = "Time On Hold")
+# 
+# 
+# proc_time_plot <- ggplot(data = proc_time_data) +
+#   geom_col(aes(x = Authorization_Type, y = value, fill = measure), alpha = 0.7) +
+#   geom_text(data = proc_time_labels, aes(x = Authorization_Type, y = value, label = num_dec),
+#             vjust = -.4, size = 3, show.legend = FALSE) +
+#   facet_wrap(~ nrs_region, ncol = 2) +
+#   labs(title = "Number of Decisions & Average Processing Time\nby NRS Region Since March 2016",
+#        caption = "Bars Labelled with Number of Decisions") +
+#   scale_fill_manual(values = lic_colrs, name=NULL,
+#                     labels=time_lab, drop = TRUE) +
+#   xlab(NULL) +
+#   ylab("Time in Days") +
+#   theme_soe_facet() +
+#   scale_y_continuous(expand=c(0, 0), limits = c(0, max(proc_time_labels$value) + max(proc_time_labels$value/5))) +
+#   scale_x_discrete(labels = function(x) str_wrap(x, width = 8)) +
+#   theme(panel.grid.major.x = element_blank(),
+#         axis.title.y = element_text(size=10),
+#         axis.text = element_text(size=10),
+#         plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
+#         plot.caption = element_text(size = 10, hjust = 0.3),
+#         plot.margin = unit(c(5,5,5,5),"mm"),
+#         legend.text = element_text(size=10),
+#         legend.position = "bottom",
+#         legend.direction = "vertical")
+# 
+# plot(proc_time_plot)
 
 ## @knitr stage_rates
 
@@ -333,7 +337,7 @@ ind_ta_plot <- ggplot(ind_proc_time, aes(x = days, y = stage, group = ID, colour
   facet_wrap(~ nrs_region, ncol = 2) +
   labs(title = "Status & Processing Time of Individual Groundwater\nTransition Licence Applications by NRS Region",
        subtitle = "Each line is an individual application, where recieved = day zero",
-       caption = "\nNote: No applications have been submitted to-date in the Kootenay Boundary NRS Region\nand number of days includes days on hold") +
+       caption = "\nNote: Number of days includes days on hold") +
    scale_colour_manual(values = line_colrs, labels=line_labs, name= NULL) +
 #   scale_y_continuous(expand=c(0, 0)) +
   ylab(NULL) +

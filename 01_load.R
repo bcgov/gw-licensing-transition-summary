@@ -17,6 +17,9 @@ library(readxl) # MS Excel data import
 ## Import the projected number of transition Existing Use Groundwater License Applications (from ENV Water Branch)
 projected_app_raw <- read_excel("Z:/water/groundwater/licensing/transition/Projected_GW_Transition_Licences_ENVWaterBranch.xlsx")
 
+## Import the join table for FCBC Regions and NRS Regions (from EnvReport BC)
+regions <- read_excel("Z:/water/groundwater/licensing/transition/regions_matchup.xlsx")
+
 
 ## Import the APPLICATION data for Existing Use Groundwater License Applications
 ## Data source is a MS Excel file export from 'Application Search' sourced from vFCBC E-Licensing Home

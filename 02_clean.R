@@ -41,6 +41,7 @@ projected_app <- projected_app_raw %>%
   mutate(projected = round(projected, digits = 0))
 
 
+
 ## Clean transition_app_raw ##
 ## Only keep columns in transition_app necessary for data summaries
 keep_col_app <- c("AuthorizationType", "ApplicationDate", "VFCBCOffice", "StatusDescription")
@@ -48,27 +49,6 @@ keep_col_app <- c("AuthorizationType", "ApplicationDate", "VFCBCOffice", "Status
 transition_app <- transition_app_raw %>% 
   select(one_of(keep_col_app))
 
-## Add Regions to transition_app df
-## Get regions for each office from ATS report
-office_regions <- processing_time_raw %>%
-  mutate(nrs_region = `Region Name`, VFCBCOffice = `Office Name`) %>% 
-  select(nrs_region, VFCBCOffice) %>% 
-  group_by(VFCBCOffice, nrs_region) %>% 
-  summarise(n = n()) %>% 
-  select(-(n))
-
-## Change 'North East' to 'Northeast'
-office_regions$nrs_region[office_regions$nrs_region == "North East"] <- "Northeast"
-
-## Region file 
-# regions <- office_regions %>%
-#   group_by(nrs_region) %>%
-#   summarise(n = n()) %>%
-#   select(-(n))
-
-## Merge nrs_regions into transition_all df
-transition_app <- merge(transition_app, office_regions, by = "VFCBCOffice", all.x = TRUE)
-  
 
 
 ## Clean transition_lic_raw ##
@@ -78,6 +58,12 @@ keep_col_lic <- c("TrackingNumber", "ApplicationType", "NewExistingUse", "JobSta
 
 transition_lic <- transition_lic_raw %>% 
   select(one_of(keep_col_lic))
+
+names(transition_lic)[names(transition_lic) == "Region"] <- "E-licence Regions"
+
+## Merge nrs_regions into transition_lic df
+transition_lic <- transition_lic %>% 
+  merge(regions, by = "E-licence Regions")
 
 
 
@@ -106,5 +92,5 @@ processing_time$nrs_region[processing_time$nrs_region == "North East"] <- "North
 ## Create tmp folder if not already there and store clean data in local repository
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
 save(projected_app, transition_app, transition_lic, processing_time, 
-      app_date, lic_date, proctime_date, office_regions, file = "tmp/trans_gwlic_clean.RData")
+      app_date, lic_date, proctime_date, file = "tmp/trans_gwlic_clean.RData")
 

@@ -2,13 +2,11 @@
 <a rel="Exploration" href="https://github.com/BCDevExchange/docs/blob/master/discussion/projectstates.md"><img alt="Being designed and built, but in the lab. May change, disappear, or be buggy." style="border-width:0" src="https://assets.bcdevexchange.org/images/badges/exploration.svg" title="Being designed and built, but in the lab. May change, disappear, or be buggy." /></a>
 </div>
 
----
-
 # Summarizing and visualizing B.C. ground water licensing transition data 
 
 This repository contains R code for summarizing and visualizing B.C. ground water licensing transition data and generates a summary of the static data visualizations in a PDF document.
 
-### Usage
+## Usage
 
 There are four core scripts that are required for the analysis, they need to be run in order:
 
@@ -29,18 +27,18 @@ install_github("bcgov/envreportutils")
 ```
 
 
-### Getting Help or Reporting an Issue
+## Getting Help or Reporting an Issue
 
 To report bugs/issues/feature requests, please file an [Issue](https://github.com/bcgov-c/gw-license-transition-summary/issues).
 
-### How to Contribute
+## How to Contribute
 
 If you would like to contribute, please see our [CONTRIBUTING](CONTRIBUTING.md) guidelines.
 
 Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
 
 
-### License
+## License
 
     Copyright 2017 Province of British Columbia
 

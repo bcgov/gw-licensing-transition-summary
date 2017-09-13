@@ -214,18 +214,46 @@ stage_rates <- proc_time_rec %>%
   gather(measure, value, -Date) 
 
 ## Individual lines for each transition licence 
-ind_proc_time <- processing_time %>%
+ind_proc_time_trans <- processing_time %>%
   filter(Authorization_Type == "Existing Groundwater Licence") %>% 
   rename(Decision_Date = `Granted/Offered_Date`) 
 
-ind_proc_time <- rownames_to_column(ind_proc_time, "ID")
+pt_trans_tot <- ind_proc_time_trans %>% 
+  group_by(Authorization_Status) %>% 
+  summarise(Totals = n())
 
-ind_proc_time <- ind_proc_time %>% 
-  mutate(Received = 0, Accepted = difftime(as.POSIXct(ind_proc_time$Accepted_Date),
-                                             as.POSIXct(ind_proc_time$Received_Date),
+ind_proc_time_trans <- rownames_to_column(ind_proc_time_trans, "ID")
+
+ind_proc_time_trans <- ind_proc_time_trans %>% 
+  mutate(Received = 0, Accepted = difftime(as.POSIXct(ind_proc_time_trans$Accepted_Date),
+                                             as.POSIXct(ind_proc_time_trans$Received_Date),
          units="days"),
-         Decision = difftime(as.POSIXct(ind_proc_time$Decision_Date),
-                             as.POSIXct(ind_proc_time$Received_Date),
+         Decision = difftime(as.POSIXct(ind_proc_time_trans$Decision_Date),
+                             as.POSIXct(ind_proc_time_trans$Received_Date),
+                             units="days")) %>% 
+  select(ID, nrs_region, Authorization_Status, Received, Accepted, Decision) %>% 
+  gather(stage, days, -ID, -nrs_region, -Authorization_Status) 
+
+
+
+
+## Individual lines for each NEW licence 
+ind_proc_time_new <- processing_time %>%
+  filter(Authorization_Type == "New Groundwater Licence") %>% 
+  rename(Decision_Date = `Granted/Offered_Date`) 
+
+pt_new_tot <- ind_proc_time_new %>% 
+  group_by(Authorization_Status) %>% 
+  summarise(Totals = n())
+
+ind_proc_time_new <- rownames_to_column(ind_proc_time_new, "ID")
+
+ind_proc_time_new <- ind_proc_time_new %>% 
+  mutate(Received = 0, Accepted = difftime(as.POSIXct(ind_proc_time_new$Accepted_Date),
+                                           as.POSIXct(ind_proc_time_new$Received_Date),
+                                           units="days"),
+         Decision = difftime(as.POSIXct(ind_proc_time_new$Decision_Date),
+                             as.POSIXct(ind_proc_time_new$Received_Date),
                              units="days")) %>% 
   select(ID, nrs_region, Authorization_Status, Received, Accepted, Decision) %>% 
   gather(stage, days, -ID, -nrs_region, -Authorization_Status) 
@@ -239,4 +267,4 @@ save(tot_ta, ta_type, est.df, cat.order, tl_status,
      current_rate, rate_to_achieve, lastday,
      work_day_rate_to_achieve, tl_region,
      tl_purpose, time_region, stage_rates,
-     ind_proc_time, file = "tmp/trans_gwlic_summaries.RData")
+     ind_proc_time_trans, ind_proc_time_new, file = "tmp/trans_gwlic_summaries.RData")

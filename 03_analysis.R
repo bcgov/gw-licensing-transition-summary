@@ -267,4 +267,5 @@ save(tot_ta, ta_type, est.df, cat.order, tl_status,
      current_rate, rate_to_achieve, lastday,
      work_day_rate_to_achieve, tl_region,
      tl_purpose, time_region, stage_rates,
-     ind_proc_time_trans, ind_proc_time_new, file = "tmp/trans_gwlic_summaries.RData")
+     ind_proc_time_trans, ind_proc_time_new,
+     pt_new_tot, pt_trans_tot, file = "tmp/trans_gwlic_summaries.RData")

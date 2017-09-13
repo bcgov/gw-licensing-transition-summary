@@ -283,7 +283,7 @@ stage_rate_plot <- ggplot(stage_rates, aes(x = Date, y = value, colour = measure
 #  geom_smooth(method = "loess") +
   labs(title = "Number of Transition Licences by Processing Stage") +
 #       subtitle = paste("Data sourced from FLNRO FCBC 'ATS system application processing time report' and accessed on", proctime_date)) +
-  scale_y_continuous(expand=c(0, 0), limits = c(0, 1200), breaks=seq(0, 1200, 200), labels = scales::comma) +
+  scale_y_continuous(expand=c(0, 0), limits = c(0, 1300), breaks=seq(0, 1200, 200), labels = scales::comma) +
   scale_colour_manual(values = rate_colrs, name=NULL,
                     labels=rate_lab) +
   xlab(NULL) +
@@ -308,14 +308,15 @@ png(filename = "./tmp/gw_translic_proc_rates.png", width = 836, height = 489, un
 plot(stage_rate_plot)
 dev.off()
 
-## @knitr line_facet
+## @knitr line_facet_trans
 
-## line plot for individual transitiotn lic applications timelines
+## line plots for individual transition and new lic applications timelines
 ## arranging the order of the categories to be plotted
 stage.order <-  c("Received", "Accepted", "Decision")
 
 ## ordering the categories for plotting
-ind_proc_time$stage <- factor(ind_proc_time$stage, levels = stage.order)
+ind_proc_time_trans$stage <- factor(ind_proc_time_trans$stage, levels = stage.order)
+ind_proc_time_new$stage <- factor(ind_proc_time_new$stage, levels = stage.order)
 
 ## colours for categories
 line_colrs <- c("Active" = "#377eb8",
@@ -326,16 +327,16 @@ line_labs <- c("Active" = "In Progress",
                "Closed" = "Completed",
                "On Hold" = "On Hold")
 
-ind_ta_plot <- ggplot(ind_proc_time, aes(x = days, y = stage, group = ID, colour = Authorization_Status)) +
+ind_ta_plot <- ggplot(ind_proc_time_trans, aes(x = days, y = stage, group = ID, colour = Authorization_Status)) +
   geom_line(size = .75) +
   geom_vline(xintercept = 140, linetype = 2, colour = "grey40") +
   annotate("text", label ="140 days", colour = "grey40",
-           x = 190, y = .7, size = 3.5) +
+           x = 190, y = .7, size = 3) +
   geom_vline(xintercept = 280, linetype = 2, colour = "grey40") +
   annotate("text", label ="280 days", colour = "grey40",
-           x = 335, y = .7, size = 3.5) +
+           x = 335, y = .7, size = 3) +
   facet_wrap(~ nrs_region, ncol = 2) +
-  labs(title = "Status & Processing Time of Individual Groundwater\nTransition Licence Applications by NRS Region",
+  labs(title = "Status & Processing Time of Individual TRANSITION Groundwater\nLicence Applications by NRS Region",
        subtitle = "Each line is an individual application, where recieved = day zero",
        caption = "\nNote: Number of days includes days on hold") +
    scale_colour_manual(values = line_colrs, labels=line_labs, name= NULL) +
@@ -355,6 +356,39 @@ ind_ta_plot <- ggplot(ind_proc_time, aes(x = days, y = stage, group = ID, colour
         legend.direction = "horizontal")
 
 plot(ind_ta_plot)
+
+## @knitr line_facet_new
+
+ind_na_plot <- ggplot(ind_proc_time_new, aes(x = days, y = stage, group = ID, colour = Authorization_Status)) +
+  geom_line(size = .75) +
+  geom_vline(xintercept = 140, linetype = 2, colour = "grey40") +
+  annotate("text", label ="140 days", colour = "grey40",
+           x = 180, y = .7, size = 3) +
+  geom_vline(xintercept = 280, linetype = 2, colour = "grey40") +
+  annotate("text", label ="280 days", colour = "grey40",
+           x = 325, y = .7, size = 3) +
+  facet_wrap(~ nrs_region, ncol = 2) +
+  labs(title = "Status & Processing Time of Individual NEW Groundwater\nLicence Applications by NRS Region",
+       subtitle = "Each line is an individual application, where recieved = day zero",
+       caption = "\nNote: Number of days includes days on hold") +
+  scale_colour_manual(values = line_colrs, labels=line_labs, name= NULL) +
+  #   scale_y_continuous(expand=c(0, 0)) +
+  ylab(NULL) +
+  xlab("Number of Days") +
+  theme_soe_facet() +
+  theme(panel.grid.major.x = element_blank(),
+        axis.title.y = element_text(size=10),
+        axis.text = element_text(size=10),
+        plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
+        plot.subtitle = element_text(size = 10,  hjust = 0.5),
+        plot.caption = element_text(size = 9, hjust = 0.5),
+        plot.margin = unit(c(5,5,5,5),"mm"),
+        legend.text = element_text(size=12),
+        legend.position = "top",
+        legend.direction = "horizontal")
+
+plot(ind_na_plot)
+
 
 ## @knitr end
 

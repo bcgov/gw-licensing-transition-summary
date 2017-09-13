@@ -323,9 +323,9 @@ line_colrs <- c("Active" = "#377eb8",
                 "Closed" = "#e41a1c",
                 "On Hold" = "#4daf4a")
 
-line_labs <- c("Active" = "In Progress",
-               "Closed" = "Completed",
-               "On Hold" = "On Hold")
+line_labs_trans <- c("Active" = paste("In Progress (n=", pt_trans_tot$Totals[pt_trans_tot$Authorization_Status == "Active"], ")", sep = ""),
+               "Closed" = paste("Completed (n=", pt_trans_tot$Totals[pt_trans_tot$Authorization_Status == "Closed"], ")", sep = ""),
+               "On Hold" = paste("On Hold (n=", pt_trans_tot$Totals[pt_trans_tot$Authorization_Status == "On Hold"], ")", sep = ""))
 
 ind_ta_plot <- ggplot(ind_proc_time_trans, aes(x = days, y = stage, group = ID, colour = Authorization_Status)) +
   geom_line(size = .75) +
@@ -339,7 +339,7 @@ ind_ta_plot <- ggplot(ind_proc_time_trans, aes(x = days, y = stage, group = ID, 
   labs(title = "Status & Processing Time of Individual TRANSITION Groundwater\nLicence Applications by NRS Region",
        subtitle = "Each line is an individual application, where recieved = day zero",
        caption = "\nNote: Number of days includes days on hold") +
-   scale_colour_manual(values = line_colrs, labels=line_labs, name= NULL) +
+   scale_colour_manual(values = line_colrs, labels=line_labs_trans, name= NULL) +
 #   scale_y_continuous(expand=c(0, 0)) +
   ylab(NULL) +
   xlab("Number of Days") +
@@ -359,6 +359,10 @@ plot(ind_ta_plot)
 
 ## @knitr line_facet_new
 
+line_labs_new <- c("Active" = paste("In Progress (n=", pt_new_tot$Totals[pt_new_tot$Authorization_Status == "Active"], ")", sep = ""),
+               "Closed" = paste("Completed (n=", pt_new_tot$Totals[pt_new_tot$Authorization_Status == "Closed"], ")", sep = ""),
+               "On Hold" = paste("On Hold (n=", pt_new_tot$Totals[pt_new_tot$Authorization_Status == "On Hold"], ")", sep = ""))
+
 ind_na_plot <- ggplot(ind_proc_time_new, aes(x = days, y = stage, group = ID, colour = Authorization_Status)) +
   geom_line(size = .75) +
   geom_vline(xintercept = 140, linetype = 2, colour = "grey40") +
@@ -371,7 +375,7 @@ ind_na_plot <- ggplot(ind_proc_time_new, aes(x = days, y = stage, group = ID, co
   labs(title = "Status & Processing Time of Individual NEW Groundwater\nLicence Applications by NRS Region",
        subtitle = "Each line is an individual application, where recieved = day zero",
        caption = "\nNote: Number of days includes days on hold") +
-  scale_colour_manual(values = line_colrs, labels=line_labs, name= NULL) +
+  scale_colour_manual(values = line_colrs, labels=line_labs_new, name= NULL) +
   #   scale_y_continuous(expand=c(0, 0)) +
   ylab(NULL) +
   xlab("Number of Days") +

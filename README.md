@@ -26,7 +26,7 @@ library(devtools)
 install_github("bcgov/envreportutils")
 ```
  
-A Tex/LaTeX software option (e.g. MiKTex or MacTeX) is required to render the `rmarkdown` file to PDF with `knitr`. 
+A full installation of Tex (e.g. MiKTex or MacTeX) is required to render the .Rmd file to PDF with `knitr`. 
 
 ## Getting Help or Reporting an Issue
 

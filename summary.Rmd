@@ -1,7 +1,11 @@
 ---
-output: pdf_document
+output: 
+  pdf_document:
+    latex_engine: xelatex
 papersize: letter
-fontfamily: Verdana
+mainfont: Verdana
+header-includes:
+- \usepackage[fontsize=12pt]{scrextend}  
 ---
 
 

@@ -15,16 +15,16 @@ library(readxl) # MS Excel data import
 
 
 ## Import the projected number of transition Existing Use Groundwater License Applications (from ENV Water Branch)
-projected_app_raw <- read_excel("/Volumes/S40036/SOE/Operations ORCS/Data - Working/water/groundwater/licensing/transition/Projected_GW_Transition_Licences_ENVWaterBranch.xlsx")
+projected_app_raw <- read_excel("~/soe_pickaxe/Operations ORCS/Data - Working/water/groundwater/licensing/transition/Projected_GW_Transition_Licences_ENVWaterBranch.xlsx")
 
 ## Import the join table for FCBC Regions and NRS Regions (from EnvReport BC)
-regions <- read_excel("/Volumes/S40036/SOE/Operations ORCS/Data - Working/water/groundwater/licensing/transition/regions_matchup.xlsx")
+regions <- read_excel("~/soe_pickaxe/Operations ORCS/Data - Working/water/groundwater/licensing/transition/regions_matchup.xlsx")
 
 
 ## Import the APPLICATION data for Existing Use Groundwater License Applications
 ## Data source is a MS Excel file export from 'Application Search' sourced from vFCBC E-Licensing Home
 ## Data license: Access Only http://www2.gov.bc.ca/gov/content/home/copyright 
-transition_app_raw <- read_excel("/Volumes/S40036/SOE/Operations ORCS/Data - Working/water/groundwater/licensing/transition/ApplicationSearch_eASP.xlsx")
+transition_app_raw <- read_excel("~/soe_pickaxe/Operations ORCS/Data - Working/water/groundwater/licensing/transition/ApplicationSearch_eASP.xlsx")
 ## Data 'as of' date
 app_date <- "September 9th 2017"
 
@@ -34,7 +34,7 @@ app_date <- "September 9th 2017"
 ## Data source is a MS Excel file report/export from 'Incoming Groundwater Licence Application Tracking Report'
 ## through E-licensing Home, generated manually by ENV staff
 ## Data license: Access Only http://www2.gov.bc.ca/gov/content/home/copyright 
-transition_lic_raw <- read_excel("/Volumes/S40036/SOE/Operations ORCS/Data - Working/water/groundwater/licensing/transition/ApplicationPurposeUseSearch.xlsx")
+transition_lic_raw <- read_excel("~/soe_pickaxe/Operations ORCS/Data - Working/water/groundwater/licensing/transition/ApplicationPurposeUseSearch.xlsx")
 ## Data 'as of' date
 lic_date <- "September 9th 2017"
 
@@ -44,7 +44,7 @@ lic_date <- "September 9th 2017"
 ## 'FrontCounterBC ATS system application processing time report' provided by
 ## email from FCBC FLNRO staff (generated monthly)
 ## Data license: Access Only http://www2.gov.bc.ca/gov/content/home/copyright 
-processing_time_raw <- read_excel("/Volumes/S40036/SOE/Operations ORCS/Data - Working/water/groundwater/licensing/transition/Groundwater Data for August 2017.xlsx")
+processing_time_raw <- read_excel("~/soe_pickaxe/Operations ORCS/Data - Working/water/groundwater/licensing/transition/Groundwater Data for August 2017.xlsx")
 ## Data 'as of' date
 proctime_date <- "August 31st 2017"
 

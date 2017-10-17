@@ -6,3 +6,4 @@
 /out
 README.html
 *.pdf
+.DS_Store

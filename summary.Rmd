@@ -115,7 +115,8 @@ Data sourced from FLNRO 'ATS system application processing time report' and acce
 ```{r line_facet_trans, fig.height = 8, fig.width = 7}
 
 ```
-
+<!--
 ```{r line_facet_new, fig.height = 8, fig.width = 7}
 
 ```
+-->

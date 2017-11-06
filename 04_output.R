@@ -359,39 +359,41 @@ plot(ind_ta_plot)
 
 ## @knitr line_facet_new
 
-line_labs_new <- c("Active" = paste("In Progress (n=", pt_new_tot$Totals[pt_new_tot$Authorization_Status == "Active"], ")", sep = ""),
-               "Closed" = paste("Completed (n=", pt_new_tot$Totals[pt_new_tot$Authorization_Status == "Closed"], ")", sep = ""),
-               "On Hold" = paste("On Hold (n=", pt_new_tot$Totals[pt_new_tot$Authorization_Status == "On Hold"], ")", sep = ""))
+## NEW LIC NOT INCLUDED IN THE LATEST ATS REPORT SEPT 30th 2017
 
-ind_na_plot <- ggplot(ind_proc_time_new, aes(x = days, y = stage, group = ID, colour = Authorization_Status)) +
-  geom_line(size = .75) +
-  geom_vline(xintercept = 140, linetype = 2, colour = "grey40") +
-  annotate("text", label ="140 days", colour = "grey40",
-           x = 180, y = .7, size = 3) +
-  geom_vline(xintercept = 280, linetype = 2, colour = "grey40") +
-  annotate("text", label ="280 days", colour = "grey40",
-           x = 325, y = .7, size = 3) +
-  facet_wrap(~ nrs_region, ncol = 2) +
-  labs(title = "Status & Processing Time of Individual NEW Groundwater\nLicence Applications by NRS Region",
-       subtitle = "Each line is an individual application, where recieved = day zero",
-       caption = "\nNote: Number of days includes days on hold") +
-  scale_colour_manual(values = line_colrs, labels=line_labs_new, name= NULL) +
-  #   scale_y_continuous(expand=c(0, 0)) +
-  ylab(NULL) +
-  xlab("Number of Days") +
-  theme_soe_facet() +
-  theme(panel.grid.major.x = element_blank(),
-        axis.title.y = element_text(size=10),
-        axis.text = element_text(size=10),
-        plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
-        plot.subtitle = element_text(size = 10,  hjust = 0.5),
-        plot.caption = element_text(size = 9, hjust = 0.5),
-        plot.margin = unit(c(5,5,5,5),"mm"),
-        legend.text = element_text(size=12),
-        legend.position = "top",
-        legend.direction = "horizontal")
-
-plot(ind_na_plot)
+# line_labs_new <- c("Active" = paste("In Progress (n=", pt_new_tot$Totals[pt_new_tot$Authorization_Status == "Active"], ")", sep = ""),
+#                "Closed" = paste("Completed (n=", pt_new_tot$Totals[pt_new_tot$Authorization_Status == "Closed"], ")", sep = ""),
+#                "On Hold" = paste("On Hold (n=", pt_new_tot$Totals[pt_new_tot$Authorization_Status == "On Hold"], ")", sep = ""))
+# 
+# ind_na_plot <- ggplot(ind_proc_time_new, aes(x = days, y = stage, group = ID, colour = Authorization_Status)) +
+#   geom_line(size = .75) +
+#   geom_vline(xintercept = 140, linetype = 2, colour = "grey40") +
+#   annotate("text", label ="140 days", colour = "grey40",
+#            x = 180, y = .7, size = 3) +
+#   geom_vline(xintercept = 280, linetype = 2, colour = "grey40") +
+#   annotate("text", label ="280 days", colour = "grey40",
+#            x = 325, y = .7, size = 3) +
+#   facet_wrap(~ nrs_region, ncol = 2) +
+#   labs(title = "Status & Processing Time of Individual NEW Groundwater\nLicence Applications by NRS Region",
+#        subtitle = "Each line is an individual application, where recieved = day zero",
+#        caption = "\nNote: Number of days includes days on hold") +
+#   scale_colour_manual(values = line_colrs, labels=line_labs_new, name= NULL) +
+#   #   scale_y_continuous(expand=c(0, 0)) +
+#   ylab(NULL) +
+#   xlab("Number of Days") +
+#   theme_soe_facet() +
+#   theme(panel.grid.major.x = element_blank(),
+#         axis.title.y = element_text(size=10),
+#         axis.text = element_text(size=10),
+#         plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
+#         plot.subtitle = element_text(size = 10,  hjust = 0.5),
+#         plot.caption = element_text(size = 9, hjust = 0.5),
+#         plot.margin = unit(c(5,5,5,5),"mm"),
+#         legend.text = element_text(size=12),
+#         legend.position = "top",
+#         legend.direction = "horizontal")
+# 
+# plot(ind_na_plot)
 
 
 ## @knitr end

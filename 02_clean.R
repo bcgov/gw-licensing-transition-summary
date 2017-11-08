@@ -49,56 +49,40 @@ colnames(virtual_raw) <- gsub(" ", "_", colnames(virtual_raw))
 ## Only keep columns in virtual_raw necessary for plots,
 ## filter out new licence applications and
 ## filter our duplicate licence using VCFBC_Tracking_Number
-keep_col_app <- c("Application_type", "Date_Submited", "VCFBC_Tracking_Number", "Job_Status")
+keep_col_virtual <- c("Application_type", "Date_Submited", "VCFBC_Tracking_Number", "Job_Status")
 
 virtual_clean <- virtual_raw %>% 
-  select(one_of(keep_col_app)) %>%
+  select(one_of(keep_col_virtual)) %>%
   filter(Application_type == "Existing Use Groundwater Application") %>% 
   distinct(Application_type, Date_Submited, VCFBC_Tracking_Number, Job_Status, .keepall = TRUE)
 
 
-
-
 ## Clean e-Lic_raw
-## Only keep columns in transition_lic necessary for data summaries
-keep_col_lic <- c("TrackingNumber", "ApplicationType", "NewExistingUse", "JobStatus", "Region",
+## Only keep columns in transition_lic necessary for plots,
+## Filter out new licence applications
+keep_col_elic <- c("TrackingNumber", "ApplicationType", "NewExistingUse", "JobStatus", "Region",
                   "PurposeUse", "Volume1000m3y")
 
-transition_lic <- transition_lic_raw %>% 
-  select(one_of(keep_col_lic))
+elic_clean_dup <- elic_raw %>% 
+  select(one_of(keep_col_elic)) %>% 
+  filter(NewExistingUse == "Existing Use")
 
-names(transition_lic)[names(transition_lic) == "Region"] <- "E-licence Regions"
+## Filter our duplicate licence applications using TrackingNumber and columns
+## not useful without those duplicates (e.g. water use types)
+elic_clean <- elic_clean_dup %>% 
+  select(TrackingNumber, ApplicationType, NewExistingUse, JobStatus, Region) %>% 
+  distinct(TrackingNumber, ApplicationType, NewExistingUse, JobStatus, Region,
+          .keepall = TRUE)
 
-## Merge nrs_regions into transition_lic df
-transition_lic <- transition_lic %>% 
+## Add NRS regions for comparing with Projected dataframe
+names(elic_clean)[names(elic_clean) == "Region"] <- "E-licence Regions"
+
+elic_clean <- elic_clean %>% 
   merge(regions, by = "E-licence Regions")
-
-
-
-## Clean transition_processing_time_raw ##
-## Only keep columns in transition_app necessary for data summaries
-keep_col_time <- c("Region Name", "Authorization Type", "Authorization Status",
-                    "Received Date", "Accepted Date", "Granted/Offered Date",
-                   "Total Processing Time", "Net Processing Time")
-
-processing_time <- processing_time_raw %>% 
-  select(one_of(keep_col_time))
-
-## Remove spaces in col names
-colnames(processing_time) <- gsub(" ", "_", colnames(processing_time))
-
-## Filter for Existing & New Groundwater Licences only 
-processing_time <- processing_time %>% 
-  filter(Authorization_Type == "Existing Groundwater Licence" | Authorization_Type == "New Groundwater Licence") %>% 
-  rename(nrs_region = Region_Name)
-  
-## Change 'North East' to 'Northeast'
-processing_time$nrs_region[processing_time$nrs_region == "North East"] <- "Northeast"
 
 
 
 ## Create tmp folder if not already there and store clean data in local repository
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
-save(projected_app, transition_app, transition_lic, processing_time, 
-      app_date, lic_date, proctime_date, file = "tmp/trans_gwlic_clean.RData")
+save(projected_app_clean, virtual_clean, elic_clean_dup, elic_clean, file = "tmp/trans_gwlic_clean.RData")
 

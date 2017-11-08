@@ -12,17 +12,20 @@ header-includes:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, cache = FALSE, dev = "cairo_pdf")
 
-library(knitr) #for rendering the PDF
 library(dplyr) # data munging
-library(ggplot2) # fortify()
+library(envreportutils) # order_df
+library(lubridate)
+library(tidyr) # reshape df
+library(scales) # percent()
+library(tibble) # rownames_to_column()
+library(ggplot2)
 library(envreportutils) # theme_soe()
 library(stringr) # for label wrapping
-library(RColorBrewer) #for colour palette
 
-read_chunk("04_output.R")
+knitr::read_chunk("03_output.R")
 
 ## Load clean data if not already in local repository
-if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
+if (!exists("virtual_clean")) load("tmp/trans_gwlic_clean.RData")
 ```
 
 
@@ -35,7 +38,9 @@ if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
 
 \vspace{12pt}
 
-# STATUS DASHBOARD: `r proctime_date`
+# STATUS as of `r ddate`
+
+Data sourced from FLNRO e-Licensing system accessed on `r ddate`
 
 \vspace{32pt}
 
@@ -43,6 +48,7 @@ if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
 
 ```
 
+<!--
 \vspace{32pt}
 
 ```{r stage_rates, fig.height = 4, fig.width = 7}
@@ -51,51 +57,40 @@ if (!exists("ta_type")) load("tmp/trans_gwlic_summaries.RData")
 
 \vspace{24pt}
 
-Dashboard plot data sourced from (i) 'vFCBC Application Search' accessed on `r app_date` and (ii) FLNRO 'ATS system application processing time report' accessed on `r proctime_date`.
+-->
 
-\newpage
 
-# B.C. Groundwater Licensing Transition Project
-
-\vspace{12pt}
-
-# STATUS SUMMARIES
 
 \vspace{32pt}
 
-## FrontCounter BC: Applications Recieved, Processing & Acceptance 
-
-Data sourced from 'vFCBC Application Search' and accessed on `r app_date` 
-<!--projected estimates from ENV Water Protection & Sustainability Branch-->
+## FrontCounter BC: Current Applications in Processing  
 
 \vspace{12pt}
   
-```{r types, fig.height = 2, fig.width = 7}
+```{r virtual_status, fig.height = 2, fig.width = 7}
 
 ```
 
-\vspace{24pt}
+<!--
 
 ```{r app_rate, fig.height = 4, fig.width = 7}
 
 ```
 
+-->
 
-\newpage
 
 ## FLNRO E-Licensing: Applications Under Adjudication 
 
-Data sourced from FLNRO's E-licensing Home 'Incoming Groundwater Licence Application Tracking Report' and accessed on `r lic_date`
-
 \vspace{12pt}
 
-```{r incoming, fig.height = 2, fig.width = 7}
+```{r elic_status, fig.height = 2, fig.width = 7}
 
 ```
 
 \vspace{14pt}
 
-```{r app_regions, fig.height = 5, fig.width = 7}
+```{r elic_regions, fig.height = 5, fig.width = 7}
 
 ```
 
@@ -104,19 +99,3 @@ Data sourced from FLNRO's E-licensing Home 'Incoming Groundwater Licence Applica
 
 ```
 
-\newpage
-
-## FLNRO ATS System: Groundwater Licence Status & Processing Time
-
-Data sourced from FLNRO 'ATS system application processing time report' and accessed on `r proctime_date`
-
-\vspace{24pt}
-
-```{r line_facet_trans, fig.height = 8, fig.width = 7}
-
-```
-<!--
-```{r line_facet_new, fig.height = 8, fig.width = 7}
-
-```
--->

@@ -175,6 +175,7 @@ app_regions_plot <- ggplot(data = tl_region, aes(x = nrs_region, y = value, fill
 
 plot(app_regions_plot)
 
+## @knitr water_use
 
 ## number of elic licenses by purpose use category, includes duplicate IDs
 tl_purpose <- elic_clean_dup %>% 
@@ -184,10 +185,7 @@ tl_purpose <- elic_clean_dup %>%
 
 tl_purpose <- order_df(tl_purpose, target_col = "PurposeUse", value_col = "number", fun = max, desc = TRUE)
 
-## @knitr water_use
-
 ## bar chart of Water Use Purposes for incoming E-licence applications
-
 tl_use_plot <- ggplot(tl_purpose, aes(x = PurposeUse, y = number)) +
   geom_col(alpha = 0.7, fill = "#377eb8") +
   geom_text(aes(label = perc_tot), vjust = .2, hjust = -.2, size = 3) +
@@ -209,19 +207,47 @@ tl_use_plot <- ggplot(tl_purpose, aes(x = PurposeUse, y = number)) +
 plot(tl_use_plot)
 
 
+## Plots that use data from BOTH virtual & elic dataframes
 
-
-
+## @knitr estimate
 
 ## make a 'total transition applications with estimated transitions' dataframe
-tot_ta <- length(transition_app$StatusDescription)
 est_ta <- 20000
+
+## add up licences in virtual and licences in elic for total applications to-date
+tot_ta <- length(virtual_clean$VCFBC_Tracking_Number) + length(elic_clean$TrackingNumber)
+
 remaining <- est_ta-tot_ta
-cat <- c("Estimated Outstanding", "Current Number")
+cat <- c("Estimated Outstanding Transition Applications", "Current Number Transition Applications")
 val <- c(remaining, tot_ta)
 est.df <- data.frame(cat, val)
 
 est.df<- order_df(est.df, target_col = "cat", value_col = "val", fun = max, desc = TRUE)
+
+two_colrs <- c("Current Number Transition Applications" = "#3182bd",
+               "Estimated Outstanding Transition Applications" = "grey70")
+
+## bar chart of total received and estimated applications
+tot_est_plot <- ggplot(est.df, aes(1, y = val, fill = cat)) +
+  geom_col(alpha = .7) +
+  geom_text(aes(label = val), position = position_stack(vjust = 0.5), size = 2) +
+  labs(title = "Received Transition Applications Compared to Expected") +
+  scale_fill_manual(values = two_colrs, name = NULL, breaks = rev(levels(est.df$cat))) +
+  xlab(NULL) +
+  ylab(NULL) +
+  theme_soe() +
+  coord_flip() +
+  scale_y_continuous(expand=c(0, 0), limits = c(0,21000), breaks=seq(0, 20000, 5000), labels = scales::comma) +
+  theme(panel.grid.major.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.text = element_text(size=10),
+        plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
+        plot.margin = unit(c(5,5,5,5),"mm"),
+        legend.text = element_text(size=10),
+        legend.position = "bottom",
+        legend.direction = "horizontal")
+
+plot(tot_est_plot)
 
 
 

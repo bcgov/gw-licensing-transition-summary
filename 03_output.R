@@ -21,8 +21,7 @@ library(envreportutils) # theme_soe()
 library(stringr) # for label wrapping
 
 ## Load clean data if not already in local repository
-if (!exists("transition_app")) load("tmp/trans_gwlic_clean.RData")
-
+if (!exists("virtual_clean")) load("tmp/trans_gwlic_clean.RData")
 
 
 ## virtual data summaries
@@ -249,7 +248,7 @@ tot_est_plot <- ggplot(est.df, aes(1, y = val, fill = cat)) +
 
 plot(tot_est_plot)
 
-
+## @knitr end
 
 ## Rate of applications
 ## calculate the num applications per day

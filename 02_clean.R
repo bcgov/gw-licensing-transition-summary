@@ -30,28 +30,36 @@ if (!exists("transition_app_raw")) load("tmp/trans_gwlic_raw.RData")
 # setdiff(transition_lic_raw$TrackingNumber, transition_app_raw$BusinessAreaNumber)
 
 
-## Clean projected_app_raw ##
-## Only keep columns in transition_app necessary for data summaries
+## Clean projected_app_raw 
+# Change coloumn names, keep only some columns and round estimates to zero sig figs
 names(projected_app_raw)[names(projected_app_raw) == "Projected (based on assumption of 20,000 wells)"] <- "projected"
 names(projected_app_raw)[names(projected_app_raw) == "Region"] <- "nrs_region"
 keep_col_proj <- c("nrs_region", "projected")
 
-projected_app <- projected_app_raw %>% 
+projected_app_clean <- projected_app_raw %>% 
   select(one_of(keep_col_proj)) %>% 
   mutate(projected = round(projected, digits = 0))
 
 
+## Clean virtual_raw
 
-## Clean transition_app_raw ##
-## Only keep columns in transition_app necessary for data summaries
-keep_col_app <- c("AuthorizationType", "ApplicationDate", "VFCBCOffice", "StatusDescription")
+## Remove spaces in col names
+colnames(virtual_raw) <- gsub(" ", "_", colnames(virtual_raw))
 
-transition_app <- transition_app_raw %>% 
-  select(one_of(keep_col_app))
+## Only keep columns in virtual_raw necessary for plots,
+## filter out new licence applications and
+## filter our duplicate licence using VCFBC_Tracking_Number
+keep_col_app <- c("Application_type", "Date_Submited", "VCFBC_Tracking_Number", "Job_Status")
+
+virtual_clean <- virtual_raw %>% 
+  select(one_of(keep_col_app)) %>%
+  filter(Application_type == "Existing Use Groundwater Application") %>% 
+  distinct(Application_type, Date_Submited, VCFBC_Tracking_Number, Job_Status, .keepall = TRUE)
 
 
 
-## Clean transition_lic_raw ##
+
+## Clean e-Lic_raw
 ## Only keep columns in transition_lic necessary for data summaries
 keep_col_lic <- c("TrackingNumber", "ApplicationType", "NewExistingUse", "JobStatus", "Region",
                   "PurposeUse", "Volume1000m3y")

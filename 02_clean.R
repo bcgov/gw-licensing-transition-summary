@@ -16,20 +16,6 @@ library(dplyr) # data munging
 if (!exists("transition_app_raw")) load("tmp/trans_gwlic_raw.RData")
 
 
-# ## how many IDs  and unique IDs in vFCBC file 
-# length(na.omit(transition_app_raw$BusinessAreaNumber))
-# length(unique(na.omit(transition_app_raw$BusinessAreaNumber)))
-# 
-# ## how many IDs and unique IDs in E-Lisensing file       
-# length(na.omit(transition_lic_raw$TrackingNumber))
-# length(unique(na.omit(transition_lic_raw$TrackingNumber)))
-# 
-# ## what is in vFCBC but not in E-Licensing
-# setdiff(na.omit(transition_app_raw$BusinessAreaNumber), transition_lic_raw$TrackingNumber)
-# ## what is in E-Licensing but not in vFCBC
-# setdiff(transition_lic_raw$TrackingNumber, transition_app_raw$BusinessAreaNumber)
-
-
 ## Clean projected_app_raw 
 # Change coloumn names, keep only some columns and round estimates to zero sig figs
 names(projected_app_raw)[names(projected_app_raw) == "Projected (based on assumption of 20,000 wells)"] <- "projected"

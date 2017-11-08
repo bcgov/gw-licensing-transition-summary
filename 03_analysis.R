@@ -16,13 +16,116 @@ library(lubridate)
 library(tidyr) # reshape df
 library(scales) # percent()
 library(tibble) # rownames_to_column()
+library(ggplot2)
+library(envreportutils) # theme_soe()
+library(stringr) # for label wrapping
 
 ## Load clean data if not already in local repository
 if (!exists("transition_app")) load("tmp/trans_gwlic_clean.RData")
 
 
 
-## transition_app summaries ##
+## virtual data summaries
+
+## @knitr virtual_status
+
+## collapse some categories for plotting
+virtual_clean$Job_Status[virtual_clean$Job_Status == "Cancelled"] <-  "Cancelled & Not Accepted"
+virtual_clean$Job_Status[virtual_clean$Job_Status == "Not Accepted"] <-  "Cancelled & Not Accepted"
+virtual_clean$Job_Status[virtual_clean$Job_Status == "Editing"] <-  "Submitted & Pre-Review Steps"
+virtual_clean$Job_Status[virtual_clean$Job_Status == "Submitted"] <-  "Submitted & Pre-Review Steps"
+virtual_clean$Job_Status[virtual_clean$Job_Status == "Pending"] <-  "Submitted & Pre-Review Steps"
+virtual_clean$Job_Status[virtual_clean$Job_Status == "Pre-Submittal"] <-  "Submitted & Pre-Review Steps"
+
+## number of applications by application category
+ta_type <- virtual_clean %>% 
+  count(Job_Status) 
+
+## arranging the order of the categories to be plotted
+cat.order <- c("Under Review", "Submitted & Pre-Review Steps", "Cancelled & Not Accepted")
+
+## reordering the categories for plotting
+ta_type$Job_Status <- factor(ta_type$Job_Status, levels = cat.order)
+
+## set colour palette
+colours <- c("Accepted" = "#e41a1c",
+             "Under Review" = "#377eb8",
+             "Submitted & Pre-Review Steps" = "#4daf4a",
+             "Cancelled & Not Accepted" = "#a65628")
+
+## bar chart of CURRENT applications into VFCBC by status description (does not include accepted applications)
+ta_type_plot <- ggplot(ta_type, aes(1, y = n, fill = Job_Status)) +
+  geom_col(alpha = 0.7) +
+  geom_text(aes(label = n), position = position_stack(vjust = 0.5), size = 2) +
+  labs(title = "Status of FrontCounter BC Transition\nApplication Intake Process") +
+  scale_fill_manual(values = colours, name = NULL, breaks = rev(levels(ta_type$Job_Status))) +
+  xlab(NULL) +
+  ylab(NULL) +
+  theme_soe() +
+  coord_flip() +
+  scale_y_continuous(expand=c(0, 0), labels = scales::comma) +
+  theme(panel.grid.major.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.text = element_text(size=10),
+        plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
+        plot.margin = unit(c(5,5,5,5),"mm"),
+        legend.text = element_text(size=7),
+        legend.position = "bottom",
+        legend.direction = "horizontal") +
+  guides(fill = guide_legend(nrow = 1))
+
+plot(ta_type_plot)
+
+
+## elic data summaries
+
+## number of e-licenses by status category with duplicate rows removed
+tl_status <- elic_clean %>% 
+  group_by(JobStatus) %>% 
+  summarise(number = length(JobStatus))
+
+## Change 'Grant' to 'Granted'
+tl_status$JobStatus[tl_status$JobStatus == "Grant"] <- "Decision"
+
+## arranging the order of the categories to be plotted
+cat.order3 <- c("Decision", "In Progress", "Parked", "Abandoned")
+
+## reordering the categories for plotting
+tl_status$JobStatus <- factor(tl_status$JobStatus, levels = cat.order3)
+
+
+## colour palette
+colr2 <- c("Abandoned" = "#a65628",
+           "Parked" = "#4daf4a",
+           "In Progress" = "#377eb8",
+           "Decision" = "#e41a1c")
+
+## bar chart of incoming E-licence applications by status
+tl_status_plot <- ggplot(tl_status, aes(1, y = number, fill = JobStatus)) +
+  geom_col(alpha = 0.7) +
+  geom_text(aes(label = number), position = position_stack(vjust = 0.5), size = 2) +
+  labs(title = "Status of FLNRO Adjudication: Transition Applications") +
+  scale_fill_manual(values = colr2, name = NULL,
+                    breaks = rev(levels(tl_status$JobStatus))) +
+  xlab(NULL) +
+  ylab(NULL) +
+  theme_soe() +
+  coord_flip() +
+  scale_y_continuous(expand=c(0, 0)) +
+  theme(panel.grid.major.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.text.x = element_text(size=10),
+        plot.title = element_text(size = 12,  hjust = 0.5, face = "bold"),
+        plot.margin = unit(c(5,5,5,5),"mm"),
+        legend.text = element_text(size=10),
+        legend.position = "bottom",
+        legend.direction = "horizontal") +
+  guides(fill = guide_legend(nrow = 1))
+
+plot(tl_status_plot)
+
+
+
 
 ## make a 'total transition applications with estimated transitions' dataframe
 tot_ta <- length(transition_app$StatusDescription)
@@ -34,23 +137,7 @@ est.df <- data.frame(cat, val)
 
 est.df<- order_df(est.df, target_col = "cat", value_col = "val", fun = max, desc = TRUE)
 
-## collapse some categories for plotting
-transition_app$StatusDescription[transition_app$StatusDescription == "Cancelled"] <-  "Cancelled & Not Accepted"
-transition_app$StatusDescription[transition_app$StatusDescription == "Not Accepted"] <-  "Cancelled & Not Accepted"
-transition_app$StatusDescription[transition_app$StatusDescription == "Editing"] <-  "Submitted & Pre-Review Steps"
-transition_app$StatusDescription[transition_app$StatusDescription == "Submitted"] <-  "Submitted & Pre-Review Steps"
-transition_app$StatusDescription[transition_app$StatusDescription == "Pending"] <-  "Submitted & Pre-Review Steps"
-transition_app$StatusDescription[transition_app$StatusDescription == "Pre-Submittal"] <-  "Submitted & Pre-Review Steps"
 
-## number of applications by application category
-ta_type <- transition_app %>% 
-  count(StatusDescription) 
-  
-## arranging the order of the categories to be plotted
-cat.order <- c("Accepted", "Under Review", "Submitted & Pre-Review Steps", "Cancelled & Not Accepted")
-
-## reordering the categories for plotting
-ta_type$StatusDescription <- factor(ta_type$StatusDescription, levels = cat.order)
 
 ## Rate of applications
 ## calculate the num applications per day
@@ -104,22 +191,6 @@ work_day_rate_to_achieve <- app_to_go/work_days_to_go
 
 
 ## transition_lic summaries ##
-
-## number of licenses by status category with duplicate rows removed
-tl_status <- transition_lic %>% 
-  distinct(TrackingNumber, .keep_all = TRUE) %>% 
-  group_by(JobStatus) %>% 
-  summarise(number = length(JobStatus))
-
-## Change 'Grant' to 'Granted'
-tl_status$JobStatus[tl_status$JobStatus == "Grant"] <- "Granted"
-
-## arranging the order of the categories to be plotted
-cat.order3 <- c("Granted", "In Progress", "Parked", "Abandoned")
-
-## reordering the categories for plotting
-tl_status$JobStatus <- factor(tl_status$JobStatus, levels = cat.order3)
-
 
 ## Number applications and predicted number by Region
 tl_region <- transition_lic %>%

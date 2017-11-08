@@ -40,6 +40,6 @@ ddate <- "November 1st 2017"
 
 ## Create tmp folder if not already there and store raw data in local repository
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
-save(elic_raw, virtual_raw, ddate, 
+save(projected_app_raw, regions, elic_raw, virtual_raw, ddate, 
      file = "tmp/trans_gwlic_raw.RData")
 

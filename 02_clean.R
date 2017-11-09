@@ -42,6 +42,9 @@ virtual_clean <- virtual_raw %>%
   filter(Application_type == "Existing Use Groundwater Application") %>% 
   distinct(Application_type, Date_Submited, VCFBC_Tracking_Number, Job_Status, .keepall = TRUE)
 
+## Fix date formatting from character to Date
+virtual_clean$Date_Submited <- as.Date(virtual_clean$Date_Submited, format = "%m/%d/%Y")
+
 
 ## Clean e-Lic_raw
 ## Only keep columns in transition_lic necessary for plots,
@@ -70,5 +73,5 @@ elic_clean <- elic_clean %>%
 
 ## Create tmp folder if not already there and store clean data in local repository
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
-save(projected_app_clean, virtual_clean, elic_clean_dup, elic_clean, file = "tmp/trans_gwlic_clean.RData")
+save(ddate, projected_app_clean, virtual_clean, elic_clean_dup, elic_clean, file = "tmp/trans_gwlic_clean.RData")
 

@@ -14,8 +14,8 @@ library(dplyr) # data munging
 library(envreportutils) # order_df
 library(lubridate)
 library(tidyr) # reshape df
-library(scales) # percent()
-library(tibble) # rownames_to_column()
+#library(scales) # percent()
+#library(tibble) # rownames_to_column()
 library(ggplot2)
 library(envreportutils) # theme_soe()
 library(stringr) # for label wrapping
@@ -55,8 +55,8 @@ virtual.colours <- c("Accepted" = "#e41a1c",
 ## bar chart of CURRENT applications into VFCBC by status description (does not include accepted applications)
 ta_type_plot <- ggplot(ta_type, aes(1, y = n, fill = Job_Status)) +
   geom_col(alpha = 0.7) +
-  geom_text(aes(label = n), position = position_stack(vjust = 0.5), size = 2) +
-  labs(title = "Status of FrontCounter BC Transition\nApplication Intake Process") +
+  geom_text(aes(label = n), position = position_stack(vjust = 0.5), size = 3) +
+  labs(title = "FrontCounter BC: Current Transition Applications") +
   scale_fill_manual(values = virtual.colours, name = NULL, breaks = rev(levels(ta_type$Job_Status))) +
   xlab(NULL) +
   ylab(NULL) +
@@ -68,7 +68,7 @@ ta_type_plot <- ggplot(ta_type, aes(1, y = n, fill = Job_Status)) +
         axis.text = element_text(size=10),
         plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
         plot.margin = unit(c(5,5,5,5),"mm"),
-        legend.text = element_text(size=7),
+        legend.text = element_text(size=10),
         legend.position = "bottom",
         legend.direction = "horizontal") +
   guides(fill = guide_legend(nrow = 1))
@@ -103,8 +103,8 @@ elic.colour <- c("Abandoned" = "#a65628",
 ## bar chart of incoming E-licence applications by status
 tl_status_plot <- ggplot(tl_status, aes(1, y = number, fill = JobStatus)) +
   geom_col(alpha = 0.7) +
-  geom_text(aes(label = number), position = position_stack(vjust = 0.5), size = 2) +
-  labs(title = "Status of FLNRO Adjudication: Transition Applications") +
+  geom_text(aes(label = number), position = position_stack(vjust = 0.5), size = 3) +
+  labs(title = "FLNRO Adjudication: Transition Applications") +
   scale_fill_manual(values = elic.colour, name = NULL,
                     breaks = rev(levels(tl_status$JobStatus))) +
   xlab(NULL) +
@@ -154,14 +154,14 @@ new_lab <- c("projected" = "Projected",
 
 app_regions_plot <- ggplot(data = tl_region, aes(x = nrs_region, y = value, fill = type)) +
   geom_bar(stat="identity", position = "dodge", alpha = 0.7) +
-  geom_text(aes(label = value), position = position_dodge(.9),  vjust = -.5, size = 2) +
-  labs(title = "Accepted & Granted Transition Applications Compared with\nProjected Numbers By NRS Region") +
+  geom_text(aes(label = value), position = position_dodge(.9),  vjust = -.5, size = 3) +
+  labs(title = "Status of Transition Licensing by NRS Region") +
   scale_fill_manual(values = elic.region.colours, name=NULL,
                     labels=new_lab) +
   xlab(NULL) +
   ylab("Number of Applications") +
   theme_soe() +
-  scale_y_continuous(expand=c(0, 0), limits = c(0, 5200), breaks = seq(0, 5200, 1000), labels = scales::comma) +
+  scale_y_continuous(expand=c(0, 0), limits = c(0, 5400), breaks = seq(0, 5400, 1000), labels = scales::comma) +
   scale_x_discrete(labels = function(x) str_wrap(x, width = 8)) +
   theme(panel.grid.major.x = element_blank(),
         axis.title.y = element_text(size=10),
@@ -217,20 +217,20 @@ est_ta <- 20000
 tot_ta <- length(virtual_clean$VCFBC_Tracking_Number) + length(elic_clean$TrackingNumber)
 
 remaining <- est_ta-tot_ta
-cat <- c("Estimated Outstanding Transition Applications", "Current Number Transition Applications")
+cat <- c("Estimated Outstanding\nTransition Applications", "Current Number of\nTransition Applications")
 val <- c(remaining, tot_ta)
 est.df <- data.frame(cat, val)
 
 est.df<- order_df(est.df, target_col = "cat", value_col = "val", fun = max, desc = TRUE)
 
-two_colrs <- c("Current Number Transition Applications" = "#3182bd",
-               "Estimated Outstanding Transition Applications" = "grey70")
+two_colrs <- c("Current Number of\nTransition Applications" = "#3182bd",
+               "Estimated Outstanding\nTransition Applications" = "grey70")
 
 ## bar chart of total received and estimated applications
 tot_est_plot <- ggplot(est.df, aes(1, y = val, fill = cat)) +
   geom_col(alpha = .7) +
-  geom_text(aes(label = val), position = position_stack(vjust = 0.5), size = 2) +
-  labs(title = "Received Transition Applications Compared to Expected") +
+  geom_text(aes(label = val), position = position_stack(vjust = 0.5), size = 3) +
+  labs(title = "Transition Applications: Received Compared to Expected Number") +
   scale_fill_manual(values = two_colrs, name = NULL, breaks = rev(levels(est.df$cat))) +
   xlab(NULL) +
   ylab(NULL) +
@@ -248,28 +248,31 @@ tot_est_plot <- ggplot(est.df, aes(1, y = val, fill = cat)) +
 
 plot(tot_est_plot)
 
-## @knitr end
+## @knitr app_rate
 
-## Rate of applications
+## Calculate, plot and forecast rate/s of incoming transition applications
+
 ## calculate the num applications per day
-transition_time_day <- transition_app %>%
-  group_by(ApplicationDate) %>%
+app_per_day <- virtual_clean %>%
+  group_by(Date_Submited) %>%
   summarise(numperday = n())
-mean_rate_per_day <- mean(transition_time_day$numperday)
+
+## mean number per day over period
+mean_rate_per_day <- mean(app_per_day$numperday)
 
 ## What days are people applying
-# transition_time_day$day <- wday(as.Date(transition_time_day$ApplicationDate), label=TRUE, abbr = FALSE)
-# day_plot <- ggplot(transition_time_day, aes(day, numperday)) +
+# app_per_day$day <- wday(as.Date(app_per_day$Date_Submited), label=TRUE, abbr = FALSE)
+# day_plot <- ggplot(app_per_day, aes(day, numperday)) +
 #   geom_col(alpha = 0.7)
 # plot(day_plot)
 
 ## cumlative sum of applications and add to df
-transition_time_day$cumsum <- cumsum(transition_time_day$numperday)
+app_per_day$cumsum <- cumsum(app_per_day$numperday)
 
 ## Calculate current rate to-date
-appsum <- sum(transition_time_day$numperday)
-firstday <- min(transition_time_day$ApplicationDate)
-lastday <- max(transition_time_day$ApplicationDate)
+appsum <- sum(app_per_day$numperday)
+firstday <- min(app_per_day$Date_Submited)
+lastday <- max(app_per_day$Date_Submited)
 numdays <- as.integer(difftime(as.POSIXct(lastday), as.POSIXct(firstday), units="days"))
 current_rate <- appsum/numdays
 
@@ -293,25 +296,31 @@ rate_forecasts$req_cumsum <- cumsum(rate_forecasts$req_num)
 work_days_to_go <- sum(!weekdays(seq(lastday, enddate, "days")) %in% c("Saturday", "Sunday"))
 work_day_rate_to_achieve <- app_to_go/work_days_to_go
 
-## workshop df
-# date <- as.POSIXct(c('2016-11-01','2017-03-01'))
-# cumsum <- c(179, 802)
-# label <- as.character(c("Start of\nWorkshops", "End of \nWorkshops"))
-# wrkshops <- data.frame(date, cumsum, label)
 
+## line chart of incoming transition license applications to VFCBC by date and rates
+tl_rate_plot <- ggplot() +
+  geom_point(data = app_per_day, aes(y = cumsum, x = Date_Submited),
+             alpha = 0.7, colour = "#08519c", size = 1) +
+  labs(title = "Observed Submission Rate of Transition\nApplications Compared to Target Rate") +
+  geom_line(data = rate_forecasts, aes(y = curr_cumsum, x = date), alpha = 0.7,
+            colour = "#08519c", size = 1, linetype = 2) +
+  geom_line(data = rate_forecasts, aes(y = req_cumsum, x = date), alpha = 0.7,
+            colour = "#006d2c", size = 1, linetype = 2) +
+  annotate("text", label = paste("Average Rate of Application\nSubmissions To Date:\n", round(current_rate, digits = 1), "/day", sep = ""), colour = "#08519c",
+           x = as.POSIXct(as.character("2016-11-01")), y = 4000, size = 4) +
+  annotate("text", label = paste("Target Rate of Application\nSubmissions Starting ", app_date,":\n",
+                                 round(rate_to_achieve, digits = 0), "/day", " (or ", round(work_day_rate_to_achieve, digits = 0),"/weekday)",  sep = ""), colour = "#006d2c",
+           x = as.POSIXct(as.character("2017-11-01")), y = 16000, size = 4) +
+  scale_y_continuous(expand=c(0, 0), limits = c(0,20000), breaks=seq(0, 20000, 2000), labels = scales::comma) +
+  xlab(NULL) +
+  ylab("Number of Applications") +
+  theme_soe() +
+  theme(panel.grid.major.x = element_blank(),
+        axis.text = element_text(size=10),
+        plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
+        plot.margin = unit(c(5,5,5,5),"mm"))
 
+plot(tl_rate_plot)
 
+## @knitr end
 
-
-
-
-## Create tmp folder if not already there and store clean data in local repository
-if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
-
-save(tot_ta, ta_type, est.df, cat.order, tl_status,
-     transition_time_day, rate_forecasts,  app_date, lic_date, proctime_date,
-     current_rate, rate_to_achieve, lastday,
-     work_day_rate_to_achieve, tl_region,
-     tl_purpose, time_region, stage_rates,
-     ind_proc_time_trans, ind_proc_time_new,
-     pt_new_tot, pt_trans_tot, file = "tmp/trans_gwlic_summaries.RData")

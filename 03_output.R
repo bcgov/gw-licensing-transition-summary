@@ -278,7 +278,7 @@ current_rate <- appsum/numdays
 
 ## Calculate rate forecast based on current rate and add to df
 enddate <- as.POSIXct(as.character("2019-03-01"))
-date <- seq(lastday, enddate, by="1 day")
+date <- seq(lastday, enddate, by = "1 day")
 rate_forecasts <- data.frame(date)
 rate_forecasts$curr_num <- current_rate
 rate_forecasts$curr_num[1] <- appsum
@@ -319,7 +319,6 @@ tl_rate_plot <- ggplot() +
         axis.text = element_text(size=10),
         plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
         plot.margin = unit(c(5,5,5,5),"mm"))
-
 plot(tl_rate_plot)
 
 ## @knitr end

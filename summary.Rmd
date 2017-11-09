@@ -15,9 +15,7 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, cache = FALSE, dev = "cairo
 library(dplyr) # data munging
 library(envreportutils) # order_df
 library(lubridate)
-library(tidyr) # reshape df
-library(scales) # percent()
-library(tibble) # rownames_to_column()
+library(tidyr) # gather()
 library(ggplot2)
 library(envreportutils) # theme_soe()
 library(stringr) # for label wrapping
@@ -34,39 +32,18 @@ if (!exists("virtual_clean")) load("tmp/trans_gwlic_clean.RData")
 <!--\pagenumbering{gobble}-->
 
 
-# B.C. Groundwater Licensing Transition Project
+# Status of B.C. Groundwater Licensing Transition Project
 
-\vspace{12pt}
+## Data provided by FLNRO Water Management Branch on `r ddate`
 
-# STATUS as of `r ddate`
-
-Data sourced from FLNRO e-Licensing system accessed on `r ddate`
-
-\vspace{32pt}
+\vspace{50pt}
 
 ```{r estimate, fig.height = 2, fig.width = 7}
 
 ```
 
-<!--
-\vspace{32pt}
+\vspace{50pt}
 
-```{r stage_rates, fig.height = 4, fig.width = 7}
-
-```
-
-\vspace{24pt}
-
--->
-
-
-
-\vspace{32pt}
-
-## FrontCounter BC: Current Applications in Processing  
-
-\vspace{12pt}
-  
 ```{r virtual_status, fig.height = 2, fig.width = 7}
 
 ```
@@ -79,16 +56,12 @@ Data sourced from FLNRO e-Licensing system accessed on `r ddate`
 
 -->
 
-
-## FLNRO E-Licensing: Applications Under Adjudication 
-
-\vspace{12pt}
+\vspace{50pt}
 
 ```{r elic_status, fig.height = 2, fig.width = 7}
 
 ```
 
-\vspace{14pt}
 
 ```{r elic_regions, fig.height = 5, fig.width = 7}
 

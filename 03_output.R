@@ -248,78 +248,80 @@ tot_est_plot <- ggplot(est.df, aes(1, y = val, fill = cat)) +
 
 plot(tot_est_plot)
 
-## @knitr app_rate
-
-## Calculate, plot and forecast rate/s of incoming transition applications
-
-## calculate the num applications per day
-app_per_day <- virtual_clean %>%
-  group_by(Date_Submited) %>%
-  summarise(numperday = n())
-
-## mean number per day over period
-mean_rate_per_day <- mean(app_per_day$numperday)
-
-## What days are people applying
-# app_per_day$day <- wday(as.Date(app_per_day$Date_Submited), label=TRUE, abbr = FALSE)
-# day_plot <- ggplot(app_per_day, aes(day, numperday)) +
-#   geom_col(alpha = 0.7)
-# plot(day_plot)
-
-## cumlative sum of applications and add to df
-app_per_day$cumsum <- cumsum(app_per_day$numperday)
-
-## Calculate current rate to-date
-appsum <- sum(app_per_day$numperday)
-firstday <- min(app_per_day$Date_Submited)
-lastday <- max(app_per_day$Date_Submited)
-numdays <- as.integer(difftime(as.POSIXct(lastday), as.POSIXct(firstday), units="days"))
-current_rate <- appsum/numdays
-
-## Calculate rate forecast based on current rate and add to df
-enddate <- as.POSIXct(as.character("2019-03-01"))
-date <- seq(lastday, enddate, by = "1 day")
-rate_forecasts <- data.frame(date)
-rate_forecasts$curr_num <- current_rate
-rate_forecasts$curr_num[1] <- appsum
-rate_forecasts$curr_cumsum <- cumsum(rate_forecasts$curr_num)
-
-## Calculate the required rate for March 2019 end date and add to df
-app_to_go <- est_ta - appsum
-days_to_go <- as.integer(enddate - lastday)
-rate_to_achieve <- app_to_go/days_to_go
-rate_forecasts$req_num <- rate_to_achieve
-rate_forecasts$req_num[1] <- appsum
-rate_forecasts$req_cumsum <- cumsum(rate_forecasts$req_num)
-
-## Calculate the required rate for March 2019 end date for workdays only
-work_days_to_go <- sum(!weekdays(seq(lastday, enddate, "days")) %in% c("Saturday", "Sunday"))
-work_day_rate_to_achieve <- app_to_go/work_days_to_go
-
-
-## line chart of incoming transition license applications to VFCBC by date and rates
-tl_rate_plot <- ggplot() +
-  geom_point(data = app_per_day, aes(y = cumsum, x = Date_Submited),
-             alpha = 0.7, colour = "#08519c", size = 1) +
-  labs(title = "Observed Submission Rate of Transition\nApplications Compared to Target Rate") +
-  geom_line(data = rate_forecasts, aes(y = curr_cumsum, x = date), alpha = 0.7,
-            colour = "#08519c", size = 1, linetype = 2) +
-  geom_line(data = rate_forecasts, aes(y = req_cumsum, x = date), alpha = 0.7,
-            colour = "#006d2c", size = 1, linetype = 2) +
-  annotate("text", label = paste("Average Rate of Application\nSubmissions To Date:\n", round(current_rate, digits = 1), "/day", sep = ""), colour = "#08519c",
-           x = as.POSIXct(as.character("2016-11-01")), y = 4000, size = 4) +
-  annotate("text", label = paste("Target Rate of Application\nSubmissions Starting ", app_date,":\n",
-                                 round(rate_to_achieve, digits = 0), "/day", " (or ", round(work_day_rate_to_achieve, digits = 0),"/weekday)",  sep = ""), colour = "#006d2c",
-           x = as.POSIXct(as.character("2017-11-01")), y = 16000, size = 4) +
-  scale_y_continuous(expand=c(0, 0), limits = c(0,20000), breaks=seq(0, 20000, 2000), labels = scales::comma) +
-  xlab(NULL) +
-  ylab("Number of Applications") +
-  theme_soe() +
-  theme(panel.grid.major.x = element_blank(),
-        axis.text = element_text(size=10),
-        plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
-        plot.margin = unit(c(5,5,5,5),"mm"))
-plot(tl_rate_plot)
-
 ## @knitr end
+
+
+# ## @knitr app_rate
+# 
+# ## Calculate, plot and forecast rate/s of incoming transition applications
+# 
+# ## calculate the num applications per day
+# app_per_day <- virtual_clean %>%
+#   group_by(Date_Submited) %>%
+#   summarise(numperday = n())
+# 
+# ## mean number per day over period
+# mean_rate_per_day <- mean(app_per_day$numperday)
+# 
+# ## What days are people applying
+# # app_per_day$day <- wday(as.Date(app_per_day$Date_Submited), label=TRUE, abbr = FALSE)
+# # day_plot <- ggplot(app_per_day, aes(day, numperday)) +
+# #   geom_col(alpha = 0.7)
+# # plot(day_plot)
+# 
+# ## cumlative sum of applications and add to df
+# app_per_day$cumsum <- cumsum(app_per_day$numperday)
+# 
+# ## Calculate current rate to-date
+# appsum <- sum(app_per_day$numperday)
+# firstday <- min(app_per_day$Date_Submited)
+# lastday <- max(app_per_day$Date_Submited)
+# numdays <- as.integer(difftime(as.POSIXct(lastday), as.POSIXct(firstday), units = "days"))
+# current_rate <- appsum/numdays
+# 
+# ## Calculate rate forecast based on current rate and add to df
+# enddate <- as.Date(as.character("2019-03-01"))
+# date <- seq(lastday, enddate, by = "1 day")
+# rate_forecasts <- data.frame(date)
+# rate_forecasts$curr_num <- current_rate
+# rate_forecasts$curr_num[1] <- appsum
+# rate_forecasts$curr_cumsum <- cumsum(rate_forecasts$curr_num)
+# 
+# ## Calculate the required rate for March 2019 end date and add to df
+# app_to_go <- est_ta - appsum
+# days_to_go <- as.integer(enddate - lastday)
+# rate_to_achieve <- app_to_go/days_to_go
+# rate_forecasts$req_num <- rate_to_achieve
+# rate_forecasts$req_num[1] <- appsum
+# rate_forecasts$req_cumsum <- cumsum(rate_forecasts$req_num)
+# 
+# ## Calculate the required rate for March 2019 end date for workdays only
+# work_days_to_go <- sum(!weekdays(seq(lastday, enddate, "days")) %in% c("Saturday", "Sunday"))
+# work_day_rate_to_achieve <- app_to_go/work_days_to_go
+# 
+# 
+# ## line chart of incoming transition license applications to VFCBC by date and rates
+# tl_rate_plot <- ggplot() +
+#   geom_point(data = app_per_day, aes(y = cumsum, x = Date_Submited),
+#              alpha = 0.7, colour = "#08519c", size = 1) +
+#   labs(title = "Observed Submission Rate of Transition\nApplications Compared to Target Rate") +
+#   geom_line(data = rate_forecasts, aes(y = curr_cumsum, x = date), alpha = 0.7,
+#             colour = "#08519c", size = 1, linetype = 2) +
+#   geom_line(data = rate_forecasts, aes(y = req_cumsum, x = date), alpha = 0.7,
+#             colour = "#006d2c", size = 1, linetype = 2) +
+#   annotate("text", label = paste("Average Rate of Application\nSubmissions To Date:\n", round(current_rate, digits = 1), "/day", sep = ""), colour = "#08519c",
+#            x = as.Date(as.character("2016-11-01")), y = 4000, size = 4) +
+#   annotate("text", label = paste("Target Rate of Application\nSubmissions Starting ", ddate,":\n",
+#                                  round(rate_to_achieve, digits = 0), "/day", " (or ", round(work_day_rate_to_achieve, digits = 0),"/weekday)",  sep = ""), colour = "#006d2c",
+#            x = as.Date(as.character("2017-11-01")), y = 16000, size = 4) +
+#   scale_y_continuous(expand=c(0, 0), limits = c(0,20000), breaks=seq(0, 20000, 2000), labels = scales::comma) +
+#   xlab(NULL) +
+#   ylab("Number of Applications") +
+#   theme_soe() +
+#   theme(panel.grid.major.x = element_blank(),
+#         axis.text = element_text(size=10),
+#         plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
+#         plot.margin = unit(c(5,5,5,5),"mm"))
+# plot(tl_rate_plot)
+# 
 

@@ -13,30 +13,24 @@
 
 library(readxl) # MS Excel data import 
 
-
-## Import the projected number of transition Existing Use Groundwater License Applications (from ENV Water Branch)
-projected_app_raw <- read_excel("~/soe_data/water/groundwater/licensing/transition/Projected_GW_Transition_Licences_ENVWaterBranch.xlsx")
-
-## Import the join table for FCBC Regions and NRS Regions (from EnvReport BC)
-regions <- read_excel("~/soe_data/water/groundwater/licensing/transition/regions_matchup.xlsx")
-
-
-## Import the projected number of transition Existing Use Groundwater License Applications (from ENV Water Branch)
-projected_app_raw <- read_excel("~/soe_data/water/groundwater/licensing/transition/Projected_GW_Transition_Licences_ENVWaterBranch.xlsx")
-
-## Import the join table for FCBC Regions and NRS Regions (from EnvReport BC)
-regions <- read_excel("~/soe_data/water/groundwater/licensing/transition/regions_matchup.xlsx")
-
-
-## Import the E-licence data for Existing Use Groundwater License Applications
-## Data source is a MS Excel file export provided by a 
-## Senior Water Business Specialist in the Water Management Branch, FLNRO
-elic_raw <- read_excel("~/soe_data/water/groundwater/licensing/transition/GW Applications Nov 1, 2017.xlsx", sheet = "e-Lic")
-virtual_raw <- read_excel("~/soe_data/water/groundwater/licensing/transition/GW Applications Nov 1, 2017.xlsx", sheet = "virtual")
-
 ## Data 'as of' date
 ddate <- "November 1st 2017"
 
+## The projected number of transition Existing Use Groundwater License Applications (from ENV Water Branch)
+projected_app_raw <- "~/soe_data/water/groundwater/licensing/transition/Projected_GW_Transition_Licences_ENVWaterBranch.xlsx"
+
+## The join table for FCBC Regions and NRS Regions (from EnvReport BC)
+regions <- "~/soe_data/water/groundwater/licensing/transition/regions_matchup.xlsx"
+
+## The MS Excel E-licence data for Existing Use Groundwater License Applications provided
+## by a Senior Water Business Specialist in the Water Management Branch, FLNRO
+lic_raw <- "~/soe_data/water/groundwater/licensing/transition/GW Applications Nov 1, 2017.xlsx"
+
+## Load data files
+regions <- read_excel(regions)
+projected_app_raw <- read_excel(projected_app_raw)
+elic_raw <- read_excel(lic_raw, sheet = "e-Lic")
+virtual_raw <- read_excel(lic_raw, sheet = "virtual")
 
 ## Create tmp folder if not already there and store raw data in local repository
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)

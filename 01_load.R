@@ -24,13 +24,13 @@ regions <- "~/soe_data/water/groundwater/licensing/transition/regions_matchup.xl
 
 ## The MS Excel E-licence data for Existing Use Groundwater License Applications provided
 ## by a Senior Water Business Specialist in the Water Management Branch, FLNRO
-lic_raw <- "~/soe_data/water/groundwater/licensing/transition/GW Applications Nov 1, 2017.xlsx"
+lic_raw <- "~/soe_data/water/groundwater/licensing/transition/GW Applications Nov 15, 2017.xlsx"
 
 ## Load data files
 regions <- read_excel(regions)
 projected_app_raw <- read_excel(projected_app_raw)
 elic_raw <- read_excel(lic_raw, sheet = "e-Lic")
-virtual_raw <- read_excel(lic_raw, sheet = "virtual")
+virtual_raw <- read_excel(lic_raw, sheet = "FCBC")
 
 ## Create tmp folder if not already there and store raw data in local repository
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)

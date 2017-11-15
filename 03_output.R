@@ -214,7 +214,7 @@ plot(tl_use_plot)
 est_ta <- 20000
 
 ## add up licences in virtual and licences in elic for total applications to-date
-tot_ta <- length(virtual_clean$VCFBC_Tracking_Number) + length(elic_clean$TrackingNumber)
+tot_ta <- length(virtual_clean$VFCBC_Tracking_Number) + length(elic_clean$TrackingNumber)
 
 remaining <- est_ta-tot_ta
 cat <- c("Estimated Outstanding\nTransition Applications", "Current Number of\nTransition Applications")

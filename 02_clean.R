@@ -13,7 +13,7 @@
 library(dplyr) # data munging
 
 ## Load raw data if not already in local repository
-if (!exists("transition_app_raw")) load("tmp/trans_gwlic_raw.RData")
+if (!exists("projected_app_raw")) load("tmp/trans_gwlic_raw.RData")
 
 
 ## Clean projected_app_raw 
@@ -35,15 +35,15 @@ colnames(virtual_raw) <- gsub(" ", "_", colnames(virtual_raw))
 ## Only keep columns in virtual_raw necessary for plots,
 ## filter out new licence applications and
 ## filter our duplicate licence using VCFBC_Tracking_Number
-keep_col_virtual <- c("Application_type", "Date_Submited", "VCFBC_Tracking_Number", "Job_Status")
+keep_col_virtual <- c("Application_Type", "Date_Submitted", "VFCBC_Tracking_Number", "Job_Status")
 
 virtual_clean <- virtual_raw %>% 
   select(one_of(keep_col_virtual)) %>%
-  filter(Application_type == "Existing Use Groundwater Application") %>% 
-  distinct(Application_type, Date_Submited, VCFBC_Tracking_Number, Job_Status, .keepall = TRUE)
+  filter(Application_Type == "Existing Use Groundwater Application") %>% 
+  distinct(Application_Type, Date_Submitted, VFCBC_Tracking_Number, Job_Status, .keepall = TRUE)
 
 ## Fix date formatting from character to Date
-virtual_clean$Date_Submited <- as.Date(virtual_clean$Date_Submited, format = "%m/%d/%Y")
+virtual_clean$Date_Submitted <- as.Date(virtual_clean$Date_Submitted, format = "%m/%d/%Y")
 
 
 ## Clean e-Lic_raw

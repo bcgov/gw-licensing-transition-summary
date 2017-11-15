@@ -14,7 +14,7 @@
 library(readxl) # MS Excel data import 
 
 ## Data 'as of' date
-ddate <- "November 1st 2017"
+ddate <- "November 15th 2017"
 
 ## The projected number of transition Existing Use Groundwater License Applications (from ENV Water Branch)
 projected_app_raw <- "~/soe_data/water/groundwater/licensing/transition/Projected_GW_Transition_Licences_ENVWaterBranch.xlsx"

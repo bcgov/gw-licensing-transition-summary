@@ -28,6 +28,9 @@ if (!exists("virtual_clean")) load("tmp/trans_gwlic_clean.RData")
 
 ## @knitr virtual_status
 
+## Total licence applications with FCBC
+tot_FCBC <- length(virtual_clean$VFCBC_Tracking_Number)
+
 ## collapse some categories for plotting
 virtual_clean$Job_Status[virtual_clean$Job_Status == "Cancelled"] <-  "Cancelled & Not Accepted"
 virtual_clean$Job_Status[virtual_clean$Job_Status == "Not Accepted"] <-  "Cancelled & Not Accepted"
@@ -56,7 +59,9 @@ virtual.colours <- c("Accepted" = "#e41a1c",
 ta_type_plot <- ggplot(ta_type, aes(1, y = n, fill = Job_Status)) +
   geom_col(alpha = 0.7) +
   geom_text(aes(label = n), position = position_stack(vjust = 0.5), size = 3) +
-  labs(title = "FrontCounter BC: Current Transition Applications") +
+  labs(title = "Transition Applications Currently with FrontCounter BC",
+       subtitle = paste("Total Applications = ", tot_FCBC),
+       caption = "\nNote: Submitted & Pre-Review includes applications in the pre-submitted,\nsubmitted, pending & editing statges with vFCBC") + 
   scale_fill_manual(values = virtual.colours, name = NULL, breaks = rev(levels(ta_type$Job_Status))) +
   xlab(NULL) +
   ylab(NULL) +
@@ -66,11 +71,12 @@ ta_type_plot <- ggplot(ta_type, aes(1, y = n, fill = Job_Status)) +
   theme(panel.grid.major.y = element_blank(),
         axis.text.y = element_blank(),
         axis.text = element_text(size=10),
-        plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
+        plot.title = element_text(size = 12, face = "bold"),
         plot.margin = unit(c(5,5,5,5),"mm"),
         legend.text = element_text(size=10),
         legend.position = "bottom",
-        legend.direction = "horizontal") +
+        legend.direction = "horizontal",
+        plot.caption = element_text(size=9)) +
   guides(fill = guide_legend(nrow = 1))
 
 plot(ta_type_plot)
@@ -80,16 +86,19 @@ plot(ta_type_plot)
 
 ## @knitr elic_status
 
+## Total licence applications with FCBC
+tot_elic <- length(elic_clean$TrackingNumber)
+
 ## number of e-licenses by status category with duplicate rows removed
 tl_status <- elic_clean %>% 
   group_by(JobStatus) %>% 
   summarise(number = length(JobStatus))
 
 ## Change 'Grant' to 'Granted'
-tl_status$JobStatus[tl_status$JobStatus == "Grant"] <- "Decision"
+tl_status$JobStatus[tl_status$JobStatus == "Grant"] <- "Granted"
 
 ## arranging the order of the categories to be plotted
-elic.order <- c("Decision", "In Progress", "Parked", "Abandoned")
+elic.order <- c("Granted", "In Progress", "Parked", "Abandoned")
 
 ## reordering the categories for plotting
 tl_status$JobStatus <- factor(tl_status$JobStatus, levels = elic.order)
@@ -98,13 +107,14 @@ tl_status$JobStatus <- factor(tl_status$JobStatus, levels = elic.order)
 elic.colour <- c("Abandoned" = "#a65628",
            "Parked" = "#4daf4a",
            "In Progress" = "#377eb8",
-           "Decision" = "#e41a1c")
+           "Granted" = "#e41a1c")
 
 ## bar chart of incoming E-licence applications by status
 tl_status_plot <- ggplot(tl_status, aes(1, y = number, fill = JobStatus)) +
   geom_col(alpha = 0.7) +
   geom_text(aes(label = number), position = position_stack(vjust = 0.5), size = 3) +
-  labs(title = "FLNRO Adjudication: Transition Applications") +
+  labs(title = "Transition Applications under Adjudication by E-Licensing: Current & Completed",
+       subtitle = paste("Total Applications = ", tot_elic)) +
   scale_fill_manual(values = elic.colour, name = NULL,
                     breaks = rev(levels(tl_status$JobStatus))) +
   xlab(NULL) +
@@ -115,7 +125,7 @@ tl_status_plot <- ggplot(tl_status, aes(1, y = number, fill = JobStatus)) +
   theme(panel.grid.major.y = element_blank(),
         axis.text.y = element_blank(),
         axis.text.x = element_text(size=10),
-        plot.title = element_text(size = 12,  hjust = 0.5, face = "bold"),
+        plot.title = element_text(size = 12, face = "bold"),
         plot.margin = unit(c(5,5,5,5),"mm"),
         legend.text = element_text(size=10),
         legend.position = "bottom",
@@ -128,14 +138,16 @@ plot(tl_status_plot)
 
 ## Number applications and predicted number by Region
 tl_region <- elic_clean %>%
+  mutate(JobStatus = replace(JobStatus, JobStatus=="Grant", "done")) %>%
+  mutate(JobStatus = replace(JobStatus, JobStatus=="Abandoned", "done")) %>%
   group_by(nrs_region) %>%
-  summarise(accepted = n() , decision = sum(JobStatus == "Grant")) %>%
+  summarise(Accepted = n() , Decisions = sum(JobStatus == "done")) %>%
   merge(projected_app_clean, by = "nrs_region", all.y=TRUE) %>%
   gather(type, value, -nrs_region) %>%
   mutate(value = ifelse(is.na(value), 0, value))
 
 ## arranging the order of the categories to be plotted
-elic.region.order <- c("projected", "accepted", "decision")
+elic.region.order <- c("Projected", "Accepted", "Decisions")
 
 ## reordering the categories for plotting
 tl_region$type <- factor(tl_region$type, levels = elic.region.order)
@@ -144,20 +156,17 @@ tl_region$type <- factor(tl_region$type, levels = elic.region.order)
 tl_region<- order_df(tl_region, target_col = "nrs_region", value_col = "value", fun = max, desc = TRUE)
 
 ## colour paletts
-elic.region.colours <- c("projected" = "#999999",
-           "accepted" = "#377eb8",
-           "decision" = "#e41a1c")
+elic.region.colours <- c("Projected" = "#999999",
+           "Accepted" = "#377eb8",
+           "Decisions" = "#e41a1c")
 
-new_lab <- c("projected" = "Projected",
-             "decision" = "Decision",
-             "accepted" = "Accepted")
 
 app_regions_plot <- ggplot(data = tl_region, aes(x = nrs_region, y = value, fill = type)) +
   geom_bar(stat="identity", position = "dodge", alpha = 0.7) +
   geom_text(aes(label = value), position = position_dodge(.9),  vjust = -.5, size = 3) +
-  labs(title = "Status of Transition Licensing by NRS Region") +
-  scale_fill_manual(values = elic.region.colours, name=NULL,
-                    labels=new_lab) +
+  labs(title = "Transition Applications under Adjudication by E-Licensing by NRS Region",
+       caption = "Note: Decisions include Granted and Abandoned applications") +
+  scale_fill_manual(values = elic.region.colours, name=NULL) +
   xlab(NULL) +
   ylab("Number of Applications") +
   theme_soe() +
@@ -166,11 +175,12 @@ app_regions_plot <- ggplot(data = tl_region, aes(x = nrs_region, y = value, fill
   theme(panel.grid.major.x = element_blank(),
         axis.title.y = element_text(size=10),
         axis.text = element_text(size=10),
-        plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
+        plot.title = element_text(size = 12, face = "bold"),
         plot.margin = unit(c(5,5,5,5),"mm"),
         legend.text = element_text(size=10),
         legend.position = c(.75,.76),
-        legend.background = element_rect(fill = "transparent"))
+        legend.background = element_rect(fill = "transparent"),
+        plot.caption = element_text(size=9))
 
 plot(app_regions_plot)
 
@@ -178,6 +188,7 @@ plot(app_regions_plot)
 
 ## number of elic licenses by purpose use category, includes duplicate IDs
 tl_purpose <- elic_clean_dup %>% 
+  filter(JobStatus != "Abandoned") %>% 
   group_by(PurposeUse) %>% 
   summarise(number = length(PurposeUse)) %>% 
   mutate(perc_tot = paste0(round((number/sum(number)*100), digits = 0),"%"))
@@ -188,7 +199,7 @@ tl_purpose <- order_df(tl_purpose, target_col = "PurposeUse", value_col = "numbe
 tl_use_plot <- ggplot(tl_purpose, aes(x = PurposeUse, y = number)) +
   geom_col(alpha = 0.7, fill = "#377eb8") +
   geom_text(aes(label = perc_tot), vjust = .2, hjust = -.2, size = 3) +
-  labs(title = "Incoming Transition Licences by Water Use Purpose",
+  labs(title = "Transition Licences under Adjudication or Granted\nby E-Licensing by Water Use Purpose",
        caption = "\n**Note: Some licences have more than one water use purpose") +
   xlab(NULL) +
   ylab("Number of Incoming Licences") +
@@ -199,7 +210,7 @@ tl_use_plot <- ggplot(tl_purpose, aes(x = PurposeUse, y = number)) +
         axis.title = element_text(size=10),
         axis.text.x = element_text(size=10),
         axis.text.y = element_text(size=10),
-        plot.title = element_text(size = 12, hjust = 1.5, face = "bold"),
+        plot.title = element_text(size = 12, face = "bold"),
         plot.margin = unit(c(5,5,5,5),"mm"),
         legend.text = element_text(size=9))
 
@@ -212,9 +223,7 @@ plot(tl_use_plot)
 
 ## make a 'total transition applications with estimated transitions' dataframe
 est_ta <- 20000
-
-## add up licences in virtual and licences in elic for total applications to-date
-tot_ta <- length(virtual_clean$VFCBC_Tracking_Number) + length(elic_clean$TrackingNumber)
+tot_ta <- tot_FCBC + tot_elic
 
 remaining <- est_ta-tot_ta
 cat <- c("Estimated Outstanding\nTransition Applications", "Current Number of\nTransition Applications")

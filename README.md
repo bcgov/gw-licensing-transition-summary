@@ -8,12 +8,11 @@ This repository contains R code for summarizing and visualizing B.C. ground wate
 
 ## Usage
 
-There are four core scripts that are required for the analysis, they need to be run in order:
+There are three core scripts that are required for the analysis, they need to be run in order:
 
 - 01_load.R
 - 02_clean.R
-- 03_analysis.R
-- 04_output.R
+- 03_output.R
 
 The `run_all.R` script can be `source`ed to run it all at once.
 

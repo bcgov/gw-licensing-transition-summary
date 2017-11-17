@@ -18,12 +18,11 @@ if (!exists("projected_app_raw")) load("tmp/trans_gwlic_raw.RData")
 
 ## Clean projected_app_raw 
 # Change coloumn names, keep only some columns and round estimates to zero sig figs
-names(projected_app_raw)[names(projected_app_raw) == "Projected (based on assumption of 20,000 wells)"] <- "projected"
-names(projected_app_raw)[names(projected_app_raw) == "Region"] <- "nrs_region"
-keep_col_proj <- c("nrs_region", "projected")
 
 projected_app_clean <- projected_app_raw %>% 
-  select(one_of(keep_col_proj)) %>% 
+  rename(projected = `Projected (based on assumption of 20,000 wells)`) %>% 
+  rename(nrs_region = Region) %>% 
+  select(nrs_region, projected) %>% 
   mutate(projected = round(projected, digits = 0))
 
 
@@ -37,7 +36,7 @@ colnames(virtual_raw) <- gsub(" ", "_", colnames(virtual_raw))
 ## filter our duplicate licence using VCFBC_Tracking_Number
 keep_col_virtual <- c("Application_Type", "Date_Submitted", "VFCBC_Tracking_Number", "Job_Status")
 
-virtual_clean <- virtual_raw %>% 
+virtual_clean <- virtual_raw %>%
   select(one_of(keep_col_virtual)) %>%
   filter(Application_Type == "Existing Use Groundwater Application") %>% 
   distinct(Application_Type, Date_Submitted, VFCBC_Tracking_Number, Job_Status, .keepall = TRUE)
@@ -57,18 +56,14 @@ elic_clean_dup <- elic_raw %>%
   filter(NewExistingUse == "Existing Use")
 
 ## Filter our duplicate licence applications using TrackingNumber and columns
-## not useful without those duplicates (e.g. water use types)
+## some plots not useful without those duplicates (e.g. water use types)
+## Add NRS regions for comparing with Projected dataframe
 elic_clean <- elic_clean_dup %>% 
   select(TrackingNumber, ApplicationType, NewExistingUse, JobStatus, Region) %>% 
   distinct(TrackingNumber, ApplicationType, NewExistingUse, JobStatus, Region,
-          .keepall = TRUE)
-
-## Add NRS regions for comparing with Projected dataframe
-names(elic_clean)[names(elic_clean) == "Region"] <- "E-licence Regions"
-
-elic_clean <- elic_clean %>% 
-  merge(regions, by = "E-licence Regions")
-
+          .keepall = TRUE) %>% 
+  rename(`E-licence Regions` = Region) %>% 
+  left_join(regions)
 
 
 ## Create tmp folder if not already there and store clean data in local repository

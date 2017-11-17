@@ -13,45 +13,27 @@
 
 library(readxl) # MS Excel data import 
 
-
-## Import the projected number of transition Existing Use Groundwater License Applications (from ENV Water Branch)
-projected_app_raw <- read_excel("~/soe_data/water/groundwater/licensing/transition/Projected_GW_Transition_Licences_ENVWaterBranch.xlsx")
-
-## Import the join table for FCBC Regions and NRS Regions (from EnvReport BC)
-regions <- read_excel("~/soe_data/water/groundwater/licensing/transition/regions_matchup.xlsx")
-
-
-## Import the APPLICATION data for Existing Use Groundwater License Applications
-## Data source is a MS Excel file export from 'Application Search' sourced from vFCBC E-Licensing Home
-## Data license: Access Only http://www2.gov.bc.ca/gov/content/home/copyright 
-transition_app_raw <- read_excel("~/soe_data/water/groundwater/licensing/transition/ApplicationSearch_eASP.xlsx")
 ## Data 'as of' date
-app_date <- "October 23rd 2017"
+ddate <- "November 15th 2017"
 
+## The projected number of transition Existing Use Groundwater License Applications (from ENV Water Branch)
+projected_app_raw <- "~/soe_data/water/groundwater/licensing/transition/Projected_GW_Transition_Licences_ENVWaterBranch.xlsx"
 
+## The join table for FCBC Regions and NRS Regions (from EnvReport BC)
+regions <- "~/soe_data/water/groundwater/licensing/transition/regions_matchup.xlsx"
 
-## Import the LICENSING data for Existing Use Groundwater Incoming Licenses
-## Data source is a MS Excel file report/export from 'Incoming Groundwater Licence Application Tracking Report'
-## through E-licensing Home, generated manually by ENV staff
-## Data license: Access Only http://www2.gov.bc.ca/gov/content/home/copyright 
-transition_lic_raw <- read_excel("~/soe_data/water/groundwater/licensing/transition/ApplicationPurposeUseSearch.xlsx")
-## Data 'as of' date
-lic_date <- "October 23rd 2017"
+## The MS Excel E-licence data for Existing Use Groundwater License Applications provided
+## by a Senior Water Business Specialist in the Water Management Branch, FLNRO
+lic_raw <- "~/soe_data/water/groundwater/licensing/transition/GW Applications Nov 15, 2017.xlsx"
 
-
-## Import the PROCESSING TIME data for Existing Use Groundwater Incoming Licensing
-## Data source is a MS Excel file export from FCBC's 
-## 'FrontCounterBC ATS system application processing time report' provided by
-## email from FCBC FLNRO staff (generated monthly)
-## Data license: Access Only http://www2.gov.bc.ca/gov/content/home/copyright 
-processing_time_raw <- read_excel("~/soe_data/water/groundwater/licensing/transition/Existing Use Groundwater Sept 2017.xlsx")
-## Data 'as of' date
-proctime_date <- "September 30th 2017"
-
+## Load data files
+regions <- read_excel(regions)
+projected_app_raw <- read_excel(projected_app_raw)
+elic_raw <- read_excel(lic_raw, sheet = "e-Lic")
+virtual_raw <- read_excel(lic_raw, sheet = "FCBC")
 
 ## Create tmp folder if not already there and store raw data in local repository
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)
-save(projected_app_raw, transition_app_raw, transition_lic_raw,
-     processing_time_raw, app_date, lic_date, proctime_date, 
+save(projected_app_raw, regions, elic_raw, virtual_raw, ddate, 
      file = "tmp/trans_gwlic_raw.RData")
 

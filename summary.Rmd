@@ -33,18 +33,17 @@ if (!exists("virtual_clean")) load("tmp/trans_gwlic_clean.RData")
 
 
 # Status of B.C. Groundwater Licensing Transition Project
+Data provided by FLNRO Water Management Branch on `r ddate`
 
-## Data provided by FLNRO Water Management Branch on `r ddate`
+\vspace{30pt}
 
-\vspace{50pt}
-
-```{r estimate, fig.height = 2, fig.width = 7}
+```{r estimate, fig.height = 2.5, fig.width = 7}
 
 ```
 
-\vspace{50pt}
+\vspace{20pt}
 
-```{r virtual_status, fig.height = 2, fig.width = 7}
+```{r virtual_status, fig.height = 3, fig.width = 7}
 
 ```
 
@@ -56,17 +55,19 @@ if (!exists("virtual_clean")) load("tmp/trans_gwlic_clean.RData")
 
 -->
 
-\vspace{50pt}
+\vspace{20pt}
 
-```{r elic_status, fig.height = 2, fig.width = 7}
+```{r elic_status, fig.height = 2.5, fig.width = 7}
 
 ```
 
+\newpage
 
 ```{r elic_regions, fig.height = 5, fig.width = 7}
 
 ```
 
+\newpage
 
 ```{r water_use, fig.height = 6, fig.width = 7}
 

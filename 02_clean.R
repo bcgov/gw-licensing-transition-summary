@@ -20,10 +20,10 @@ if (!exists("projected_app_raw")) load("tmp/trans_gwlic_raw.RData")
 # Change coloumn names, keep only some columns and round estimates to zero sig figs
 
 projected_app_clean <- projected_app_raw %>% 
-  rename(projected = `Projected (based on assumption of 20,000 wells)`) %>% 
+  rename(Projected = `Projected (based on assumption of 20,000 wells)`) %>% 
   rename(nrs_region = Region) %>% 
-  select(nrs_region, projected) %>% 
-  mutate(projected = round(projected, digits = 0))
+  select(nrs_region, Projected) %>% 
+  mutate(Projected = round(Projected, digits = 0))
 
 
 ## Clean virtual_raw

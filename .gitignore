@@ -7,3 +7,5 @@
 README.html
 *.pdf
 .DS_Store
+*.docx
+/Data

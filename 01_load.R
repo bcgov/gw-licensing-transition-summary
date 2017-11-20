@@ -17,14 +17,17 @@ library(readxl) # MS Excel data import
 ddate <- "November 15th 2017"
 
 ## The projected number of transition Existing Use Groundwater License Applications (from ENV Water Branch)
-projected_app_raw <- "~/soe_data/water/groundwater/licensing/transition/Projected_GW_Transition_Licences_ENVWaterBranch.xlsx"
+## projected_app_raw <- "~/soe_data/water/groundwater/licensing/transition/Projected_GW_Transition_Licences_ENVWaterBranch.xlsx"
+projected_app_raw <- "C:/R Projects/gw-licensing-transition-summary/Data/Projected_GW_Transition_Licences_ENVWaterBranch.xlsx"
 
 ## The join table for FCBC Regions and NRS Regions (from EnvReport BC)
-regions <- "~/soe_data/water/groundwater/licensing/transition/regions_matchup.xlsx"
+## regions <- "~/soe_data/water/groundwater/licensing/transition/regions_matchup.xlsx"
+regions <- "C:/R Projects/gw-licensing-transition-summary/Data/regions_matchup.xlsx"
 
 ## The MS Excel E-licence data for Existing Use Groundwater License Applications provided
 ## by a Senior Water Business Specialist in the Water Management Branch, FLNRO
-lic_raw <- "~/soe_data/water/groundwater/licensing/transition/GW Applications Nov 15, 2017.xlsx"
+## lic_raw <- "~/soe_data/water/groundwater/licensing/transition/GW Applications Nov 15, 2017.xlsx"
+lic_raw <- "C:/R Projects/gw-licensing-transition-summary/Data/GW Applications Nov 15 2017.xlsx"
 
 ## Load data files
 regions <- read_excel(regions)

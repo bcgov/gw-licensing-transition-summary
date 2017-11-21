@@ -270,7 +270,7 @@ plot(tot_est_plot)
 # 
 # ## calculate the num applications per day
 # app_per_day <- virtual_clean %>%
-#   group_by(Date_Submited) %>%
+#   group_by(Date_Submitted) %>%
 #   summarise(numperday = n())
 # 
 # ## mean number per day over period
@@ -287,8 +287,8 @@ plot(tot_est_plot)
 # 
 # ## Calculate current rate to-date
 # appsum <- sum(app_per_day$numperday)
-# firstday <- min(app_per_day$Date_Submited)
-# lastday <- max(app_per_day$Date_Submited)
+# firstday <- min(app_per_day$Date_Submitted)
+# lastday <- max(app_per_day$Date_Submitted)
 # numdays <- as.integer(difftime(as.POSIXct(lastday), as.POSIXct(firstday), units = "days"))
 # current_rate <- appsum/numdays
 # 
@@ -315,7 +315,7 @@ plot(tot_est_plot)
 # 
 # ## line chart of incoming transition license applications to VFCBC by date and rates
 # tl_rate_plot <- ggplot() +
-#   geom_point(data = app_per_day, aes(y = cumsum, x = Date_Submited),
+#   geom_point(data = app_per_day, aes(y = cumsum, x = Date_Submitted),
 #              alpha = 0.7, colour = "#08519c", size = 1) +
 #   labs(title = "Observed Submission Rate of Transition\nApplications Compared to Target Rate") +
 #   geom_line(data = rate_forecasts, aes(y = curr_cumsum, x = date), alpha = 0.7,
@@ -336,5 +336,5 @@ plot(tot_est_plot)
 #         plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
 #         plot.margin = unit(c(5,5,5,5),"mm"))
 # plot(tl_rate_plot)
-# 
+
 

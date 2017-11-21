@@ -67,7 +67,7 @@ ta_type_plot <- ggplot(ta_type, aes(1, y = n, fill = Job_Status)) +
   geom_text(aes(label = n), position = position_stack(vjust = 0.5), size = 3) +
   labs(title = "Transition Applications Currently with FrontCounter BC",
        subtitle = paste("Total Applications = ", tot_FCBC),
-       caption = "\nNote: Submitted & Pre-Review includes applications in the pre-submitted,\nsubmitted, pending & editing statges with vFCBC") + 
+       caption = "\nNote: Submitted & Pre-Review includes applications in the pre-submitted,\nsubmitted, pending & editing stages with vFCBC") + 
   scale_fill_manual(values = virtual.colours, name = NULL, breaks = rev(levels(ta_type$Job_Status))) +
   xlab(NULL) +
   ylab(NULL) +

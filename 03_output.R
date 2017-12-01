@@ -167,7 +167,7 @@ elic.region.colours <- c("Projected" = "#999999",
 app_regions_plot <- ggplot(data = tl_region, aes(x = nrs_region, y = value, fill = type)) +
   geom_bar(stat="identity", position = "dodge", alpha = 0.7) +
   geom_text(aes(label = value), position = position_dodge(.9),  vjust = -.5, size = 3) +
-  labs(title = "Transition Applications under Adjudication by\nE-Licensing by NRS Region",
+  labs(title = "Status of Accepted Transitioning Groundwater Licences\n by NRS Region",
        caption = "\nNote: Decisions include Granted and Abandoned applications") +
   scale_fill_manual(values = elic.region.colours, name=NULL) +
   xlab(NULL) +
@@ -202,7 +202,7 @@ tl_purpose <- order_df(tl_purpose, target_col = "PurposeUse", value_col = "numbe
 tl_use_plot <- ggplot(tl_purpose, aes(x = PurposeUse, y = number)) +
   geom_col(alpha = 0.7, fill = "#377eb8") +
   geom_text(aes(label = perc_tot), vjust = .2, hjust = -.2, size = 3) +
-  labs(title = "E-Licensing Transition Licences\nby Water Use Purpose",
+  labs(title = "Transitioning Groundwater Licences \nby Granted/Approved - Water Use Purposes",
        caption = "\nNote: Some licences have more than one water use purpose") +
   xlab(NULL) +
   ylab("Number of Incoming Licences") +

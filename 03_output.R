@@ -65,9 +65,9 @@ virtual.colours <- c("Accepted" = "#e41a1c",
 ta_type_plot <- ggplot(ta_type, aes(1, y = n, fill = Job_Status)) +
   geom_col(alpha = 0.7) +
   geom_text(aes(label = n), position = position_stack(vjust = 0.5), size = 3) +
-  labs(title = "Transition Applications Currently with FrontCounter BC",
-       subtitle = paste("Total Applications = ", tot_FCBC),
-       caption = "\nNote: Submitted & Pre-Review includes applications in the pre-submitted,\nsubmitted, pending & editing stages with vFCBC") + 
+  labs(title = "Applications Currently with FrontCounter BC") +
+       #subtitle = paste("Total Applications = ", tot_FCBC)) +
+       #caption = "\nNote: Submitted & Pre-Review includes applications in the pre-submitted,\nsubmitted, pending & editing stages with vFCBC") + 
   scale_fill_manual(values = virtual.colours, name = NULL, breaks = rev(levels(ta_type$Job_Status))) +
   xlab(NULL) +
   ylab(NULL) +
@@ -98,10 +98,10 @@ tl_status <- elic_clean %>%
   summarise(number = length(JobStatus))
 
 ## Change 'Grant' to 'Granted'
-tl_status$JobStatus[tl_status$JobStatus == "Grant"] <- "Granted"
+tl_status$JobStatus[tl_status$JobStatus == "Grant"] <- "Decision"
 
 ## arranging the order of the categories to be plotted
-elic.order <- c("Granted", "In Progress", "Parked", "Abandoned")
+elic.order <- c("Decision", "In Progress", "Parked", "Abandoned")
 
 ## reordering the categories for plotting
 tl_status$JobStatus <- factor(tl_status$JobStatus, levels = elic.order)
@@ -110,14 +110,14 @@ tl_status$JobStatus <- factor(tl_status$JobStatus, levels = elic.order)
 elic.colour <- c("Abandoned" = "#a65628",
            "Parked" = "#4daf4a",
            "In Progress" = "#377eb8",
-           "Granted" = "#e41a1c")
+           "Decision" = "#e41a1c")
 
 ## bar chart of incoming E-licence applications by status
 tl_status_plot <- ggplot(tl_status, aes(1, y = number, fill = JobStatus)) +
   geom_col(alpha = 0.7) +
   geom_text(aes(label = number), position = position_stack(vjust = 0.5), size = 3) +
-  labs(title = "Transition Applications under Adjudication by E-Licensing:\nCurrent & Completed",
-       subtitle = paste("Total Applications = ", tot_elic)) +
+  labs(title = "Applications Accepted and Transferred to FLNR for Decision") +
+       #subtitle = paste("Total Applications = ", tot_elic)) +
   scale_fill_manual(values = elic.colour, name = NULL,
                     breaks = rev(levels(tl_status$JobStatus))) +
   xlab(NULL) +
@@ -149,6 +149,15 @@ tl_region <- elic_clean %>%
   gather(type, value, -nrs_region) %>%
   mutate(value = ifelse(is.na(value), 0, value))
 
+## Change 'Projected' to 'Projected applications'
+#tl_region$JobStatus[tl_status$JobStatus == "Projected"] <- "Projected applications"
+
+## Change 'Accepted' to 'Accepted applications transferred to FLNR'
+#tl_status$JobStatus[tl_status$JobStatus == "Accepted"] <- "Accepted applications transferred to FLNR"
+
+## Change 'Decisions to 'Decisions made'
+#tl_status$JobStatus[tl_status$JobStatus == "Decisions"] <- "Decisions made"
+
 ## arranging the order of the categories to be plotted
 elic.region.order <- c("Projected", "Accepted", "Decisions")
 
@@ -163,12 +172,11 @@ elic.region.colours <- c("Projected" = "#999999",
            "Accepted" = "#377eb8",
            "Decisions" = "#e41a1c")
 
-
 app_regions_plot <- ggplot(data = tl_region, aes(x = nrs_region, y = value, fill = type)) +
   geom_bar(stat="identity", position = "dodge", alpha = 0.7) +
   geom_text(aes(label = value), position = position_dodge(.9),  vjust = -.5, size = 3) +
-  labs(title = "Status of Accepted Transitioning Groundwater Licences\n by NRS Region",
-       caption = "\nNote: Decisions include Granted and Abandoned applications") +
+  labs(title = "Groundwater Licence Applications and Decisions by NRS Region") +
+       #caption = "\nNote: Decisions include Granted and Abandoned applications") +
   scale_fill_manual(values = elic.region.colours, name=NULL) +
   xlab(NULL) +
   ylab("Number of Applications") +
@@ -202,7 +210,7 @@ tl_purpose <- order_df(tl_purpose, target_col = "PurposeUse", value_col = "numbe
 tl_use_plot <- ggplot(tl_purpose, aes(x = PurposeUse, y = number)) +
   geom_col(alpha = 0.7, fill = "#377eb8") +
   geom_text(aes(label = perc_tot), vjust = .2, hjust = -.2, size = 3) +
-  labs(title = "Transitioning Groundwater Licences \nby Granted/Approved - Water Use Purposes",
+  labs(title = "Transitioning Groundwater Licences by \nGranted/Approved - Water Use Purposes",
        caption = "\nNote: Some licences have more than one water use purpose") +
   xlab(NULL) +
   ylab("Number of Incoming Licences") +
@@ -243,7 +251,7 @@ two_colrs <- c("Number Recieved To-Date" = "#3182bd",
 tot_est_plot <- ggplot(est.df, aes(1, y = val, fill = cat)) +
   geom_col(alpha = .7) +
   geom_text(aes(label = val), position = position_stack(vjust = 0.5), size = 3) +
-  labs(title = "All Transition Applications Received To-Date Compared\nto Expected Number") +
+  labs(title = "Total Applications Received to Date Compared to Expected Number") +
   scale_fill_manual(values = two_colrs, name = NULL, breaks = rev(levels(est.df$cat))) +
   xlab(NULL) +
   ylab(NULL) +

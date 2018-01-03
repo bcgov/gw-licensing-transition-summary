@@ -272,10 +272,11 @@ plot(tot_est_plot)
 ## @knitr end
 
 
-# ## @knitr app_rate
-# 
-# ## Calculate, plot and forecast rate/s of incoming transition applications
-# 
+## @knitr app_rate
+
+## Calculate, plot and forecast rate/s of incoming transition applications
+## Don't use this code to create this plot until we have either "Accepted" status retained in the FCBC tab or the "Date_Sub## mitted" tab retained in the eLic tab. Currently, the row is removed from the FCBC tab when it is entered into the e-lic ## tab so a total rate of application submissions can't be calculated.
+
 # ## calculate the num applications per day
 # app_per_day <- virtual_clean %>%
 #   group_by(Date_Submitted) %>%
@@ -285,10 +286,10 @@ plot(tot_est_plot)
 # mean_rate_per_day <- mean(app_per_day$numperday)
 # 
 # ## What days are people applying
-# # app_per_day$day <- wday(as.Date(app_per_day$Date_Submited), label=TRUE, abbr = FALSE)
-# # day_plot <- ggplot(app_per_day, aes(day, numperday)) +
-# #   geom_col(alpha = 0.7)
-# # plot(day_plot)
+# app_per_day$day <- wday(as.Date(app_per_day$Date_Submitted), label=TRUE, abbr = FALSE)
+# day_plot <- ggplot(app_per_day, aes(day, numperday)) +
+#   geom_col(alpha = 0.7)
+# plot(day_plot)
 # 
 # ## cumlative sum of applications and add to df
 # app_per_day$cumsum <- cumsum(app_per_day$numperday)
@@ -319,7 +320,6 @@ plot(tot_est_plot)
 # ## Calculate the required rate for March 2019 end date for workdays only
 # work_days_to_go <- sum(!weekdays(seq(lastday, enddate, "days")) %in% c("Saturday", "Sunday"))
 # work_day_rate_to_achieve <- app_to_go/work_days_to_go
-# 
 # 
 # ## line chart of incoming transition license applications to VFCBC by date and rates
 # tl_rate_plot <- ggplot() +

@@ -29,7 +29,7 @@ if (!exists("virtual_clean")) load("tmp/trans_gwlic_clean.RData")
 ## @knitr pre
 
 ## Total licence applications with FCBC
-tot_FCBC <- length(virtual_clean$VFCBC_Tracking_Number)
+tot_FCBC <- length(virtual_clean$vFCBC_Tracking_Number)
 
 
 ## Total licence applications with FCBC
@@ -37,9 +37,13 @@ tot_elic <- length(elic_clean$TrackingNumber)
 
 ## @knitr virtual_status
 
+## filter out 'Accepted' Applications
+virtual_clean <- filter(virtual_clean, Job_Status != "Accepted" | is.na(Job_Status))
+
 ## collapse some categories for plotting
 virtual_clean$Job_Status[virtual_clean$Job_Status == "Cancelled"] <-  "Cancelled & Not Accepted"
 virtual_clean$Job_Status[virtual_clean$Job_Status == "Not Accepted"] <-  "Cancelled & Not Accepted"
+virtual_clean$Job_Status[virtual_clean$Job_Status == "Withdrawn"] <-  "Cancelled & Not Accepted"
 virtual_clean$Job_Status[virtual_clean$Job_Status == "Editing"] <-  "Submitted & Pre-Review Steps"
 virtual_clean$Job_Status[virtual_clean$Job_Status == "Submitted"] <-  "Submitted & Pre-Review Steps"
 virtual_clean$Job_Status[virtual_clean$Job_Status == "Pending"] <-  "Submitted & Pre-Review Steps"

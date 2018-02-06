@@ -14,7 +14,7 @@
 library(readxl) # MS Excel data import 
 
 ## Data 'as of' date
-ddate <- "January 4th 2017"
+ddate <- "February 5th 2018"
 
 # ## soe_data source
 # ## The projected number of transition Existing Use Groundwater License Applications (from ENV Water Branch)
@@ -40,13 +40,13 @@ regions <- "C:/R Projects/gw-licensing-transition-summary/Data/regions_matchup.x
 ## This file is updated every 2 weeks, sent to Greg Tyson, who forwards to us analysts to produce this report. The data should be saved here
 ## Z:\WPS\Water Strategies\Groundwater Licensing - BIG project\GW Licencing Data (Heather worked off her C drive so that's where she saved 
 ## a copy of the data which is where the path below is from)
-lic_raw <- "C:/R Projects/gw-licensing-transition-summary/Data/GW Applications Jan 4 2018.xlsx"
+lic_raw <- "C:/R Projects/gw-licensing-transition-summary/Data/GW Applications Feb 5 2018.xlsx"
 
 ## Load data files
 regions <- read_excel(regions)
 projected_app_raw <- read_excel(projected_app_raw)
 elic_raw <- read_excel(lic_raw, sheet = "e-Lic")
-virtual_raw <- read_excel(lic_raw, sheet = "FCBC")
+virtual_raw <- read_excel(lic_raw, sheet = "vFCBC")
 
 ## Create tmp folder if not already there and store raw data in local repository
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)

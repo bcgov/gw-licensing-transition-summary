@@ -34,12 +34,12 @@ colnames(virtual_raw) <- gsub(" ", "_", colnames(virtual_raw))
 ## Only keep columns in virtual_raw necessary for plots,
 ## filter out new licence applications and
 ## filter our duplicate licence using VCFBC_Tracking_Number
-keep_col_virtual <- c("Application_Type", "Date_Submitted", "VFCBC_Tracking_Number", "Job_Status")
+keep_col_virtual <- c("Application_Type", "Date_Submitted", "vFCBC_Tracking_Number", "Job_Status")
 
 virtual_clean <- virtual_raw %>%
   select(one_of(keep_col_virtual)) %>%
   filter(Application_Type == "Existing Use Groundwater Application") %>% 
-  distinct(Application_Type, Date_Submitted, VFCBC_Tracking_Number, Job_Status, .keepall = TRUE)
+  distinct(Application_Type, Date_Submitted, vFCBC_Tracking_Number, Job_Status, .keepall = TRUE)
 
 ## Fix date formatting from character to Date
 virtual_clean$Date_Submitted <- as.Date(virtual_clean$Date_Submitted, format = "%m/%d/%Y")

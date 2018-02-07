@@ -28,11 +28,11 @@ if (!exists("virtual_clean")) load("tmp/trans_gwlic_clean.RData")
 
 ## @knitr pre
 
-## Total licence applications with FCBC
+## Total licence applications with FCBC 
 tot_FCBC <- length(virtual_clean$vFCBC_Tracking_Number)
 
 
-## Total licence applications with FCBC
+## Total licence applications with e-licencing (these are accounted for in vFCBC sheet as Job_Status = 'Accepted')
 tot_elic <- length(elic_clean$TrackingNumber)
 
 ## @knitr virtual_status
@@ -101,8 +101,11 @@ tl_status <- elic_clean %>%
   group_by(JobStatus) %>% 
   summarise(number = length(JobStatus))
 
-## Change 'Grant' to 'Granted'
+## Change 'Grant' to 'Decision'
+## at this point in time, there is no 'existing use' application for 'grant in part' and 'refuse', ## these are 'new' applications. 
 tl_status$JobStatus[tl_status$JobStatus == "Grant"] <- "Decision"
+tl_status$JobStatus[tl_status$JobStatus == "Grant in Part"] <- "Decision"
+tl_status$JobStatus[tl_status$JobStatus == "Refuse"] <- "Decision"
 
 ## arranging the order of the categories to be plotted
 elic.order <- c("Decision", "In Progress", "Parked", "Abandoned")
@@ -144,6 +147,7 @@ plot(tl_status_plot)
 ## @knitr elic_regions
 
 ## Number applications and predicted number by Region
+## 'Accepted' applications into e-lic are labelled 'in progress' 
 tl_region <- elic_clean %>%
   mutate(JobStatus = replace(JobStatus, JobStatus=="Grant", "done")) %>%
   mutate(JobStatus = replace(JobStatus, JobStatus=="Abandoned", "done")) %>%
@@ -238,20 +242,23 @@ plot(tl_use_plot)
 ## @knitr estimate
 
 ## make a 'total transition applications with estimated transitions' dataframe
+## total vFCBC applications with distinct tracking number and including Job_Status = Accepted applications. There's a discrepancy of 22 between doing calcuating total applications received this way just from vFCBC and using both the vFCBC (minus the accepted applications) plus the e-licencing sheets. 
+
 est_ta <- 20000
-tot_ta <- tot_FCBC + tot_elic
+tot_ta <- tot_FCBC
 
 remaining <- est_ta-tot_ta
-cat <- c("Estimated Outstanding", "Number Recieved To-Date")
+cat <- c("Estimated Outstanding", "Number Received To-Date")
 val <- c(remaining, tot_ta)
 est.df <- data.frame(cat, val)
 
 est.df<- order_df(est.df, target_col = "cat", value_col = "val", fun = max, desc = TRUE)
 
-two_colrs <- c("Number Recieved To-Date" = "#3182bd",
+two_colrs <- c("Number Received To-Date" = "#3182bd",
                "Estimated Outstanding" = "grey70")
 
 ## bar chart of total received and estimated applications
+## vFCBC accepted applications have been filtered out above
 tot_est_plot <- ggplot(est.df, aes(1, y = val, fill = cat)) +
   geom_col(alpha = .7) +
   geom_text(aes(label = val), position = position_stack(vjust = 0.5), size = 3) +
@@ -279,74 +286,73 @@ plot(tot_est_plot)
 ## @knitr app_rate
 
 ## Calculate, plot and forecast rate/s of incoming transition applications
-## Don't use this code to create this plot until we have either "Accepted" status retained in the FCBC tab or the "Date_Sub## mitted" tab retained in the eLic tab. Currently, the row is removed from the FCBC tab when it is entered into the e-lic ## tab so a total rate of application submissions can't be calculated.
 
-# ## calculate the num applications per day
-# app_per_day <- virtual_clean %>%
-#   group_by(Date_Submitted) %>%
-#   summarise(numperday = n())
-# 
-# ## mean number per day over period
-# mean_rate_per_day <- mean(app_per_day$numperday)
-# 
-# ## What days are people applying
-# app_per_day$day <- wday(as.Date(app_per_day$Date_Submitted), label=TRUE, abbr = FALSE)
-# day_plot <- ggplot(app_per_day, aes(day, numperday)) +
-#   geom_col(alpha = 0.7)
-# plot(day_plot)
-# 
-# ## cumlative sum of applications and add to df
-# app_per_day$cumsum <- cumsum(app_per_day$numperday)
-# 
-# ## Calculate current rate to-date
-# appsum <- sum(app_per_day$numperday)
-# firstday <- min(app_per_day$Date_Submitted)
-# lastday <- max(app_per_day$Date_Submitted)
-# numdays <- as.integer(difftime(as.POSIXct(lastday), as.POSIXct(firstday), units = "days"))
-# current_rate <- appsum/numdays
-# 
-# ## Calculate rate forecast based on current rate and add to df
-# enddate <- as.Date(as.character("2019-03-01"))
-# date <- seq(lastday, enddate, by = "1 day")
-# rate_forecasts <- data.frame(date)
-# rate_forecasts$curr_num <- current_rate
-# rate_forecasts$curr_num[1] <- appsum
-# rate_forecasts$curr_cumsum <- cumsum(rate_forecasts$curr_num)
-# 
-# ## Calculate the required rate for March 2019 end date and add to df
-# app_to_go <- est_ta - appsum
-# days_to_go <- as.integer(enddate - lastday)
-# rate_to_achieve <- app_to_go/days_to_go
-# rate_forecasts$req_num <- rate_to_achieve
-# rate_forecasts$req_num[1] <- appsum
-# rate_forecasts$req_cumsum <- cumsum(rate_forecasts$req_num)
-# 
-# ## Calculate the required rate for March 2019 end date for workdays only
-# work_days_to_go <- sum(!weekdays(seq(lastday, enddate, "days")) %in% c("Saturday", "Sunday"))
-# work_day_rate_to_achieve <- app_to_go/work_days_to_go
-# 
-# ## line chart of incoming transition license applications to VFCBC by date and rates
-# tl_rate_plot <- ggplot() +
-#   geom_point(data = app_per_day, aes(y = cumsum, x = Date_Submitted),
-#              alpha = 0.7, colour = "#08519c", size = 1) +
-#   labs(title = "Observed Submission Rate of Transition\nApplications Compared to Target Rate") +
-#   geom_line(data = rate_forecasts, aes(y = curr_cumsum, x = date), alpha = 0.7,
-#             colour = "#08519c", size = 1, linetype = 2) +
-#   geom_line(data = rate_forecasts, aes(y = req_cumsum, x = date), alpha = 0.7,
-#             colour = "#006d2c", size = 1, linetype = 2) +
-#   annotate("text", label = paste("Average Rate of Application\nSubmissions To Date:\n", round(current_rate, digits = 1), "/day", sep = ""), colour = "#08519c",
-#            x = as.Date(as.character("2016-11-01")), y = 4000, size = 4) +
-#   annotate("text", label = paste("Target Rate of Application\nSubmissions Starting ", ddate,":\n",
-#                                  round(rate_to_achieve, digits = 0), "/day", " (or ", round(work_day_rate_to_achieve, digits = 0),"/weekday)",  sep = ""), colour = "#006d2c",
-#            x = as.Date(as.character("2017-11-01")), y = 16000, size = 4) +
-#   scale_y_continuous(expand=c(0, 0), limits = c(0,20000), breaks=seq(0, 20000, 2000), labels = scales::comma) +
-#   xlab(NULL) +
-#   ylab("Number of Applications") +
-#   theme_soe() +
-#   theme(panel.grid.major.x = element_blank(),
-#         axis.text = element_text(size=10),
-#         plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
-#         plot.margin = unit(c(5,5,5,5),"mm"))
-# plot(tl_rate_plot)
+## calculate the num applications per day
+app_per_day <- virtual_clean %>%
+  group_by(Date_Submitted) %>%
+  summarise(numperday = n())
+
+## mean number per day over period
+mean_rate_per_day <- mean(app_per_day$numperday)
+
+## What days are people applying
+app_per_day$day <- wday(as.Date(app_per_day$Date_Submitted), label=TRUE, abbr = FALSE)
+day_plot <- ggplot(app_per_day, aes(day, numperday)) +
+  geom_col(alpha = 0.7)
+plot(day_plot)
+
+## cumlative sum of applications and add to df
+app_per_day$cumsum <- cumsum(app_per_day$numperday)
+
+## Calculate current rate to-date
+appsum <- sum(app_per_day$numperday)
+firstday <- min(app_per_day$Date_Submitted)
+lastday <- max(app_per_day$Date_Submitted)
+numdays <- as.integer(difftime(as.POSIXct(lastday), as.POSIXct(firstday), units = "days"))
+current_rate <- appsum/numdays
+
+## Calculate rate forecast based on current rate and add to df
+enddate <- as.Date(as.character("2019-03-01"))
+date <- seq(lastday, enddate, by = "1 day")
+rate_forecasts <- data.frame(date)
+rate_forecasts$curr_num <- current_rate
+rate_forecasts$curr_num[1] <- appsum
+rate_forecasts$curr_cumsum <- cumsum(rate_forecasts$curr_num)
+
+## Calculate the required rate for March 2019 end date and add to df
+app_to_go <- est_ta - appsum
+days_to_go <- as.integer(enddate - lastday)
+rate_to_achieve <- app_to_go/days_to_go
+rate_forecasts$req_num <- rate_to_achieve
+rate_forecasts$req_num[1] <- appsum
+rate_forecasts$req_cumsum <- cumsum(rate_forecasts$req_num)
+
+## Calculate the required rate for March 2019 end date for workdays only
+work_days_to_go <- sum(!weekdays(seq(lastday, enddate, "days")) %in% c("Saturday", "Sunday"))
+work_day_rate_to_achieve <- app_to_go/work_days_to_go
+
+## line chart of incoming transition license applications to VFCBC by date and rates
+tl_rate_plot <- ggplot() +
+  geom_point(data = app_per_day, aes(y = cumsum, x = Date_Submitted),
+             alpha = 0.7, colour = "#08519c", size = 1) +
+  labs(title = "Observed Submission Rate of Transition\nApplications Compared to Target Rate") +
+  geom_line(data = rate_forecasts, aes(y = curr_cumsum, x = date), alpha = 0.7,
+            colour = "#08519c", size = 1, linetype = 2) +
+  geom_line(data = rate_forecasts, aes(y = req_cumsum, x = date), alpha = 0.7,
+            colour = "#006d2c", size = 1, linetype = 2) +
+  annotate("text", label = paste("Average Rate of Application\nSubmissions To Date:\n", round(current_rate, digits = 1), "/day", sep = ""), colour = "#08519c",
+           x = as.Date(as.character("2016-11-01")), y = 4000, size = 4) +
+  annotate("text", label = paste("Target Rate of Application\nSubmissions Starting ", ddate,":\n",
+                                 round(rate_to_achieve, digits = 0), "/day", " (or ", round(work_day_rate_to_achieve, digits = 0),"/weekday)",  sep = ""), colour = "#006d2c",
+           x = as.Date(as.character("2017-11-01")), y = 16000, size = 4) +
+  scale_y_continuous(expand=c(0, 0), limits = c(0,20000), breaks=seq(0, 20000, 2000), labels = scales::comma) +
+  xlab(NULL) +
+  ylab("Number of Applications") +
+  theme_soe() +
+  theme(panel.grid.major.x = element_blank(),
+        axis.text = element_text(size=10),
+        plot.title = element_text(size = 12, hjust = 0.5, face = "bold"),
+        plot.margin = unit(c(5,5,5,5),"mm"))
+plot(tl_rate_plot)
 
 

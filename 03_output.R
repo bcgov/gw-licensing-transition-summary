@@ -299,10 +299,10 @@ app_per_day <- virtual_clean %>%
 mean_rate_per_day <- mean(app_per_day$numperday)
 
 ## What days are people applying
-app_per_day$day <- wday(as.Date(app_per_day$Date_Submitted), label=TRUE, abbr = FALSE)
-day_plot <- ggplot(app_per_day, aes(day, numperday)) +
-  geom_col(alpha = 0.7)
-plot(day_plot)
+# app_per_day$day <- wday(as.Date(app_per_day$Date_Submitted), label=TRUE, abbr = FALSE)
+# day_plot <- ggplot(app_per_day, aes(day, numperday)) +
+#   geom_col(alpha = 0.7)
+# plot(day_plot)
 
 ## cumlative sum of applications and add to df
 app_per_day$cumsum <- cumsum(app_per_day$numperday)

@@ -16,31 +16,31 @@ library(readxl) # MS Excel data import
 ## Data 'as of' date
 ddate <- "February 5th 2018"
 
-# ## soe_data source
-# ## The projected number of transition Existing Use Groundwater License Applications (from ENV Water Branch)
-# projected_app_raw <- "~/soe_data/water/groundwater/licensing/transition/Projected_GW_Transition_Licences_ENVWaterBranch.xlsx"
-# 
-# ## The join table for FCBC Regions and NRS Regions (from EnvReport BC)
-# regions <- "~/soe_data/water/groundwater/licensing/transition/regions_matchup.xlsx"
-# 
-# ## The MS Excel E-licence data for Existing Use Groundwater License Applications provided
-# ## by a Senior Water Business Specialist in the Water Management Branch, FLNRO
-# lic_raw <- "~/soe_data/water/groundwater/licensing/transition/GW Applications Nov 15, 2017.xlsx"
+## ENV SoE Unit soe_data source
+## The projected number of transition Existing Use Groundwater License Applications (from ENV Water Branch)
+projected_app_raw <- "~/soe_data/water/groundwater/licensing/transition/Projected_GW_Transition_Licences_ENVWaterBranch.xlsx"
+
+## The join table for FCBC Regions and NRS Regions (from EnvReport BC)
+regions <- "~/soe_data/water/groundwater/licensing/transition/regions_matchup.xlsx"
+
+## The MS Excel E-licence data for Existing Use Groundwater License Applications provided
+## by a Senior Water Business Specialist in the Water Management Branch, FLNRO
+lic_raw <- "~/soe_data/water/groundwater/licensing/transition/GW Applications Feb 5 2018.xlsx"
 
 
 ## ENV Water data source
 ## The projected number of transition Existing Use Groundwater License Applications (from ENV Water Protection & Sustainability Branch)
-projected_app_raw <- "C:/R Projects/gw-licensing-transition-summary/Data/Projected_GW_Transition_Licences_ENVWaterBranch.xlsx"
-
-## The join table for FCBC Regions and NRS Regions (from EnvReport BC)
-regions <- "C:/R Projects/gw-licensing-transition-summary/Data/regions_matchup.xlsx"
-
-## The MS Excel E-licence data for Existing Use Groundwater License Applications provided
-## by a Senior Water Business Specialist in the Water Management Branch, FLNRO
-## This file is updated every 2 weeks, sent to Greg Tyson, who forwards to us analysts to produce this report. The data should be saved here
-## Z:\WPS\Water Strategies\Groundwater Licensing - BIG project\GW Licencing Data (Heather worked off her C drive so that's where she saved 
-## a copy of the data which is where the path below is from)
-lic_raw <- "C:/R Projects/gw-licensing-transition-summary/Data/GW Applications Feb 5 2018.xlsx"
+# projected_app_raw <- "C:/R Projects/gw-licensing-transition-summary/Data/Projected_GW_Transition_Licences_ENVWaterBranch.xlsx"
+# 
+# ## The join table for FCBC Regions and NRS Regions (from EnvReport BC)
+# regions <- "C:/R Projects/gw-licensing-transition-summary/Data/regions_matchup.xlsx"
+# 
+# ## The MS Excel E-licence data for Existing Use Groundwater License Applications provided
+# ## by a Senior Water Business Specialist in the Water Management Branch, FLNRO
+# ## This file is updated every 2 weeks, sent to Greg Tyson, who forwards to us analysts to produce this report. The data should be saved here
+# ## Z:\WPS\Water Strategies\Groundwater Licensing - BIG project\GW Licencing Data (Heather worked off her C drive so that's where she saved 
+# ## a copy of the data which is where the path below is from)
+# lic_raw <- "C:/R Projects/gw-licensing-transition-summary/Data/GW Applications Feb 5 2018.xlsx"
 
 ## Load data files
 regions <- read_excel(regions)

@@ -20,7 +20,7 @@ library(ggplot2)
 library(envreportutils) # theme_soe()
 library(stringr) # for label wrapping
 
-## Load clean data if not already in local repository
+## load clean data if not already in local repository
 if (!exists("virtual_clean")) load("tmp/trans_gwlic_clean.RData")
 
 
@@ -28,29 +28,29 @@ if (!exists("virtual_clean")) load("tmp/trans_gwlic_clean.RData")
 
 ## @knitr pre
 
-## Total licence applications with FCBC 
+## total licence applications with FCBC 
 tot_FCBC <- length(virtual_clean$vFCBC_Tracking_Number)
 
-
-## Total licence applications with e-licencing (these are accounted for in vFCBC sheet as Job_Status = 'Accepted')
+## total licence applications with e-licencing (these are accounted for in vFCBC sheet as Job_Status = 'Accepted')
 tot_elic <- length(elic_clean$TrackingNumber)
 
 ## @knitr virtual_status
-
-## filter out 'Accepted' Applications
-virtual_clean <- filter(virtual_clean, Job_Status != "Accepted" | is.na(Job_Status))
 
 ## collapse some categories for plotting
 virtual_clean$Job_Status[virtual_clean$Job_Status == "Cancelled"] <-  "Cancelled & Not Accepted"
 virtual_clean$Job_Status[virtual_clean$Job_Status == "Not Accepted"] <-  "Cancelled & Not Accepted"
 virtual_clean$Job_Status[virtual_clean$Job_Status == "Withdrawn"] <-  "Cancelled & Not Accepted"
+virtual_clean$Job_Status[virtual_clean$Job_Status == "Abandoned"] <-  "Cancelled & Not Accepted"
 virtual_clean$Job_Status[virtual_clean$Job_Status == "Editing"] <-  "Submitted & Pre-Review Steps"
 virtual_clean$Job_Status[virtual_clean$Job_Status == "Submitted"] <-  "Submitted & Pre-Review Steps"
 virtual_clean$Job_Status[virtual_clean$Job_Status == "Pending"] <-  "Submitted & Pre-Review Steps"
 virtual_clean$Job_Status[virtual_clean$Job_Status == "Pre-Submittal"] <-  "Submitted & Pre-Review Steps"
 
+## filter out 'Accepted' Applications
+virtual_clean_noaccept <- filter(virtual_clean, Job_Status != "Accepted" | is.na(Job_Status))
+
 ## number of applications by application category
-ta_type <- virtual_clean %>% 
+ta_type <- virtual_clean_noaccept %>% 
   count(Job_Status) 
 
 ## arranging the order of the categories to be plotted
@@ -101,8 +101,9 @@ tl_status <- elic_clean %>%
   group_by(JobStatus) %>% 
   summarise(number = length(JobStatus))
 
-## Change 'Grant' to 'Decision'
-## at this point in time, there is no 'existing use' application for 'grant in part' and 'refuse', ## these are 'new' applications. 
+## change 'Grant' to 'Decision'
+## at this point in time, there is no 'existing use' application for 'grant in part' and 'refuse',
+## these are 'new' application categories. 
 tl_status$JobStatus[tl_status$JobStatus == "Grant"] <- "Decision"
 tl_status$JobStatus[tl_status$JobStatus == "Grant in Part"] <- "Decision"
 tl_status$JobStatus[tl_status$JobStatus == "Refuse"] <- "Decision"
@@ -242,7 +243,9 @@ plot(tl_use_plot)
 ## @knitr estimate
 
 ## make a 'total transition applications with estimated transitions' dataframe
-## total vFCBC applications with distinct tracking number and including Job_Status = Accepted applications. There's a discrepancy of 22 between doing calcuating total applications received this way just from vFCBC and using both the vFCBC (minus the accepted applications) plus the e-licencing sheets. 
+## total vFCBC applications with distinct tracking number and including Job_Status = Accepted applications.
+## There's a discrepancy of 22 between doing calcuating total applications received from vFCBC 
+## and using both the vFCBC (minus the accepted applications) plus the e-licencing data sheets. 
 
 est_ta <- 20000
 tot_ta <- tot_FCBC

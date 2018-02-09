@@ -37,6 +37,10 @@ Data provided by FLNRO Water Management Branch on `r ddate`
 
 \vspace{30pt}
 
+```{r app_rate, fig.height = 4, fig.width = 7}
+
+```
+
 ```{r estimate, fig.height = 3, fig.width = 7}
 
 ```
@@ -46,14 +50,6 @@ Data provided by FLNRO Water Management Branch on `r ddate`
 ```{r virtual_status, fig.height = 3, fig.width = 7}
 
 ```
-
-
-
-```{r app_rate, fig.height = 4, fig.width = 7}
-
-```
-
-
 
 \vspace{40pt}
 

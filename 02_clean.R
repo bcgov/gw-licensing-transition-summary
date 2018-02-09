@@ -62,8 +62,8 @@ elic_clean_dup <- elic_raw %>%
 ## some plots not useful without those duplicates (e.g. water use types)
 ## Add NRS regions for comparing with Projected dataframe
 elic_clean <- elic_clean_dup %>% 
-  select(TrackingNumber, ApplicationType, NewExistingUse, JobStatus, Region) %>% 
-  distinct(TrackingNumber, ApplicationType, NewExistingUse, JobStatus, Region,
+  select(JobID, TrackingNumber, ApplicationType, NewExistingUse, JobStatus, Region) %>% 
+  distinct(JobID, TrackingNumber, ApplicationType, NewExistingUse, JobStatus, Region,
           .keepall = TRUE) %>% 
   rename(`E-licence Regions` = Region) %>% 
   left_join(regions)

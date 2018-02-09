@@ -13,40 +13,40 @@
 
 library(readxl) # MS Excel data import 
 
-## Data 'as of' date
-ddate <- "February 5th 2018"
 
-# ## soe_data source
-# ## The projected number of transition Existing Use Groundwater License Applications (from ENV Water Branch)
-# projected_app_raw <- "~/soe_data/water/groundwater/licensing/transition/Projected_GW_Transition_Licences_ENVWaterBranch.xlsx"
-# 
-# ## The join table for FCBC Regions and NRS Regions (from EnvReport BC)
-# regions <- "~/soe_data/water/groundwater/licensing/transition/regions_matchup.xlsx"
-# 
-# ## The MS Excel E-licence data for Existing Use Groundwater License Applications provided
-# ## by a Senior Water Business Specialist in the Water Management Branch, FLNRO
-# lic_raw <- "~/soe_data/water/groundwater/licensing/transition/GW Applications Nov 15, 2017.xlsx"
+## PATHS
+## ENV SoE Unit soe_data source PATH
+# path <- "~/soe_data/water/groundwater/licensing/transition/"
+
+## ENV Water data source PATH
+path <- "C:/R Projects/gw-licensing-transition-summary/Data/"
 
 
-## ENV Water data source
-## The projected number of transition Existing Use Groundwater License Applications (from ENV Water Protection & Sustainability Branch)
-projected_app_raw <- "C:/R Projects/gw-licensing-transition-summary/Data/Projected_GW_Transition_Licences_ENVWaterBranch.xlsx"
+## DATA files
+## The projected number of transition Existing Use Groundwater License Applications (from ENV Water Branch)
+projected_app_raw <- "Projected_GW_Transition_Licences_ENVWaterBranch.xlsx"
 
 ## The join table for FCBC Regions and NRS Regions (from EnvReport BC)
-regions <- "C:/R Projects/gw-licensing-transition-summary/Data/regions_matchup.xlsx"
+regions <- "regions_matchup.xlsx"
 
 ## The MS Excel E-licence data for Existing Use Groundwater License Applications provided
 ## by a Senior Water Business Specialist in the Water Management Branch, FLNRO
-## This file is updated every 2 weeks, sent to Greg Tyson, who forwards to us analysts to produce this report. The data should be saved here
-## Z:\WPS\Water Strategies\Groundwater Licensing - BIG project\GW Licencing Data (Heather worked off her C drive so that's where she saved 
-## a copy of the data which is where the path below is from)
-lic_raw <- "C:/R Projects/gw-licensing-transition-summary/Data/GW Applications Feb 5 2018.xlsx"
+## This file is updated every 2 weeks, sent to Greg Tyson, who forwards to us analysts to produce this report.
+## The data should be saved here Z:\WPS\Water Strategies\Groundwater Licensing - BIG project\GW Licencing Data 
+## (Heather worked off her C drive so that's where she saved a copy of the data which is where the path below is from)
+lic_raw <- "GW Applications Feb 5 2018.xlsx"
+
+
+## Data 'as of' DATE
+ddate <- "February 5th 2018"
+
 
 ## Load data files
-regions <- read_excel(regions)
-projected_app_raw <- read_excel(projected_app_raw)
-elic_raw <- read_excel(lic_raw, sheet = "e-Lic")
-virtual_raw <- read_excel(lic_raw, sheet = "vFCBC")
+regions <- read_excel(paste0(path, regions))
+projected_app_raw <- read_excel(paste0(path, projected_app_raw))
+elic_raw <- read_excel(paste0(path, lic_raw), sheet = "e-Lic")
+virtual_raw <- read_excel(paste0(path, lic_raw), sheet = "vFCBC")
+
 
 ## Create tmp folder if not already there and store raw data in local repository
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)

@@ -16,10 +16,10 @@ library(readxl) # MS Excel data import
 
 ## PATHS
 ## ENV SoE Unit soe_data source PATH
-path <- "~/soe_data/water/groundwater/licensing/transition/"
+# path <- "~/soe_data/water/groundwater/licensing/transition/"
 
 ## ENV Water data source PATH
-# path <- "C:/R Projects/gw-licensing-transition-summary/Data/"
+path <- "C:/R Projects/gw-licensing-transition-summary/Data/"
 
 
 ## DATA files

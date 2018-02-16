@@ -28,6 +28,8 @@ if (!exists("virtual_clean")) load("tmp/trans_gwlic_clean.RData")
 
 ## @knitr pre
 
+est_ta <- 20000
+
 ## total licence applications with FCBC 
 tot_FCBC <- length(virtual_clean$vFCBC_Tracking_Number)
 
@@ -247,7 +249,7 @@ plot(tl_use_plot)
 ## There's a discrepancy of 22 between doing calcuating total applications received from vFCBC 
 ## and using both the vFCBC (minus the accepted applications) plus the e-licencing data sheets. 
 
-est_ta <- 20000
+# est_ta <- 20000
 tot_ta <- tot_FCBC
 
 remaining <- est_ta-tot_ta
@@ -288,7 +290,7 @@ plot(tot_est_plot)
 
 ## @knitr app_rate
 
-est_ta <- 20000
+# est_ta <- 20000
 
 ## Calculate, plot and forecast rate/s of incoming transition applications
 

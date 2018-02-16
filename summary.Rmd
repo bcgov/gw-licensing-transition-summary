@@ -41,7 +41,9 @@ Data provided by FLNRO Water Management Branch on `r ddate`
 
 ```
 
-```{r estimate, fig.height = 3, fig.width = 7}
+\vspace{70pt}
+
+```{r estimate, fig.height = 2.5, fig.width = 7}
 
 ```
 
@@ -51,7 +53,7 @@ Data provided by FLNRO Water Management Branch on `r ddate`
 
 ```
 
-\vspace{40pt}
+\vspace{80pt}
 
 ```{r elic_status, fig.height = 3, fig.width = 7}
 

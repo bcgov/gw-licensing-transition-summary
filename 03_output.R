@@ -288,6 +288,8 @@ plot(tot_est_plot)
 
 ## @knitr app_rate
 
+est_ta <- 20000
+
 ## Calculate, plot and forecast rate/s of incoming transition applications
 
 ## calculate the num applications per day

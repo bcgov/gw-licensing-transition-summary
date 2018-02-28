@@ -334,9 +334,18 @@ rate_forecasts$req_num <- rate_to_achieve
 rate_forecasts$req_num[1] <- appsum
 rate_forecasts$req_cumsum <- cumsum(rate_forecasts$req_num)
 
+## Calculate HALF of the required rate for March 2019 end date and add to df
+app_to_go_half <- est_ta/2 - appsum
+rate_to_achieve_half <- app_to_go_half/days_to_go
+rate_forecasts$req_num_half <- rate_to_achieve_half
+rate_forecasts$req_num_half[1] <- appsum
+rate_forecasts$req_cumsum_half <- cumsum(rate_forecasts$req_num_half)
+
 ## Calculate the required rate for March 2019 end date for workdays only
 work_days_to_go <- sum(!weekdays(seq(lastday, enddate, "days")) %in% c("Saturday", "Sunday"))
 work_day_rate_to_achieve <- app_to_go/work_days_to_go
+work_day_rate_to_achieve_half <- app_to_go_half/work_days_to_go
+
 
 ## line chart of incoming transition license applications to VFCBC by date and rates
 tl_rate_plot <- ggplot() +
@@ -347,11 +356,16 @@ tl_rate_plot <- ggplot() +
             colour = "#08519c", size = 1, linetype = 2) +
   geom_line(data = rate_forecasts, aes(y = req_cumsum, x = date), alpha = 0.7,
             colour = "#006d2c", size = 1, linetype = 2) +
+  geom_line(data = rate_forecasts, aes(y = req_cumsum_half, x = date), alpha = 0.7,
+            colour = "#e60000", size = 1, linetype = 2) +
   annotate("text", label = paste("Average Rate of Application\nSubmissions To Date:\n", round(current_rate, digits = 1), "/day", sep = ""), colour = "#08519c",
            x = as.Date(as.character("2016-11-01")), y = 4000, size = 4) +
-  annotate("text", label = paste("Target Rate of Application\nSubmissions Starting ", ddate,":\n",
+  annotate("text", label = paste("Target Rate of 20,000 Application\nSubmissions Starting ", ddate,":\n",
                                  round(rate_to_achieve, digits = 0), "/day", " (or ", round(work_day_rate_to_achieve, digits = 0),"/weekday)",  sep = ""), colour = "#006d2c",
-           x = as.Date(as.character("2017-11-01")), y = 16000, size = 4) +
+           x = as.Date(as.character("2018-02-01")), y = 17500, size = 4) +
+  annotate("text", label = paste("Target Rate of 10,000 Application\nSubmissions Starting ", ddate,":\n",
+                                 round(rate_to_achieve_half, digits = 0), "/day", " (or ", round(work_day_rate_to_achieve_half, digits = 0),"/weekday)",  sep = ""), colour = "#e60000",
+           x = as.Date(as.character("2017-07-01")), y = 11000, size = 4) +
   scale_y_continuous(expand=c(0, 0), limits = c(0,20000), breaks=seq(0, 20000, 2000), labels = scales::comma) +
   xlab(NULL) +
   ylab("Number of Applications") +

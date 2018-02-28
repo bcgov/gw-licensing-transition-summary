@@ -19,7 +19,7 @@ library(readxl) # MS Excel data import
 # path <- "~/soe_data/water/groundwater/licensing/transition/"
 
 ## ENV Water data source PATH
-path <- "C:/Users/jgoetz/R/gw-licensing-transition-summary/data/"
+path <- "C:/R Projects/gw-licensing-transition-summary/Data/"
 
 
 ## DATA files
@@ -45,7 +45,7 @@ ddate <- "February 22nd 2018"
 regions <- read_excel(paste0(path, regions))
 projected_app_raw <- read_excel(paste0(path, projected_app_raw))
 elic_raw <- read_excel(paste0(path, lic_raw), sheet = "e-Lic")
-virtual_raw <- read_excel(paste0(path, lic_raw), sheet = "vFCBC")
+virtual_raw <- read_excel(paste0(path, lic_raw), sheet = "FCBC")
 
 
 ## Create tmp folder if not already there and store raw data in local repository

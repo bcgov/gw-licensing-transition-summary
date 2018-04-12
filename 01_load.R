@@ -34,18 +34,18 @@ regions <- "regions_matchup.xlsx"
 ## This file is updated every 2 weeks, sent to Greg Tyson, who forwards to us analysts to produce this report.
 ## The data should be saved here Z:\WPS\Water Strategies\Groundwater Licensing - BIG project\GW Licencing Data 
 ## (Heather worked off her C drive so that's where she saved a copy of the data which is where the path below is from)
-lic_raw <- "GW Applications Feb 22, 2018.xlsx"
+lic_raw <- "GW Applications April 5, 2018.xlsx"
 
 
 ## Data 'as of' DATE
-ddate <- "February 22nd 2018"
+ddate <- "April 5th 2018"
 
 
 ## Load data files
 regions <- read_excel(paste0(path, regions))
 projected_app_raw <- read_excel(paste0(path, projected_app_raw))
 elic_raw <- read_excel(paste0(path, lic_raw), sheet = "e-Lic")
-virtual_raw <- read_excel(paste0(path, lic_raw), sheet = "FCBC")
+virtual_raw <- read_excel(paste0(path, lic_raw), sheet = "vFCBC")
 
 
 ## Create tmp folder if not already there and store raw data in local repository

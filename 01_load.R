@@ -19,7 +19,7 @@ library(readxl) # MS Excel data import
 # path <- "~/soe_data/water/groundwater/licensing/transition/"
 
 ## ENV Water data source PATH
-path <- "C:/Users/jgoetz/R/gw-licensing-transition-summary/data/"
+path <- "C:/R Projects/gw-licensing-transition-summary/Data/"
 
 
 ## DATA files
@@ -34,11 +34,11 @@ regions <- "regions_matchup.xlsx"
 ## This file is updated every 2 weeks, sent to Greg Tyson, who forwards to us analysts to produce this report.
 ## The data should be saved here Z:\WPS\Water Strategies\Groundwater Licensing - BIG project\GW Licencing Data 
 ## (Heather worked off her C drive so that's where she saved a copy of the data which is where the path below is from)
-lic_raw <- "GW Applications Feb 22, 2018.xlsx"
+lic_raw <- "GW Applications April 5, 2018.xlsx"
 
 
 ## Data 'as of' DATE
-ddate <- "February 22nd 2018"
+ddate <- "April 5th 2018"
 
 
 ## Load data files

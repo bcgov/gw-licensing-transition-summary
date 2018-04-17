@@ -14,6 +14,7 @@
 source("01_load.R")
 source("02_clean.R")
 source("03_output.R")
+source("pptx_report.R")
 
 outfile <- paste0("ENV_GW_Licensing_Transition_Summary_asof_", ddate, ".pdf")
 

@@ -31,7 +31,7 @@ if (!exists("virtual_clean")) load("tmp/trans_gwlic_clean.RData")
 est_ta <- 20000
 
 ## total licence applications with FCBC 
-tot_FCBC <- length(virtual_clean$vFCBC_Tracking_Number)
+tot_FCBC <- length(virtual_clean$VFCBC_Tracking_Number)
 
 ## total licence applications with e-licencing (these are accounted for in vFCBC sheet as Job_Status = 'Accepted')
 tot_elic <- length(elic_clean$TrackingNumber)

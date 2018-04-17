@@ -13,6 +13,7 @@
 
 library(officer)
 
+# Creates a blank "pptx" object, add the slides and content, then save to a directory
 read_pptx() %>% 
   add_slide(layout = "Title Slide", master = "Office Theme") %>% 
   ph_with_text(type = "ctrTitle", str = "Status of Transitioning Groundwater User Water Licence Applications") %>%

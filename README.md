@@ -1,8 +1,8 @@
 <a id="devex-badge" rel="Delivery" href="https://github.com/BCDevExchange/assets/blob/master/README.md"><img alt="In production, but maybe in Alpha or Beta. Intended to persist and be supported." style="border-width:0" src="https://assets.bcdevexchange.org/images/badges/delivery.svg" title="In production, but maybe in Alpha or Beta. Intended to persist and be supported." /></a>[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-# Summarizing and visualizing B.C. ground water licensing transition data 
+# British Columbia Groundwater Licence Transition
 
-This repository contains R code for summarizing and visualizing B.C. ground water licensing transition data and generates a summary of the static data visualizations in a PDF document.
+This repository contains R code for summarising and visualising internal [B.C. ground water licensing transition](https://www2.gov.bc.ca/gov/content?id=E9D78269542048EDA2D9DE9E5AEDF973) data.
 
 ## Usage
 
@@ -14,20 +14,20 @@ There are three core scripts that are required for the analysis, they need to be
 
 The `run_all.R` script can be `source`ed to run it all at once.
 
-Most packages used in the analysis can be installed from CRAN using `install.packages()`. You will need to install  [envreportutils](https://github.com/bcgov/envreportutils) using devtools:
+Most packages used in the analysis can be installed from CRAN using `install.packages()`. You will need to install  [`envreportutils`](https://github.com/bcgov/envreportutils) using the `remotes` package:
 
 ```r
-install.packages("devtools") # If you don't already have it installed
+install.packages("remotes") # If you don't already have it installed
 
-library(devtools)
+library(remotes)
 install_github("bcgov/envreportutils")
 ```
  
-A full installation of Tex (e.g. MiKTex or MacTeX) is required to render the .Rmd file to PDF with `knitr`. 
+An installation of LaTeX (e.g. MiKTex, MacTeX or [`tinytex`](https://cran.r-project.org/web/packages/tinytex/index.html)) is required to render the .Rmd file to PDF with `knitr`.
 
 ## Getting Help or Reporting an Issue
 
-To report bugs/issues/feature requests, please file an [Issue](https://github.com/bcgov-c/gw-license-transition-summary/issues).
+To report bugs/issues/feature requests, please file an [Issue](https://github.com/bcgov/gw-license-transition-summary/issues).
 
 ## How to Contribute
 

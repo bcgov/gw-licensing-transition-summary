@@ -2,7 +2,7 @@
 
 # British Columbia Groundwater Licence Transition
 
-This repository contains R code for summarising and visualising internal [B.C. ground water licensing transition](https://www2.gov.bc.ca/gov/content?id=E9D78269542048EDA2D9DE9E5AEDF973) data.
+This repository contains R code for summarising and visualising [B.C. ground water licensing transition](https://www2.gov.bc.ca/gov/content?id=E9D78269542048EDA2D9DE9E5AEDF973) data.
 
 ## Usage
 

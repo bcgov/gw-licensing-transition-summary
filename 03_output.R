@@ -246,8 +246,6 @@ plot(tl_use_plot)
 
 ## make a 'total transition applications with estimated transitions' dataframe
 ## total vFCBC applications with distinct tracking number and including Job_Status = Accepted applications.
-## There's a discrepancy of 22 between doing calcuating total applications received from vFCBC 
-## and using both the vFCBC (minus the accepted applications) plus the e-licencing data sheets. 
 
 # est_ta <- 20000
 tot_ta <- tot_FCBC

@@ -15,7 +15,6 @@ library(dplyr) # data munging
 ## Load raw data if not already in local repository
 if (!exists("projected_app_raw")) load("tmp/trans_gwlic_raw.RData")
 
-
 ## Clean projected_app_raw 
 # Change coloumn names, keep only some columns and round estimates to zero sig figs
 

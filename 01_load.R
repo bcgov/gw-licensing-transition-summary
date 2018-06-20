@@ -10,39 +10,36 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 
-
 library(readxl) # MS Excel data import 
 
+#####################
+# Data 'as of' DATE #
+#####################
+## Set the date that the data is current to
+ddate <- "April 5th 2018"
 
-## PATHS
-## soe_data source PATH
-# path <- "~/soe_data/water/groundwater/licensing/transition/"
+###############
+# DATA files  #
+###############
+## These files should be placed in the data/ folder of this directory. See
+## data/README.md for details.
 
-## ENV Water data source PATH
-path <- "Z:/WPS/Water Strategies/Groundwater Licensing - BIG project/GW Licencing Data/"
-
-
-## DATA files
 ## The projected number of transition Existing Use Groundwater License Applications (from ENV Water Branch)
 projected_app_raw <- "Projected_GW_Transition_Licences_ENVWaterBranch.xlsx"
 
-## The join table for FCBC Regions and NRS Regions (from EnvReportBC)
-regions <- "regions_matchup.xlsx"
-
 ## The MS Excel E-licence data for Existing Use Groundwater License Applications provided
 ## by the Water Management Branch, FLNRORD. This file is updated every 2 weeks.
-## The raw data should be saved here Z:\WPS\Water Strategies\Groundwater Licensing - BIG project\GW Licencing Data.
+lic_raw <- "GW_Applications_current.xlsx"
 
-lic_raw <- "GW Applications April 5, 2018.xlsx"
+## The join table for FCBC Regions and NRS Regions (from EnvReportBC)
+regions <- "regions_matchup.csv"
 
-## Data 'as of' DATE
-ddate <- "April 5th 2018"
-
-## Load data files
-regions <- read_excel(paste0(path, regions))
-projected_app_raw <- read_excel(paste0(path, projected_app_raw))
-elic_raw <- read_excel(paste0(path, lic_raw), sheet = "e-Lic")
-virtual_raw <- read_excel(paste0(path, lic_raw), sheet = "vFCBC")
+## Load data files --------------------------
+regions <- read.csv(file.path("data", regions), stringsAsFactors = FALSE, 
+                    check.names = FALSE)
+projected_app_raw <- read_excel(file.path("data", projected_app_raw))
+elic_raw <- read_excel(file.path("data", lic_raw), sheet = "e-Lic")
+virtual_raw <- read_excel(file.path("data", lic_raw), sheet = "vFCBC")
 
 ## Create tmp folder if not already there and store raw data in local repository
 if (!exists("tmp")) dir.create("tmp", showWarnings = FALSE)

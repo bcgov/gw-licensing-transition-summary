@@ -17,7 +17,7 @@ library(officer)
 read_pptx() %>% 
   add_slide(layout = "Title Slide", master = "Office Theme") %>% 
   ph_with_text(type = "ctrTitle", str = "Status of Transitioning Groundwater User Water Licence Applications") %>%
-  ph_with_text(type = "subTitle", str = paste0("Data provided by FLNRO Water Management Branch on ", ddate)) %>%
+  ph_with_text(type = "subTitle", str = paste0("Data provided by FLNRORD Water Management Branch on ", ddate)) %>%
   add_slide(layout = "Title and Content", master = "Office Theme") %>% 
   ph_with_gg_at(value = tl_rate_plot, width = 9, height = 5.5, left = 0.5, top = 1) %>% 
   add_slide(layout = "Title and Content", master = "Office Theme") %>% 

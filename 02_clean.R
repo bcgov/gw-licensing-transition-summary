@@ -31,7 +31,7 @@ projected_app_clean <- projected_app_raw %>%
 ## Clean virtual_raw
 
 ## Remove spaces in col names
-colnames(virtual_raw) <- gsub(" ", "_", colnames(virtual_raw))
+colnames(virtual_raw) <- gsub("\\s+", "_", colnames(virtual_raw))
 
 ## Only keep columns in virtual_raw necessary for plots,
 ## filter out new licence applications and
@@ -63,7 +63,7 @@ elic_clean_dup <- elic_raw %>%
 elic_clean <- elic_clean_dup %>% 
   select(JobID, TrackingNumber, ApplicationType, NewExistingUse, JobStatus, Region) %>% 
   distinct(JobID, TrackingNumber, ApplicationType, NewExistingUse, JobStatus, Region,
-          .keepall = TRUE) %>% 
+          .keep_all = TRUE) %>% 
   rename(`E-licence Regions` = Region) %>% 
   left_join(regions)
 

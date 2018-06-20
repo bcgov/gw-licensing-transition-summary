@@ -1,6 +1,6 @@
 ## Data Sources
 
-The scripts for generating the summary plots and PDF report expect two files to be in this `data/` directory-you will need to place them here manually:
+The scripts for generating the summary plots and PDF report expect two files to be in this `data/` directory&mdash;you will need to place them here manually:
 
 - `Projected_GW_Transition_Licences_ENVWaterBranch.xlsx`
 - `GW_Applications_current.xlsx` - This file will likely have a date in the filename in the source directory, but should be copied into the `data/` folder with this name.

@@ -33,33 +33,33 @@ est_ta <- 20000
 ## total licence applications with FCBC 
 tot_FCBC <- length(virtual_clean$VFCBC_Tracking_Number)
 
-## total licence applications with e-licencing (these are accounted for in vFCBC sheet as Job_Status = 'Accepted')
+## total licence applications with e-licencing (these are accounted for in vFCBC sheet as Job_status = 'Accepted')
 tot_elic <- length(elic_clean$TrackingNumber)
 
 ## @knitr virtual_status
 
 ## collapse some categories for plotting
-virtual_clean$Job_Status[virtual_clean$Job_Status == "Cancelled"] <-  "Cancelled & Not Accepted"
-virtual_clean$Job_Status[virtual_clean$Job_Status == "Not Accepted"] <-  "Cancelled & Not Accepted"
-virtual_clean$Job_Status[virtual_clean$Job_Status == "Withdrawn"] <-  "Cancelled & Not Accepted"
-virtual_clean$Job_Status[virtual_clean$Job_Status == "Abandoned"] <-  "Cancelled & Not Accepted"
-virtual_clean$Job_Status[virtual_clean$Job_Status == "Editing"] <-  "Submitted & Pre-Review Steps"
-virtual_clean$Job_Status[virtual_clean$Job_Status == "Submitted"] <-  "Submitted & Pre-Review Steps"
-virtual_clean$Job_Status[virtual_clean$Job_Status == "Pending"] <-  "Submitted & Pre-Review Steps"
-virtual_clean$Job_Status[virtual_clean$Job_Status == "Pre-Submittal"] <-  "Submitted & Pre-Review Steps"
+virtual_clean$Job_status[virtual_clean$Job_status == "Cancelled"] <-  "Cancelled & Not Accepted"
+virtual_clean$Job_status[virtual_clean$Job_status == "Not Accepted"] <-  "Cancelled & Not Accepted"
+virtual_clean$Job_status[virtual_clean$Job_status == "Withdrawn"] <-  "Cancelled & Not Accepted"
+virtual_clean$Job_status[virtual_clean$Job_status == "Abandoned"] <-  "Cancelled & Not Accepted"
+virtual_clean$Job_status[virtual_clean$Job_status == "Editing"] <-  "Submitted & Pre-Review Steps"
+virtual_clean$Job_status[virtual_clean$Job_status == "Submitted"] <-  "Submitted & Pre-Review Steps"
+virtual_clean$Job_status[virtual_clean$Job_status == "Pending"] <-  "Submitted & Pre-Review Steps"
+virtual_clean$Job_status[virtual_clean$Job_status == "Pre-Submittal"] <-  "Submitted & Pre-Review Steps"
 
 ## filter out 'Accepted' Applications
-virtual_clean_noaccept <- filter(virtual_clean, Job_Status != "Accepted" | is.na(Job_Status))
+virtual_clean_noaccept <- filter(virtual_clean, Job_status != "Accepted" | is.na(Job_status))
 
 ## number of applications by application category
 ta_type <- virtual_clean_noaccept %>% 
-  count(Job_Status) 
+  count(Job_status) 
 
 ## arranging the order of the categories to be plotted
 vir.order <- c("Under Review", "Submitted & Pre-Review Steps", "Cancelled & Not Accepted")
 
 ## reordering the categories for plotting
-ta_type$Job_Status <- factor(ta_type$Job_Status, levels = vir.order)
+ta_type$Job_status <- factor(ta_type$Job_status, levels = vir.order)
 
 ## set colour palette
 virtual.colours <- c("Accepted" = "#e41a1c",
@@ -68,13 +68,13 @@ virtual.colours <- c("Accepted" = "#e41a1c",
              "Cancelled & Not Accepted" = "#a65628")
 
 ## bar chart of CURRENT applications into VFCBC by status description (does not include accepted applications)
-ta_type_plot <- ggplot(ta_type, aes(1, y = n, fill = Job_Status)) +
+ta_type_plot <- ggplot(ta_type, aes(1, y = n, fill = Job_status)) +
   geom_col(alpha = 0.7) +
   geom_text(aes(label = n), position = position_stack(vjust = 0.5), size = 3) +
   labs(title = "Applications Currently with FrontCounter BC") +
        #subtitle = paste("Total Applications = ", tot_FCBC)) +
        #caption = "\nNote: Submitted & Pre-Review includes applications in the pre-submitted,\nsubmitted, pending & editing stages with vFCBC") + 
-  scale_fill_manual(values = virtual.colours, name = NULL, breaks = rev(levels(ta_type$Job_Status))) +
+  scale_fill_manual(values = virtual.colours, name = NULL, breaks = rev(levels(ta_type$Job_status))) +
   xlab(NULL) +
   ylab(NULL) +
   theme_soe() +
@@ -109,6 +109,11 @@ tl_status <- elic_clean %>%
 tl_status$JobStatus[tl_status$JobStatus == "Grant"] <- "Decision"
 tl_status$JobStatus[tl_status$JobStatus == "Grant in Part"] <- "Decision"
 tl_status$JobStatus[tl_status$JobStatus == "Refuse"] <- "Decision"
+
+# Groups the 'Grant' and 'Grant in Part' and 'Refuse' together
+tl_status <- tl_status %>% 
+  group_by(JobStatus) %>% 
+  summarise(number = sum(number))
 
 ## arranging the order of the categories to be plotted
 elic.order <- c("Decision", "In Progress", "Parked", "Abandoned")
@@ -245,7 +250,7 @@ plot(tl_use_plot)
 ## @knitr estimate
 
 ## make a 'total transition applications with estimated transitions' dataframe
-## total vFCBC applications with distinct tracking number and including Job_Status = Accepted applications.
+## total vFCBC applications with distinct tracking number and including Job_status = Accepted applications.
 
 # est_ta <- 20000
 tot_ta <- tot_FCBC

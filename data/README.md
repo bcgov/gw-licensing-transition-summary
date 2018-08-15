@@ -8,6 +8,6 @@ The scripts for generating the summary plots and PDF report expect two files to 
 You will need to copy these files from a master source directory on the network. This is likely one of:
 
 - soe_data source PATH: `~/soe_data/water/groundwater/licensing/transition/`
-- ENV Water data source PATH: `Y:/WPS/Water Strategies/Groundwater Licensing - BIG project/GW Licencing Data/`
+- ENV Water data source PATH: `Y:/WPS/Water Strategies/Groundwater Licensing BI SD project/GW Licencing Data/`
 
 The third required file, `regions_matchup.csv`, is already in this folder and should not need to be modified.

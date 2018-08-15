@@ -16,7 +16,7 @@ library(readxl) # MS Excel data import
 # Data 'as of' DATE #
 #####################
 ## Set the date that the data is current to
-ddate <- "April 5th 2018"
+ddate <- "August 9th 2018"
 
 ###############
 # DATA files  #
@@ -29,12 +29,13 @@ projected_app_raw <- "Projected_GW_Transition_Licences_ENVWaterBranch.xlsx"
 
 ## The MS Excel E-licence data for Existing Use Groundwater License Applications provided
 ## by the Water Management Branch, FLNRORD. This file is updated every 2 weeks.
-lic_raw <- "GW_Applications_current.xlsx"
+lic_raw <- "GW Applications August 9, 2018.xlsx"
 
 ## The join table for FCBC Regions and NRS Regions (from EnvReportBC)
 regions <- "regions_matchup.csv"
 
 ## Load data files --------------------------
+## Lines 42 and 43 may produce warnings as surface licences have an alphanumeric JobID (filtered out in 02_clean.R)
 regions <- read.csv(file.path("data", regions), stringsAsFactors = FALSE, 
                     check.names = FALSE)
 projected_app_raw <- read_excel(file.path("data", projected_app_raw))

@@ -1,6 +1,8 @@
 [![img](https://img.shields.io/badge/Lifecycle-Retired-d45500)](https://github.com/bcgov/repomountie/blob/master/doc/lifecycle-badges.md)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
+**This repository is no longer maintained and was archived on Nov 15, 2021**
+
 # British Columbia Groundwater Licence Transition
 
 This repository contains R code for summarising and visualising [B.C. ground water licensing transition](https://www2.gov.bc.ca/gov/content?id=E9D78269542048EDA2D9DE9E5AEDF973) data.
